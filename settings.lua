@@ -128,7 +128,7 @@ function settingInit()
         -- 没有主动饰品的情况
         if #AQSV.usable == 0 then
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-            l:SetText(L["*Don't have suitable trinkets.*"]..k)
+            l:SetText(L["<There is no suitable trinkets>"])
             l:SetPoint("TOPLEFT", f, 25, -(235 + 35))
 
             lastHeight = -(235 + 35)
@@ -155,8 +155,13 @@ function settingInit()
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
 
             local seleted = AQSV["slot"..(12+k)]
-            UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
-            UIDropDownMenu_SetText(dropdown, GetItemLink(seleted)) 
+
+            if seleted > 0 then
+                UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
+                UIDropDownMenu_SetText(dropdown, GetItemLink(seleted)) 
+            else
+                UIDropDownMenu_SetText(dropdown, L["<Select a trinket>"]) 
+            end
             
             
             UIDropDownMenu_SetWidth(dropdown, 200)

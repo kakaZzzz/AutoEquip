@@ -14,6 +14,8 @@ function addonInit()
             AQSV.enableBattleground = true
             AQSV.disableSlot14 = false
             AQSV.enableCarrot = true
+            AQSV.slot13 = 0
+            AQSV.slot14 = 0
         end
 
         for k,v in pairs(pvpSet) do
@@ -21,8 +23,6 @@ function addonInit()
                 pvp = v
             end
         end
-
-        debug(pvp)
 
         checkUsable()
         checkTrinket()
@@ -112,22 +112,13 @@ function checkTrinket( )
     trinkets = diff(trinkets, AQSV.usable)
 
     debug(trinkets)
-    
+
 
     -- 降幂排序，序号大的正常来看是等级高的饰品
     table.sort(trinkets, function(a, b)
         -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
         return a > b
     end)
-
-    -- 如果缓存中没有默认饰品
-    if AQSV.slot13 == nil and trinkets[1] ~= nil then
-        AQSV.slot13 = trinkets[1]
-    end
-
-    if AQSV.slot14 == nil and trinkets[2] ~= nil then
-        AQSV.slot14 = trinkets[2]
-    end
 
 end
 
@@ -248,11 +239,11 @@ function changeTrinket()
     end
 
     -- 遍历发现没有可用的主动饰品，则更换被动饰品
-    if not slot13["busy"] and AQSV.slot13 ~= slot13["id"] then
+    if not slot13["busy"] and AQSV.slot13 ~= slot13["id"] and AQSV.slot13 >0 then
         EquipItemByName(AQSV.slot13, 13)
     end
 
-    if not slot14["busy"] and AQSV.slot14 ~= slot14["id"] then
+    if not slot14["busy"] and AQSV.slot14 ~= slot14["id"] and AQSV.slot14 >0 then
         EquipItemByName(AQSV.slot14, 14)
     end
 end
