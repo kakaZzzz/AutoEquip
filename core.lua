@@ -35,10 +35,12 @@ function addonInit()
             if msg == "" then
                 AQSV.enable = not AQSV.enable
 
+                f.checkbox["enable"]:SetChecked(AQSV.enable)
+
                 if AQSV.enable then
-                    print("AutoEquip: enabled")
+                    print(L["AutoEquip: Enabled"])
                 else
-                    print("AutoEquip: disabled")
+                    print(L["AutoEquip: Disabled"])
                 end
             end
 

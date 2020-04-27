@@ -1,13 +1,16 @@
 
+
 -- 设置菜单初始化
 function settingInit()
 
-    local f = CreateFrame("Frame", nil, UIParent)
+    f = CreateFrame("Frame", nil, UIParent)
     f.name = "AutoEquip"
     -- 缓存主动饰品下拉框
     f.dropdown = {}
     -- 缓存常驻饰品下拉框
     f.resident = {}
+    -- 缓存单选框
+    f.checkbox = {}
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -181,6 +184,8 @@ function settingInit()
             AQSV[key] = not AQSV[key]
             b:SetChecked(AQSV[key])
         end)
+
+        f.checkbox[key] = b
     end
 
     buildCheckbox(L["Enable"].." <"..player..">", "enable", -60)

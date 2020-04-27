@@ -32,4 +32,7 @@ if locale == 'zhCN' then
 
 	L["<There is no suitable trinkets>"] = "<没有适合的饰品>"
 	L["<Select a trinket>"] = "<选择一个饰品>"
+
+	L["AutoEquip: Enabled"] = "AutoEquip: 已启用"
+	L["AutoEquip: Disabled"] = "AutoEquip: 已禁用"
 end
