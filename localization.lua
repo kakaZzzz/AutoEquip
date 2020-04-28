@@ -1,5 +1,6 @@
+local _, AQSELF = ...
 
-L = setmetatable({}, {
+local L = setmetatable({}, {
     __index = function(table, key)
         if key then
             table[key] = tostring(key)
@@ -8,6 +9,7 @@ L = setmetatable({}, {
     end,
 })
 
+AQSELF.L = L
 
 local locale = GetLocale()
 

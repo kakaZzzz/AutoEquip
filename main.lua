@@ -1,3 +1,8 @@
+local _, AQSELF = ...
+
+local debug = AQSELF.debug
+local clone = AQSELF.clone
+local diff = AQSELF.diff
 
 -- 主函数 --
 
@@ -28,7 +33,8 @@ AF:SetScript("OnUpdate",function(self, elapsed)
 
         -- 插件初始化，包括构建选项菜单
         if not init then
-            addonInit()
+            AQSELF.addonInit()
+            debug("init")
             init = true
         end
 
@@ -51,7 +57,7 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         end
 
         -- 自动更换饰品
-        changeTrinket()
+        AQSELF.changeTrinket()
         
     end
 end)
