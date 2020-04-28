@@ -1,7 +1,7 @@
-local _, AQ_SELF = ...
+local _, AQSELF = ...
 
 -- 复制table的数据，而不是引用
-AQ_SELF.clone =  function(org)
+AQSELF.clone =  function(org)
     local function copy(org, res)
         for k,v in pairs(org) do
             if type(v) ~= "table" then
@@ -18,8 +18,29 @@ AQ_SELF.clone =  function(org)
     return res
 end
 
+-- 合并两个数组
+AQSELF.merge = function(...)
+    local tabs = {...}
+    if not tabs then
+        return {}
+    end
+    local origin = tabs[1]
+    for i = 2,#tabs do
+        if origin then
+            if tabs[i] then
+                for k,v in pairs(tabs[i]) do
+                    table.insert(origin,v)
+                end
+            end
+        else
+            origin = tabs[i]
+        end
+    end
+    return origin
+end
+
 -- 去掉重复的值
-AQ_SELF.diff =  function( t1, t2 )
+AQSELF.diff =  function( t1, t2 )
     local new = {}
 
     for i,v in ipairs(t1) do
@@ -32,8 +53,8 @@ AQ_SELF.diff =  function( t1, t2 )
 end
 
 -- 调试函数
-AQ_SELF.debug = function( t )
-    if not AQ_SELF.enableDebug then
+AQSELF.debug = function( t )
+    if not AQSELF.enableDebug then
         return
     end
 
@@ -46,12 +67,12 @@ AQ_SELF.debug = function( t )
     end
 end
 
-AQ_SELF.GetItemLink = function( id )
+AQSELF.GetItemLink = function( id )
     local _, link = GetItemInfo(id)
     return link
 end
 
-AQ_SELF.GetItemTpye = function( id )
+AQSELF.GetItemTpye = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
 end
