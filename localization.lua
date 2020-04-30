@@ -41,5 +41,5 @@ if locale == 'zhCN' then
 	L[" Lock"] = " 锁定饰品栏"
 	L[" Settings"] = " 打开设置"
 	L[" Close"] = " 关闭菜单"
-	L["Enable ItemBar"] = "启动装备栏"
+	L["Enable ItemBar"] = "启用装备栏"
 end

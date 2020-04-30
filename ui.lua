@@ -44,7 +44,6 @@ function AQSELF.createItemBar()
   	f:SetFrameLevel(1)
 
 	f:SetPoint("CENTER", AQSV.x, AQSV.y)
-	f:Show()
 
 	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	f:SetScript("OnEvent", AQSELF.onInventoryChanged)
@@ -61,6 +60,12 @@ function AQSELF.createItemBar()
 	-- 创建按钮
 	for k,v in pairs(AQSELF.slots) do
 		AQSELF.createItemButton( v, k )
+	end
+
+	if AQSV.enableItemBar then
+		f:Show()
+	else
+		f:Hide()
 	end
 end
 
@@ -217,7 +222,8 @@ function AQSELF.createCooldownUnit( item_id, position )
 end
 
 function AQSELF.showTooltip( t, arg1, arg2 )
-	local tooltip = _G[RGGM_CONSTANTS.ELEMENT_TOOLTIP]
+	local tooltip = _G["GameTooltip"]
+	AQSELF.tooltip = 
     tooltip:ClearLines()
 	tooltip:SetOwner(UIParent)
 	GameTooltip_SetDefaultAnchor(tooltip, UIParent)
@@ -232,7 +238,7 @@ function AQSELF.showTooltip( t, arg1, arg2 )
 end
 
 function AQSELF.hideTooltip()
-	local tooltip = _G[RGGM_CONSTANTS.ELEMENT_TOOLTIP]
+	local tooltip = _G["GameTooltip"]
     tooltip:Hide()
 end
 

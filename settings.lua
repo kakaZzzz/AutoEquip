@@ -111,6 +111,7 @@ function AQSELF.settingInit()
 
     -- 构建两个饰品组
     function buildDropdownGroup()
+        debug(AQSV.usable)
         for k,v in ipairs(AQSV.usable) do
             local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
             dropdown:SetPoint("TOPLEFT", 100, -(230 + k*35))

@@ -9,7 +9,7 @@ local initSV = AQSELF.initSV
 
 AQSV = initSV(AQSV, {})
 AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
-AQSV.usableChests = initSV(AQSV.usable, AQSELF.usableChests)
+AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
 AQSV.enable = initSV(AQSV.enable, true)
 AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
 AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
@@ -60,9 +60,12 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         end
 
         -- 记录装备栏位置
-        local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
-        AQSV.x = xOfs
-        AQSV.y = yOfs
+        if AQSELF.bar then
+            local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
+            AQSV.x = xOfs
+            AQSV.y = yOfs
+        end
+        
 
         -- 战场开关
         if UnitInBattleground("player") and not AQSV.enableBattleground then

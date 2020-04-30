@@ -69,6 +69,12 @@ end
 
 AQSELF.initSV = function( v, init )
     if v == nil then
+
+        if type(init) == "table" then
+            local t = AQSELF.clone(init)
+            return t
+        end
+
         v = init
     end
     return v

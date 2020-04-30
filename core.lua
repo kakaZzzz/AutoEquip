@@ -29,9 +29,6 @@ function AQSELF.addonInit()
         --     AQSV.y = 0
         -- end
 
-        
-
-
         for k,v in pairs(AQSELF.pvpSet) do
             if GetItemCount(v) > 0 then
                 AQSELF.pvp = v
@@ -72,7 +69,7 @@ AQSELF.checkUsable = function()
     local new = {}
     for i,v in ipairs(AQSV.usable) do
         if GetItemCount(v) > 0 then
-            table.remove(new, v)
+            table.insert(new, v)
         end
     end
     AQSV.usable = new
@@ -132,10 +129,7 @@ AQSELF.checkTrinket = function( )
 
     -- 去掉主动饰品
     AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
-    AQSELF.chests = diff(AQSELF.chests, AQSV.usableChests)
-
-    debug(AQSELF.chests)
-
+    -- AQSELF.chests = diff(AQSELF.chests, AQSV.usableChests)
 
     -- 降幂排序，序号大的正常来看是等级高的饰品
     table.sort(AQSELF.trinkets, function(a, b)
