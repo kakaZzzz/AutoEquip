@@ -199,6 +199,15 @@ function AQSELF.settingInit()
         b:SetScript("OnClick", function()
             AQSV[key] = not AQSV[key]
             b:SetChecked(AQSV[key])
+
+            if key == "enable" or key == "enableItemBar" then  
+                -- 装备栏的开关
+                if not AQSV.enableItemBar or not AQSV.enable then
+                    AQSELF.bar:Hide()
+                else
+                    AQSELF.bar:Show()
+                end
+            end
         end)
 
         f.checkbox[key] = b

@@ -39,13 +39,6 @@ AF:SetScript("OnUpdate",function(self, elapsed)
             init = true
         end
 
-        -- 装备栏的开关
-        if not AQSV.enableItemBar or not AQSV.enable then
-            AQSELF.bar:Hide()
-        else
-            AQSELF.bar:Show()
-        end
-
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
             return
