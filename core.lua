@@ -29,19 +29,7 @@ function AQSELF.addonInit()
         --     AQSV.y = 0
         -- end
 
-        AQSV = initSV(AQSV, {})
-        AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
-        AQSV.usableChests = initSV(AQSV.usable, AQSELF.usableChests)
-        AQSV.enable = initSV(AQSV.enable, true)
-        AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
-        AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
-        AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
-        AQSV.slot13 = initSV(AQSV.slot13, 0)
-        AQSV.slot14 = initSV(AQSV.slot14, 0)
-        AQSV.x = initSV(AQSV.x, 200)
-        AQSV.y = initSV(AQSV.y, 0)
-        AQSV.locked = initSV(AQSV.locked, false)
-        AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+        
 
 
         for k,v in pairs(AQSELF.pvpSet) do
