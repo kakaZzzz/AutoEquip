@@ -6,16 +6,24 @@ local merge = AQSELF.merge
 
 AQSELF.version = "v1.1"
 
+-- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
 
 -- 获取当前角色名字
 AQSELF.player = UnitName("player")
+
+-- 构建下拉框组时，记录纵坐标
+AQSELF.lastHeight = 0
 
 -- 棍子上的胡萝卜
 AQSELF.carrot = 11122
 
 -- 缓存胡萝卜换下的饰品
 AQSELF.carrotBackup = 0
+
+-- 操作的装备栏
+AQSELF.slots = {13, 14}
+AQSELF.slotFrames = {}
 
 -- 常见的主动饰品id和buff持续时间数据
 local buffTime = {}	
@@ -25,6 +33,7 @@ buffTime[18820] = 15                    -- 短暂能量护符
 buffTime[19341] = 15                    -- 生命宝石
 buffTime[11819] = 10                    -- 复苏之风
 buffTime[20130] = 60                    -- 钻石水瓶
+-- buffTime[14023] = 0                    -- 管家铃（测试用）
 
 -- 主动饰品集合
 AQSELF.usable = {}
@@ -37,25 +46,21 @@ AQSELF.buffTime = buffTime
 
 -- 能主动使用的衣服
 
-local bodyBuffTime = {}
-bodyBuffTime[14152] = 0				-- 大法师之袍
+local chestBuffTime = {}
+chestBuffTime[14152] = 0				-- 大法师之袍
 
--- 主动饰品集合
-AQSELF.usableBody = {}
+-- 可使用的胸甲集合
+AQSELF.usableChests = {}
 
-for k,v in pairs(bodyBuffTime) do
-	table.insert(AQSELF.usableBody, k)
+for k,v in pairs(chestBuffTime) do
+	table.insert(AQSELF.usableChests, k)
 end
 
-AQSELF.bodyBuffTime = bodyBuffTime
+AQSELF.buffTime = merge(AQSELF.buffTime, chestBuffTime)
 
 -- 角色身上和背包中所有饰品
 AQSELF.trinkets = {}
-
--- 构建下拉框组时，记录纵坐标
-AQSELF.lastHeight = 0
-
-
+AQSELF.chests = {}
 
 -- 联盟、部落各个职业的徽记
 AQSELF.pvpSet = {
@@ -65,8 +70,10 @@ AQSELF.pvpSet = {
 
 -- 徽记的buff时间都是0
 for k,v in pairs(AQSELF.pvpSet) do
-	buffTime[v] = 0
+	AQSELF.buffTime[v] = 0
 end
+
+AQSELF.debug(AQSELF.buffTime)
 
 -- 记录当前角色的徽记
 AQSELF.pvp = 0

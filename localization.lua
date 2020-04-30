@@ -37,4 +37,9 @@ if locale == 'zhCN' then
 
 	L["AutoEquip: Enabled"] = "AutoEquip: 已启用"
 	L["AutoEquip: Disabled"] = "AutoEquip: 已禁用"
+
+	L[" Lock"] = " 锁定饰品栏"
+	L[" Settings"] = " 打开设置"
+	L[" Close"] = " 关闭菜单"
+	L["Enable ItemBar"] = "启动装备栏"
 end

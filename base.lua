@@ -67,6 +67,13 @@ AQSELF.debug = function( t )
     end
 end
 
+AQSELF.initSV = function( v, init )
+    if v == nil then
+        v = init
+    end
+    return v
+end
+
 AQSELF.GetItemLink = function( id )
     local _, link = GetItemInfo(id)
     return link
@@ -75,4 +82,9 @@ end
 AQSELF.GetItemTpye = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
+end
+
+AQSELF.GetItemTexture = function( id )
+    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
+    return itemTexture
 end

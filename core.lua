@@ -5,6 +5,7 @@ local clone = AQSELF.clone
 local diff = AQSELF.diff
 local L = AQSELF.L
 local player = AQSELF.player
+local initSV = AQSELF.initSV
 
 -- 初始化插件
 function AQSELF.addonInit()
@@ -12,18 +13,36 @@ function AQSELF.addonInit()
         local reinstall = false
         -- local reinstall = true
 
-        if AQSV == nil or reinstall then
-            debug("init sv")
-            debug(player)
-            AQSV = {}
-            AQSV.usable = clone(AQSELF.usable)
-            AQSV.enable = true
-            AQSV.enableBattleground = true
-            AQSV.disableSlot14 = false
-            AQSV.enableCarrot = true
-            AQSV.slot13 = 0
-            AQSV.slot14 = 0
-        end
+        -- if AQSV == nil or reinstall then
+        --     debug("init sv")
+        --     debug(player)
+        --     AQSV = {}
+        --     AQSV.usable = clone(AQSELF.usable)
+        --     AQSV.usableChests = clone(AQSELF.usableChests)
+        --     AQSV.enable = true
+        --     AQSV.enableBattleground = true
+        --     AQSV.disableSlot14 = false
+        --     AQSV.enableCarrot = true
+        --     AQSV.slot13 = 0
+        --     AQSV.slot14 = 0
+        --     AQSV.x = 0
+        --     AQSV.y = 0
+        -- end
+
+        AQSV = initSV(AQSV, {})
+        AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
+        AQSV.usableChests = initSV(AQSV.usable, AQSELF.usableChests)
+        AQSV.enable = initSV(AQSV.enable, true)
+        AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
+        AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
+        AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
+        AQSV.slot13 = initSV(AQSV.slot13, 0)
+        AQSV.slot14 = initSV(AQSV.slot14, 0)
+        AQSV.x = initSV(AQSV.x, 200)
+        AQSV.y = initSV(AQSV.y, 0)
+        AQSV.locked = initSV(AQSV.locked, false)
+        AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+
 
         for k,v in pairs(AQSELF.pvpSet) do
             if GetItemCount(v) > 0 then
@@ -80,20 +99,21 @@ end
 
 -- 检查角色身上所有的饰品
 AQSELF.checkTrinket = function( )
-    
-    local index = 1
 
     local slot13Id = GetInventoryItemID("player", 13)
     local slot14Id = GetInventoryItemID("player", 14)
+    local slot5Id = GetInventoryItemID("player", 5)
 
     if slot13Id then
-        AQSELF.trinkets[index] = slot13Id
-        index = index + 1
+        table.insert(AQSELF.trinkets, slot13Id)
     end
 
     if slot14Id then
-        AQSELF.trinkets[index] =  slot14Id
-        index = index + 1
+        table.insert(AQSELF.trinkets, slot13Id)
+    end
+
+    if slot5Id then
+        table.insert(AQSELF.chests, slot5Id)
     end
 
     for i=0,NUM_BAG_SLOTS do
@@ -108,9 +128,14 @@ AQSELF.checkTrinket = function( )
                 -- if id ~= "" then
                      local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
 
+                     -- debug(itemEquipLoc)
+
                     if itemEquipLoc == "INVTYPE_TRINKET" then
-                        AQSELF.trinkets[index] = id
-                        index = index + 1
+                        table.insert(AQSELF.trinkets, id)
+                    end
+
+                    if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
+                        table.insert(AQSELF.chests, id)
                     end
                 -- end
             end  
@@ -119,8 +144,9 @@ AQSELF.checkTrinket = function( )
 
     -- 去掉主动饰品
     AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
+    AQSELF.chests = diff(AQSELF.chests, AQSV.usableChests)
 
-    debug(AQSELF.trinkets)
+    debug(AQSELF.chests)
 
 
     -- 降幂排序，序号大的正常来看是等级高的饰品

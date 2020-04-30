@@ -181,9 +181,16 @@ function AQSELF.settingInit()
         end
     end
 
-    function buildCheckbox(text, key, pos)
+    function buildCheckbox(text, key, pos, x)
+
+        local posX = 20
+
+        if x ~= nil then
+            posX = x
+        end
+
         local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-        b:SetPoint("TOPLEFT", f, 20, pos)
+        b:SetPoint("TOPLEFT", f, posX, pos)
         b:SetChecked(AQSV[key])
 
         b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
@@ -198,6 +205,7 @@ function AQSELF.settingInit()
     end
 
     buildCheckbox(L["Enable"].." <"..player..">", "enable", -60)
+    buildCheckbox(L["Enable ItemBar"], "enableItemBar", -60, 240)
     buildCheckbox(L["enable_battleground"], "enableBattleground", -85)
     buildCheckbox(L["enable_carrot"], "enableCarrot", -110)
     buildCheckbox(L["Disable Slot 2"], "disableSlot14", -135)

@@ -11,4 +11,5 @@ localization.lua
 config.lua
 settings.lua
 core.lua
+ui.lua
 main.lua

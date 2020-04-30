@@ -34,14 +34,27 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         -- 插件初始化，包括构建选项菜单
         if not init then
             AQSELF.addonInit()
+            AQSELF.createItemBar()
             debug("init")
             init = true
+        end
+
+        -- 装备栏的开关
+        if not AQSV.enableItemBar or not AQSV.enable then
+            AQSELF.bar:Hide()
+        else
+            AQSELF.bar:Show()
         end
 
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
             return
         end
+
+        -- 记录装备栏位置
+        local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
+        AQSV.x = xOfs
+        AQSV.y = yOfs
 
         -- 战场开关
         if UnitInBattleground("player") and not AQSV.enableBattleground then
