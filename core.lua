@@ -204,8 +204,8 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             -- 骑马时一直busy，中断更换主动饰品的逻辑
             slot["busy"] = true
 
-        elseif AQSV.disableSlot14 and slot["id"] == AQSELF.carrot then
-            -- 禁用14的时候，需要追加换下萝卜的逻辑
+        elseif (AQSV.disableSlot14 or #queue== 0) and slot["id"] == AQSELF.carrot then
+            -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
             if AQSELF.carrotBackup == AQSELF.carrot then
                 AQSELF.carrotBackup = 0
@@ -229,14 +229,14 @@ function AQSELF.changeTrinket()
         table.insert(queue, 1, AQSELF.pvp)
     end
 
+    -- 获取当前饰品的状态
+    local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)
+    local slot14 = AQSELF.getTrinketStatusBySlotId(14, queue)
+
     -- 如果没有主动饰品，则停止更换饰品
     if #queue == 0 then
         return
     end
-
-    -- 获取当前饰品的状态
-    local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)
-    local slot14 = AQSELF.getTrinketStatusBySlotId(14, queue)
 
     -- 13、14都装备主动饰品，退出函数
     if slot13["busy"] and slot14["busy"] then

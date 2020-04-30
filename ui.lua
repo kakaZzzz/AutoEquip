@@ -112,7 +112,10 @@ function AQSELF.createItemButton( slot_id, position )
 	button:SetSize(40, 40)
 
 	local itemId = GetInventoryItemID("player", slot_id)
-	local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(itemId)
+	local itemTexture = ""
+	if itemId then
+		itemTexture = GetItemTexture(itemId)
+	end
 
 	button:SetAttribute("type1", "item")
 	-- 饰品切换后自动匹配
@@ -173,7 +176,10 @@ end
 function AQSELF.updateItemButton( slot_id )
 	local itemId = GetInventoryItemID("player", slot_id)
 	local button = AQSELF.slotFrames[slot_id]
-	local itemTexture = GetItemTexture(itemId)
+	local itemTexture = ""
+	if itemId then
+		itemTexture = GetItemTexture(itemId)
+	end
 
 	button.texture:SetTexture(itemTexture)
 end
@@ -240,26 +246,29 @@ function AQSELF.cooldownUpdate( self, elapsed )
         -- 计算图标上的冷却时间
     	for k,v in pairs(AQSELF.slots) do
     		local itemId = GetInventoryItemID("player", v)
-			-- 获取饰品的冷却状态
-		    local start, duration, enable = GetItemCooldown(itemId)
-		    -- 剩余冷却时间
-		    local rest = math.ceil(duration - GetTime() + start)
 
-		    local button = AQSELF.slotFrames[v]
+    		if itemId then
+    			-- 获取饰品的冷却状态
+			    local start, duration, enable = GetItemCooldown(itemId)
+			    -- 剩余冷却时间
+			    local rest = math.ceil(duration - GetTime() + start)
 
-		    if duration > 0 and rest > 0 then
-		    	local text = rest
-		    	if rest > 60 then
-		    		text = math.ceil(rest/60).."m"
-		    	end
+			    local button = AQSELF.slotFrames[v]
 
-		    	button.text:SetText(text)
-		    	local height = (rest/duration)*40
-		    	button.cooldown:SetHeight(height)
-		    else
-				button.text:SetText()
-				button.cooldown:SetHeight(1)
-		    end
+			    if duration > 0 and rest > 0 then
+			    	local text = rest
+			    	if rest > 60 then
+			    		text = math.ceil(rest/60).."m"
+			    	end
+
+			    	button.text:SetText(text)
+			    	local height = (rest/duration)*40
+			    	button.cooldown:SetHeight(height)
+			    else
+					button.text:SetText()
+					button.cooldown:SetHeight(1)
+			    end
+    		end
 		end
 
 		-- 计算冷却队列
