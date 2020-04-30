@@ -1,7 +1,7 @@
-local _, AQSELF = ...
+local _, KAKA_AQSELF_FIX = ...
 
 -- 复制table的数据，而不是引用
-AQSELF.clone =  function(org)
+KAKA_AQSELF_FIX.clone =  function(org)
     local function copy(org, res)
         for k,v in pairs(org) do
             if type(v) ~= "table" then
@@ -19,7 +19,7 @@ AQSELF.clone =  function(org)
 end
 
 -- 合并两个数组
-AQSELF.merge = function(...)
+KAKA_AQSELF_FIX.merge = function(...)
     local tabs = {...}
     if not tabs then
         return {}
@@ -40,7 +40,7 @@ AQSELF.merge = function(...)
 end
 
 -- 去掉重复的值
-AQSELF.diff =  function( t1, t2 )
+KAKA_AQSELF_FIX.diff =  function( t1, t2 )
     local new = {}
 
     for i,v in ipairs(t1) do
@@ -53,8 +53,8 @@ AQSELF.diff =  function( t1, t2 )
 end
 
 -- 调试函数
-AQSELF.debug = function( t )
-    if not AQSELF.enableDebug then
+KAKA_AQSELF_FIX.debug = function( t )
+    if not KAKA_AQSELF_FIX.enableDebug then
         return
     end
 
@@ -67,11 +67,11 @@ AQSELF.debug = function( t )
     end
 end
 
-AQSELF.initSV = function( v, init )
+KAKA_AQSELF_FIX.initSV = function( v, init )
     if v == nil then
 
         if type(init) == "table" then
-            local t = AQSELF.clone(init)
+            local t = KAKA_AQSELF_FIX.clone(init)
             return t
         end
 
@@ -80,17 +80,17 @@ AQSELF.initSV = function( v, init )
     return v
 end
 
-AQSELF.GetItemLink = function( id )
+KAKA_AQSELF_FIX.GetItemLink = function( id )
     local _, link = GetItemInfo(id)
     return link
 end
 
-AQSELF.GetItemTpye = function( id )
+KAKA_AQSELF_FIX.GetItemTpye = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
 end
 
-AQSELF.GetItemTexture = function( id )
+KAKA_AQSELF_FIX.GetItemTexture = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemTexture
 end

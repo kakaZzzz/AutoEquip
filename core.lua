@@ -1,14 +1,14 @@
-local _, AQSELF = ...
+local _, KAKA_AQSELF_FIX = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local player = AQSELF.player
-local initSV = AQSELF.initSV
+local debug = KAKA_AQSELF_FIX.debug
+local clone = KAKA_AQSELF_FIX.clone
+local diff = KAKA_AQSELF_FIX.diff
+local L = KAKA_AQSELF_FIX.L
+local player = KAKA_AQSELF_FIX.player
+local initSV = KAKA_AQSELF_FIX.initSV
 
 -- 初始化插件
-function AQSELF.addonInit()
+function KAKA_AQSELF_FIX.addonInit()
 
         local reinstall = false
         -- local reinstall = true
@@ -17,8 +17,8 @@ function AQSELF.addonInit()
         --     debug("init sv")
         --     debug(player)
         --     AQSV = {}
-        --     AQSV.usable = clone(AQSELF.usable)
-        --     AQSV.usableChests = clone(AQSELF.usableChests)
+        --     AQSV.usable = clone(KAKA_AQSELF_FIX.usable)
+        --     AQSV.usableChests = clone(KAKA_AQSELF_FIX.usableChests)
         --     AQSV.enable = true
         --     AQSV.enableBattleground = true
         --     AQSV.disableSlot14 = false
@@ -29,16 +29,16 @@ function AQSELF.addonInit()
         --     AQSV.y = 0
         -- end
 
-        for k,v in pairs(AQSELF.pvpSet) do
+        for k,v in pairs(KAKA_AQSELF_FIX.pvpSet) do
             if GetItemCount(v) > 0 then
-                AQSELF.pvp = v
+                KAKA_AQSELF_FIX.pvp = v
             end
         end
 
-        AQSELF.checkUsable()
-        AQSELF.checkTrinket()
+        KAKA_AQSELF_FIX.checkUsable()
+        KAKA_AQSELF_FIX.checkTrinket()
 
-        AQSELF.settingInit()
+        KAKA_AQSELF_FIX.settingInit()
 
         SLASH_CMD1 = "/aq";
         function SlashCmdList.CMD(msg)
@@ -46,7 +46,7 @@ function AQSELF.addonInit()
             if msg == "" then
                 AQSV.enable = not AQSV.enable
 
-                AQSELF.f.checkbox["enable"]:SetChecked(AQSV.enable)
+                KAKA_AQSELF_FIX.f.checkbox["enable"]:SetChecked(AQSV.enable)
 
                 if AQSV.enable then
                     print(L["AutoEquip: Enabled"])
@@ -64,7 +64,7 @@ function AQSELF.addonInit()
 end
 
 -- 检查主动饰品
-AQSELF.checkUsable = function()
+KAKA_AQSELF_FIX.checkUsable = function()
     -- 删除没有或者放在银行里的主动饰品，并保持优先级不变
     local new = {}
     for i,v in ipairs(AQSV.usable) do
@@ -75,7 +75,7 @@ AQSELF.checkUsable = function()
     AQSV.usable = new
 
     -- 获得新饰品，或者从银行取出，保持优先级不变，追加到最后
-    for i,v in ipairs(AQSELF.usable) do
+    for i,v in ipairs(KAKA_AQSELF_FIX.usable) do
         if GetItemCount(v) > 0 and not tContains(AQSV.usable, v) then
             table.insert(AQSV.usable, v)
         end
@@ -83,22 +83,22 @@ AQSELF.checkUsable = function()
 end
 
 -- 检查角色身上所有的饰品
-AQSELF.checkTrinket = function( )
+KAKA_AQSELF_FIX.checkTrinket = function( )
 
     local slot13Id = GetInventoryItemID("player", 13)
     local slot14Id = GetInventoryItemID("player", 14)
     local slot5Id = GetInventoryItemID("player", 5)
 
     if slot13Id then
-        table.insert(AQSELF.trinkets, slot13Id)
+        table.insert(KAKA_AQSELF_FIX.trinkets, slot13Id)
     end
 
     if slot14Id then
-        table.insert(AQSELF.trinkets, slot13Id)
+        table.insert(KAKA_AQSELF_FIX.trinkets, slot13Id)
     end
 
     if slot5Id then
-        table.insert(AQSELF.chests, slot5Id)
+        table.insert(KAKA_AQSELF_FIX.chests, slot5Id)
     end
 
     for i=0,NUM_BAG_SLOTS do
@@ -116,11 +116,11 @@ AQSELF.checkTrinket = function( )
                      -- debug(itemEquipLoc)
 
                     if itemEquipLoc == "INVTYPE_TRINKET" then
-                        table.insert(AQSELF.trinkets, id)
+                        table.insert(KAKA_AQSELF_FIX.trinkets, id)
                     end
 
                     if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
-                        table.insert(AQSELF.chests, id)
+                        table.insert(KAKA_AQSELF_FIX.chests, id)
                     end
                 -- end
             end  
@@ -128,11 +128,11 @@ AQSELF.checkTrinket = function( )
     end
 
     -- 去掉主动饰品
-    AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
-    -- AQSELF.chests = diff(AQSELF.chests, AQSV.usableChests)
+    KAKA_AQSELF_FIX.trinkets = diff(KAKA_AQSELF_FIX.trinkets, AQSV.usable)
+    -- KAKA_AQSELF_FIX.chests = diff(KAKA_AQSELF_FIX.chests, AQSV.usableChests)
 
     -- 降幂排序，序号大的正常来看是等级高的饰品
-    table.sort(AQSELF.trinkets, function(a, b)
+    table.sort(KAKA_AQSELF_FIX.trinkets, function(a, b)
         -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
         return a > b
     end)
@@ -141,7 +141,7 @@ end
 
 
 -- 获取当前装备饰品的状态
-AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
+KAKA_AQSELF_FIX.getTrinketStatusBySlotId = function( slot_id, queue )
     local slot = {}
 
     slot["id"] = GetInventoryItemID("player", slot_id)
@@ -165,7 +165,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 饰品已经使用，并且超过了buff时间
-    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] + 1 then
+    if slot["duration"] > 30 and slot["buff"] > KAKA_AQSELF_FIX.buffTime[slot["id"]] + 1 then
         slot["busy"] = false
     end
 
@@ -179,22 +179,22 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     if slot_id == 14 and AQSV.enableCarrot and not UnitInBattleground("player") then
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if(IsMounted() and not UnitOnTaxi("player"))  then
-            if slot["id"] ~= AQSELF.carrot then
-                AQSELF.carrotBackup = slot["id"]
-                EquipItemByName(AQSELF.carrot, 14)
+            if slot["id"] ~= KAKA_AQSELF_FIX.carrot then
+                KAKA_AQSELF_FIX.carrotBackup = slot["id"]
+                EquipItemByName(KAKA_AQSELF_FIX.carrot, 14)
             end
             -- 骑马时一直busy，中断更换主动饰品的逻辑
             slot["busy"] = true
 
-        elseif (AQSV.disableSlot14 or #queue== 0) and slot["id"] == AQSELF.carrot then
+        elseif (AQSV.disableSlot14 or #queue== 0) and slot["id"] == KAKA_AQSELF_FIX.carrot then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
-            if AQSELF.carrotBackup == AQSELF.carrot then
-                AQSELF.carrotBackup = 0
+            if KAKA_AQSELF_FIX.carrotBackup == KAKA_AQSELF_FIX.carrot then
+                KAKA_AQSELF_FIX.carrotBackup = 0
             end
             
-            if AQSELF.carrotBackup > 0 then
-                EquipItemByName(AQSELF.carrotBackup, 14)
+            if KAKA_AQSELF_FIX.carrotBackup > 0 then
+                EquipItemByName(KAKA_AQSELF_FIX.carrotBackup, 14)
             end
         end
     end
@@ -202,18 +202,18 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     return slot
 end
 
-function AQSELF.changeTrinket()
+function KAKA_AQSELF_FIX.changeTrinket()
     -- 主要代码部分 --
     local queue = clone(AQSV.usable)
 
     -- 如果在战场里，执行联盟徽记逻辑
     if UnitInBattleground("player") then
-        table.insert(queue, 1, AQSELF.pvp)
+        table.insert(queue, 1, KAKA_AQSELF_FIX.pvp)
     end
 
     -- 获取当前饰品的状态
-    local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)
-    local slot14 = AQSELF.getTrinketStatusBySlotId(14, queue)
+    local slot13 = KAKA_AQSELF_FIX.getTrinketStatusBySlotId(13, queue)
+    local slot14 = KAKA_AQSELF_FIX.getTrinketStatusBySlotId(14, queue)
 
     -- 如果没有主动饰品，则停止更换饰品
     if #queue == 0 then

@@ -1,15 +1,15 @@
-local _, AQSELF = ...
+local _, KAKA_AQSELF_FIX = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local initSV = AQSELF.initSV
+local debug = KAKA_AQSELF_FIX.debug
+local clone = KAKA_AQSELF_FIX.clone
+local diff = KAKA_AQSELF_FIX.diff
+local initSV = KAKA_AQSELF_FIX.initSV
 
 -- 主函数 --
 
 AQSV = initSV(AQSV, {})
-AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
-AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
+AQSV.usable = initSV(AQSV.usable, KAKA_AQSELF_FIX.usable)
+AQSV.usableChests = initSV(AQSV.usableChests, KAKA_AQSELF_FIX.usableChests)
 AQSV.enable = initSV(AQSV.enable, true)
 AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
 AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
@@ -48,8 +48,8 @@ AF:SetScript("OnUpdate",function(self, elapsed)
 
         -- 插件初始化，包括构建选项菜单
         if not init then
-            AQSELF.addonInit()
-            AQSELF.createItemBar()
+            KAKA_AQSELF_FIX.addonInit()
+            KAKA_AQSELF_FIX.createItemBar()
             debug("init")
             init = true
         end
@@ -60,8 +60,8 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         end
 
         -- 记录装备栏位置
-        if AQSELF.bar then
-            local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
+        if KAKA_AQSELF_FIX.bar then
+            local point, relativeTo, relativePoint, xOfs, yOfs = KAKA_AQSELF_FIX.bar:GetPoint()
             AQSV.x = xOfs
             AQSV.y = yOfs
         end
@@ -81,7 +81,7 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         end
 
         -- 自动更换饰品
-        AQSELF.changeTrinket()
+        KAKA_AQSELF_FIX.changeTrinket()
         
     end
 end)

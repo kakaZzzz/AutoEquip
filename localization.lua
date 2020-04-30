@@ -1,4 +1,4 @@
-local _, AQSELF = ...
+local _, KAKA_AQSELF_FIX = ...
 
 local L = setmetatable({}, {
     __index = function(table, key)
@@ -9,7 +9,7 @@ local L = setmetatable({}, {
     end,
 })
 
-AQSELF.L = L
+KAKA_AQSELF_FIX.L = L
 
 local locale = GetLocale()
 

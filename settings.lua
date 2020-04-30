@@ -1,17 +1,17 @@
-local _, AQSELF = ...
+local _, KAKA_AQSELF_FIX = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local GetItemLink = AQSELF.GetItemLink
-local player = AQSELF.player
+local debug = KAKA_AQSELF_FIX.debug
+local clone = KAKA_AQSELF_FIX.clone
+local diff = KAKA_AQSELF_FIX.diff
+local L = KAKA_AQSELF_FIX.L
+local GetItemLink = KAKA_AQSELF_FIX.GetItemLink
+local player = KAKA_AQSELF_FIX.player
 
 -- 设置菜单初始化
-function AQSELF.settingInit()
+function KAKA_AQSELF_FIX.settingInit()
 
     local f = CreateFrame("Frame", nil, UIParent)
-    AQSELF.f = f
+    KAKA_AQSELF_FIX.f = f
 
     f.name = "AutoEquip"
     -- 缓存主动饰品下拉框
@@ -23,7 +23,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        t:SetText(L["AutoEquip "]..AQSELF.version)
+        t:SetText(L["AutoEquip "]..KAKA_AQSELF_FIX.version)
         t:SetPoint("TOPLEFT", f, 25, -20)
     end
 
@@ -86,7 +86,7 @@ function AQSELF.settingInit()
     function Resident_Trinket_Initialize(self,level)
         level = level or 1;
         if (level == 1) then
-         for k, v in ipairs(AQSELF.trinkets) do
+         for k, v in ipairs(KAKA_AQSELF_FIX.trinkets) do
            local info = UIDropDownMenu_CreateInfo();
            -- info.hasArrow = true; -- creates submenu
            info.text = GetItemLink(v);
@@ -125,7 +125,7 @@ function AQSELF.settingInit()
             l:SetPoint("TOPLEFT", f, 25, -(235 + k*35))
 
             -- 保存最后一个下拉框的位置
-            AQSELF.lastHeight = -(235 + k*35)
+            KAKA_AQSELF_FIX.lastHeight = -(235 + k*35)
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
@@ -144,25 +144,25 @@ function AQSELF.settingInit()
             l:SetText(L["<There is no suitable trinkets>"])
             l:SetPoint("TOPLEFT", f, 25, -(235 + 35))
 
-            AQSELF.lastHeight = -(235 + 35)
+            KAKA_AQSELF_FIX.lastHeight = -(235 + 35)
         end
 
         do
             local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetText(L["Resident Trinkets:"] )
-            t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 45)
+            t:SetPoint("TOPLEFT", f, 25, KAKA_AQSELF_FIX.lastHeight - 45)
         end
 
         for k=1, 2 do
             local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeight-(40 + k*35))
+            dropdown:SetPoint("TOPLEFT", 100, KAKA_AQSELF_FIX.lastHeight-(40 + k*35))
             dropdown.index = k
 
             f.resident[k] = dropdown
 
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["Slot "]..k)
-            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-(45 + k*35))
+            l:SetPoint("TOPLEFT", f, 25, KAKA_AQSELF_FIX.lastHeight-(45 + k*35))
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
@@ -204,9 +204,9 @@ function AQSELF.settingInit()
             if key == "enable" or key == "enableItemBar" then  
                 -- 装备栏的开关
                 if not AQSV.enableItemBar or not AQSV.enable then
-                    AQSELF.bar:Hide()
+                    KAKA_AQSELF_FIX.bar:Hide()
                 else
-                    AQSELF.bar:Show()
+                    KAKA_AQSELF_FIX.bar:Show()
                 end
             end
         end)
