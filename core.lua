@@ -75,12 +75,14 @@ AQSELF.checkTrinket = function( )
     end
 
     if slot14Id then
-        table.insert(AQSELF.trinkets, slot13Id)
+        table.insert(AQSELF.trinkets, slot14Id)
     end
 
     if slot5Id then
         table.insert(AQSELF.chests, slot5Id)
     end
+
+    debug(AQSELF.trinkets)
 
     for i=0,NUM_BAG_SLOTS do
         local count = GetContainerNumSlots(i)
@@ -107,6 +109,8 @@ AQSELF.checkTrinket = function( )
             end  
         end
     end
+
+    debug(AQSELF.trinkets)
 
     -- 去掉主动饰品
     AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)

@@ -6,8 +6,8 @@ local merge = AQSELF.merge
 
 AQSELF.version = "v1.1"
 
--- AQSELF.enableDebug = true          -- 调试开关
-AQSELF.enableDebug = false          -- 调试开关
+AQSELF.enableDebug = true          -- 调试开关
+-- AQSELF.enableDebug = false          -- 调试开关
 
 AQSELF.init = false
 

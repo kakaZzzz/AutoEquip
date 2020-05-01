@@ -20,6 +20,7 @@ function AQSELF.settingInit()
     f.resident = {}
     -- 缓存单选框
     f.checkbox = {}
+    f.pveCheckbox = {}
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -136,6 +137,19 @@ function AQSELF.settingInit()
             
             UIDropDownMenu_SetWidth(dropdown, 200)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
+
+            -- 后面追加checkbox
+            local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+            b:SetPoint("TOPLEFT", 350, -(228 + k*35))
+            b:SetChecked()
+            f.pveCheckbox[v] = b
+
+            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+            b.text:SetText("PVE")
+            b:SetScript("OnClick", function()
+               
+            end)
         end
 
         -- 没有主动饰品的情况
