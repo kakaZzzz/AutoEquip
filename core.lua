@@ -10,25 +10,6 @@ local initSV = AQSELF.initSV
 -- 初始化插件
 function AQSELF.addonInit()
 
-        local reinstall = false
-        -- local reinstall = true
-
-        -- if AQSV == nil or reinstall then
-        --     debug("init sv")
-        --     debug(player)
-        --     AQSV = {}
-        --     AQSV.usable = clone(AQSELF.usable)
-        --     AQSV.usableChests = clone(AQSELF.usableChests)
-        --     AQSV.enable = true
-        --     AQSV.enableBattleground = true
-        --     AQSV.disableSlot14 = false
-        --     AQSV.enableCarrot = true
-        --     AQSV.slot13 = 0
-        --     AQSV.slot14 = 0
-        --     AQSV.x = 0
-        --     AQSV.y = 0
-        -- end
-
         for k,v in pairs(AQSELF.pvpSet) do
             if GetItemCount(v) > 0 then
                 AQSELF.pvp = v
@@ -40,8 +21,8 @@ function AQSELF.addonInit()
 
         AQSELF.settingInit()
 
-        SLASH_CMD1 = "/aq";
-        function SlashCmdList.CMD(msg)
+        SLASH_AQCMD1 = "/aq";
+        function SlashCmdList.AQCMD(msg)
 
             if msg == "" then
                 AQSV.enable = not AQSV.enable

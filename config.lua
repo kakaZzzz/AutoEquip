@@ -9,6 +9,8 @@ AQSELF.version = "v1.1"
 -- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
 
+AQSELF.init = false
+
 -- 获取当前角色名字
 AQSELF.player = UnitName("player")
 
@@ -28,11 +30,14 @@ AQSELF.slotFrames = {}
 -- 常见的主动饰品id和buff持续时间数据
 local buffTime = {}	
 buffTime[19339] = 20                    -- 思维加速宝石
-buffTime[19950] = 20                    -- 赞达拉饰品
+buffTime[19948] = 20                    -- 赞达拉饰品1
+buffTime[19949] = 20                    -- 赞达拉饰品2
+buffTime[19950] = 20                    -- 赞达拉饰品3
 buffTime[18820] = 15                    -- 短暂能量护符
 buffTime[19341] = 15                    -- 生命宝石
 buffTime[11819] = 10                    -- 复苏之风
 buffTime[20130] = 60                    -- 钻石水瓶
+buffTime[19991] = 20                    -- 魔暴龙眼
 -- buffTime[14023] = 0                    -- 管家铃（测试用）
 
 -- 主动饰品集合

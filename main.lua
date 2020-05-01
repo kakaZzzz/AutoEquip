@@ -3,6 +3,7 @@ local _, AQSELF = ...
 local debug = AQSELF.debug
 local clone = AQSELF.clone
 local diff = AQSELF.diff
+local L = AQSELF.L
 local initSV = AQSELF.initSV
 
 -- 主函数 --
@@ -22,14 +23,14 @@ AQSV.locked = initSV(AQSV.locked, false)
 AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
 
 -- 注册事件
-AF=CreateFrame("Frame")
+AQSELF.main = CreateFrame("Frame")
 
 -- 计数器
-AF.TimeSinceLastUpdate = 0
+AQSELF.main.TimeSinceLastUpdate = 0
 -- 函数执行间隔时间
-AF.Interval = 1
+AQSELF.main.Interval = 1
 
-AF:SetScript("OnUpdate",function(self, elapsed)
+AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
 
     self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
@@ -47,11 +48,11 @@ AF:SetScript("OnUpdate",function(self, elapsed)
         end
 
         -- 插件初始化，包括构建选项菜单
-        if not init then
+        if not AQSELF.init then
             AQSELF.addonInit()
             AQSELF.createItemBar()
-            debug("init")
-            init = true
+            print(L["AutoEquip: Loaded"])
+            AQSELF.init = true
         end
 
         -- 插件整体开关，以角色为单位

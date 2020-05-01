@@ -145,7 +145,7 @@ function AQSELF.createItemButton( slot_id, position )
 	local text = tf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	text:SetFont(STANDARD_TEXT_FONT, 18)
 	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, 1)
+	text:SetShadowOffset(1, -1)
     text:SetPoint("TOP", button, 2, 8)
     
     button.text = text
@@ -210,7 +210,7 @@ function AQSELF.createCooldownUnit( item_id, position )
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	text:SetFont(STANDARD_TEXT_FONT, 14)
 	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, 1)
+	text:SetShadowOffset(1, -1)
     text:SetPoint("TOP", f, 25, 0)
     text:SetJustifyH("LEFT")
 
