@@ -75,7 +75,7 @@ AQSELF.checkTrinket = function( )
     end
 
     if slot14Id then
-        table.insert(AQSELF.trinkets, slot13Id)
+        table.insert(AQSELF.trinkets, slot14Id)
     end
 
     if slot5Id then
