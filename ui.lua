@@ -43,7 +43,7 @@ function AQSELF.createItemBar()
 
   	f:SetFrameLevel(1)
 
-	f:SetPoint("CENTER", AQSV.x, AQSV.y)
+	f:SetPoint(AQSV.point, AQSV.x, AQSV.y)
 
 	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	f:SetScript("OnEvent", AQSELF.onInventoryChanged)

@@ -8,19 +8,7 @@ local initSV = AQSELF.initSV
 
 -- 主函数 --
 
-AQSV = initSV(AQSV, {})
-AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
-AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
-AQSV.enable = initSV(AQSV.enable, true)
-AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
-AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
-AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
-AQSV.slot13 = initSV(AQSV.slot13, 0)
-AQSV.slot14 = initSV(AQSV.slot14, 0)
-AQSV.x = initSV(AQSV.x, 200)
-AQSV.y = initSV(AQSV.y, 0)
-AQSV.locked = initSV(AQSV.locked, false)
-AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+
 
 -- 注册事件
 AQSELF.main = CreateFrame("Frame")
@@ -49,6 +37,22 @@ AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
 
         -- 插件初始化，包括构建选项菜单
         if not AQSELF.init then
+            -- 初始化全局变量
+            AQSV = initSV(AQSV, {})
+            AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
+            AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
+            AQSV.enable = initSV(AQSV.enable, true)
+            AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
+            AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
+            AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
+            AQSV.slot13 = initSV(AQSV.slot13, 0)
+            AQSV.slot14 = initSV(AQSV.slot14, 0)
+            AQSV.x = initSV(AQSV.x, 200)
+            AQSV.y = initSV(AQSV.y, 0)
+            AQSV.point = initSV(AQSV.point, "CENTER")
+            AQSV.locked = initSV(AQSV.locked, false)
+            AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+
             AQSELF.addonInit()
             AQSELF.createItemBar()
             print(L["AutoEquip: Loaded"])
@@ -65,6 +69,7 @@ AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
             local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
             AQSV.x = xOfs
             AQSV.y = yOfs
+            AQSV.point = point
         end
         
 
