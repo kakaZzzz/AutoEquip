@@ -5,7 +5,7 @@ local initSV = AQSELF.initSV
 
 -- 配置 --
 
-AQSELF.version = "v1.1"
+AQSELF.version = "v2.9"
 
 AQSELF.enableDebug = true          -- 调试开关
 -- AQSELF.enableDebug = false          -- 调试开关
