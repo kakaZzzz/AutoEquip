@@ -39,13 +39,14 @@ buffTime[19341] = 15                    -- 生命宝石
 buffTime[11819] = 10                    -- 复苏之风
 buffTime[20130] = 60                    -- 钻石水瓶
 buffTime[19991] = 20                    -- 魔暴龙眼
-buffTime[14023] = 0                    -- 管家铃（测试用）
+
 
 -- 主动饰品集合
 AQSELF.usable = {}
+AQSELF.pveSet = {}
 
 for k,v in pairs(buffTime) do
-	table.insert(AQSELF.usable, k)
+	table.insert(AQSELF.pveSet, k)
 end
 
 AQSELF.buffTime = buffTime
@@ -71,10 +72,13 @@ AQSELF.chests = {}
 -- 联盟、部落各个职业的徽记
 AQSELF.pvpSet = {
 	18854,18856,18857,18858,18859,18862,18863,18864,
-	18834,18845,18846,18849,18850,18851,18852,18853
+	18834,18845,18846,18849,18850,18851,18852,18853,
+	14023
 }
 
-AQSELF.usable = merge(AQSELF.usable, AQSELF.pvpSet)
+buffTime[14023] = 0                    	-- 管家铃（测试用）
+
+AQSELF.usable = merge(AQSELF.pveSet, AQSELF.pvpSet)
 
 -- 徽记的buff时间都是0
 for k,v in pairs(AQSELF.pvpSet) do
@@ -82,6 +86,6 @@ for k,v in pairs(AQSELF.pvpSet) do
 end
 
 -- 记录当前角色的徽记
-AQSELF.pvp = 0
+AQSELF.pvp = {}
 
 -- 配置结束 --

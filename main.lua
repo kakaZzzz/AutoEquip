@@ -52,6 +52,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.point = initSV(AQSV.point, "CENTER")
             AQSV.locked = initSV(AQSV.locked, false)
             AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+            AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
+            AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
@@ -66,10 +68,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
         -- 记录装备栏位置
         if AQSELF.bar then
-            print(AQSELF.bar)
             local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
-            print(xOfs, yOfs)
-            print(point, relativeTo, relativePoint)
             AQSV.x = xOfs
             AQSV.y = yOfs
             AQSV.point = point

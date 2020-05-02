@@ -12,12 +12,13 @@ function AQSELF.addonInit()
 
         for k,v in pairs(AQSELF.pvpSet) do
             if GetItemCount(v) > 0 then
-                AQSELF.pvp = v
+                table.insert(AQSELF.pvp, v)
             end
         end
-        -- print(2)
-        -- print(AQSV.usable)
+        
         AQSELF.checkUsable()
+        AQSELF.initGroupCheckbox()
+
         AQSELF.checkTrinket()
 
         AQSELF.settingInit()
@@ -43,6 +44,23 @@ function AQSELF.addonInit()
             end
         end
 
+end
+
+AQSELF.initGroupCheckbox = function()
+    for k,v in pairs(AQSELF.pvp) do
+        if AQSV.pveTrinkets[v] == nil then
+            AQSV.pveTrinkets[v] = false
+        end
+    end
+
+    for k,v in pairs(AQSV.usable) do
+        if AQSV.pvpTrinkets[v] == nil then
+            AQSV.pvpTrinkets[v] = true
+        end
+        if AQSV.pveTrinkets[v] == nil then
+            AQSV.pveTrinkets[v] = true
+        end
+    end
 end
 
 -- 检查主动饰品
@@ -185,20 +203,29 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     return slot
 end
 
-function AQSELF.changeTrinket()
-    -- 主要代码部分 --
+function AQSELF.buildQueueRealtime()
     local queue = {}
+    local inBattleground = UnitInBattleground("player")
 
     for k,v in pairs(AQSV.usable) do
-        if UnitInBattleground("player") then
-            
+        if inBattleground then
+            if AQSV.pvpTrinkets[v] then
+                table.insert(queue, v)
+            end
         else
-
+            if AQSV.pveTrinkets[v] then
+                table.insert(queue, v)
+            end
         end
     end
 
-    -- 如果在战场里，执行联盟徽记逻辑
+    return queue
+end
+
+function AQSELF.changeTrinket()
+    -- 主要代码部分 --
     
+    local  queue = AQSELF.buildQueueRealtime()
 
     -- 获取当前饰品的状态
     local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)

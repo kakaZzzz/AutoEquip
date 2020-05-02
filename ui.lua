@@ -16,7 +16,7 @@ function AQSELF.createItemBar()
 	AQSELF.list = {}
 
 	f:SetFrameStrata("BACKGROUND")
-	f:SetWidth(95)
+	f:SetWidth(#AQSELF.slots * (43) + 10)
 	f:SetHeight(40)
 
 	-- 可以使用鼠标
@@ -129,6 +129,9 @@ function AQSELF.createItemButton( slot_id, position )
   	button:SetFrameLevel(2)
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
+
+  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	button:SetBackdropBorderColor(0,0,0,1);
 	
 
     local t = button:CreateTexture(nil, "BACKGROUND")
@@ -257,12 +260,12 @@ function AQSELF.cooldownUpdate( self, elapsed )
     			-- 获取饰品的冷却状态
 			    local start, duration, enable = GetItemCooldown(itemId)
 			    -- 剩余冷却时间
-			    local rest = math.ceil(duration - GetTime() + start)
+			    local rest = duration - GetTime() + start
 
 			    local button = AQSELF.slotFrames[v]
 
 			    if duration > 0 and rest > 0 then
-			    	local text = rest
+			    	local text = math.ceil(rest)
 			    	if rest > 60 then
 			    		text = math.ceil(rest/60).."m"
 			    	end
@@ -278,12 +281,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		end
 
 		-- 计算冷却队列
-		local queue = clone(AQSV.usable)
-
-	    -- 如果在战场里，执行联盟徽记逻辑
-	    if UnitInBattleground("player") then
-	        table.insert(queue, 1, AQSELF.pvp)
-	    end
+		local  queue = AQSELF.buildQueueRealtime()
 
 	    local slot13Id = GetInventoryItemID("player", 13)
 	    local slot14Id = GetInventoryItemID("player", 14)
@@ -296,6 +294,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 	    -- 根据顺序创建图标，或者使其显示
 	    for k,v in pairs(wait) do
 	    	if not AQSELF.list[v] then
+	    		-- print(v)
 	    		AQSELF.list[v] = AQSELF.createCooldownUnit(v, k)
 	    	else
 	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -45 - (k - 1) * 22)
