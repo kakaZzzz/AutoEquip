@@ -1,6 +1,7 @@
 local _, AQSELF = ...
 
 local merge = AQSELF.merge
+local initSV = AQSELF.initSV
 
 -- 配置 --
 
@@ -38,7 +39,7 @@ buffTime[19341] = 15                    -- 生命宝石
 buffTime[11819] = 10                    -- 复苏之风
 buffTime[20130] = 60                    -- 钻石水瓶
 buffTime[19991] = 20                    -- 魔暴龙眼
--- buffTime[14023] = 0                    -- 管家铃（测试用）
+buffTime[14023] = 0                    -- 管家铃（测试用）
 
 -- 主动饰品集合
 AQSELF.usable = {}
@@ -73,12 +74,12 @@ AQSELF.pvpSet = {
 	18834,18845,18846,18849,18850,18851,18852,18853
 }
 
+AQSELF.usable = merge(AQSELF.usable, AQSELF.pvpSet)
+
 -- 徽记的buff时间都是0
 for k,v in pairs(AQSELF.pvpSet) do
 	AQSELF.buffTime[v] = 0
 end
-
-AQSELF.debug(AQSELF.buffTime)
 
 -- 记录当前角色的徽记
 AQSELF.pvp = 0

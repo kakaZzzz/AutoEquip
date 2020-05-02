@@ -60,7 +60,7 @@ AQSELF.debug = function( t )
 
     if type(t) == "table" then
         for k,v in pairs(t) do
-            print("@DEBUG: ",k.." =>"..v)
+            print("@DEBUG: ",k.." =>"..tostring(v))
         end
     else
         print("@DEBUG: ",t)

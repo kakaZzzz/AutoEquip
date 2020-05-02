@@ -21,6 +21,7 @@ function AQSELF.settingInit()
     -- 缓存单选框
     f.checkbox = {}
     f.pveCheckbox = {}
+    f.pvpCheckbox = {}
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -75,6 +76,8 @@ function AQSELF.settingInit()
                     for k,v in ipairs(AQSV.usable) do
                         UIDropDownMenu_SetSelectedValue(f.dropdown[k], v, 0)
                         UIDropDownMenu_SetText(f.dropdown[k], GetItemLink(v)) 
+                        f.pveCheckbox[k]:SetChecked(AQSV.pveTrinkets[v])
+                        f.pvpCheckbox[k]:SetChecked(AQSV.pvpTrinkets[v])
                     end
                 end
             end
@@ -112,7 +115,6 @@ function AQSELF.settingInit()
 
     -- 构建两个饰品组
     function buildDropdownGroup()
-        debug(AQSV.usable)
         for k,v in ipairs(AQSV.usable) do
             local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
             dropdown:SetPoint("TOPLEFT", 100, -(230 + k*35))
@@ -141,14 +143,32 @@ function AQSELF.settingInit()
             -- 后面追加checkbox
             local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
             b:SetPoint("TOPLEFT", 350, -(228 + k*35))
-            b:SetChecked()
-            f.pveCheckbox[v] = b
+            b:SetChecked(AQSV.pveTrinkets[v])
+            f.pveCheckbox[k] = b
 
             b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
             b.text:SetText("PVE")
             b:SetScript("OnClick", function()
-               
+                local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                debug(vaule)
+                AQSV.pveTrinkets[vaule] = not AQSV.pveTrinkets[vaule]
+                b:SetChecked(AQSV.pveTrinkets[vaule])
+            end)
+
+            local b1 = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+            b1:SetPoint("TOPLEFT", 420, -(228 + k*35))
+            b1:SetChecked(AQSV.pvpTrinkets[v])
+            f.pvpCheckbox[k] = b1
+
+            b1.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            b1.text:SetPoint("LEFT", b1, "RIGHT", 0, 0)
+            b1.text:SetText("PVP")
+            b1:SetScript("OnClick", function()
+                local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                debug(vaule)
+                AQSV.pvpTrinkets[vaule] = not AQSV.pvpTrinkets[vaule]
+                b1:SetChecked(AQSV.pvpTrinkets[vaule])
             end)
         end
 

@@ -15,7 +15,8 @@ function AQSELF.addonInit()
                 AQSELF.pvp = v
             end
         end
-
+        -- print(2)
+        -- print(AQSV.usable)
         AQSELF.checkUsable()
         AQSELF.checkTrinket()
 
@@ -47,6 +48,7 @@ end
 -- 检查主动饰品
 AQSELF.checkUsable = function()
     -- 删除没有或者放在银行里的主动饰品，并保持优先级不变
+    -- print(AQSV.usable)
     local new = {}
     for i,v in ipairs(AQSV.usable) do
         if GetItemCount(v) > 0 then
@@ -82,8 +84,6 @@ AQSELF.checkTrinket = function( )
         table.insert(AQSELF.chests, slot5Id)
     end
 
-    debug(AQSELF.trinkets)
-
     for i=0,NUM_BAG_SLOTS do
         local count = GetContainerNumSlots(i)
 
@@ -109,8 +109,6 @@ AQSELF.checkTrinket = function( )
             end  
         end
     end
-
-    debug(AQSELF.trinkets)
 
     -- 去掉主动饰品
     AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
@@ -189,12 +187,18 @@ end
 
 function AQSELF.changeTrinket()
     -- 主要代码部分 --
-    local queue = clone(AQSV.usable)
+    local queue = {}
+
+    for k,v in pairs(AQSV.usable) do
+        if UnitInBattleground("player") then
+            
+        else
+
+        end
+    end
 
     -- 如果在战场里，执行联盟徽记逻辑
-    if UnitInBattleground("player") then
-        table.insert(queue, 1, AQSELF.pvp)
-    end
+    
 
     -- 获取当前饰品的状态
     local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)

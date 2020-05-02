@@ -8,8 +8,10 @@ local initSV = AQSELF.initSV
 
 -- 主函数 --
 
+print(AQSELF.usable)
+
 AQSV = initSV(AQSV, {})
-AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
+AQSV["usable"] = initSV(AQSV["usable"], {})
 AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
 AQSV.enable = initSV(AQSV.enable, true)
 AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
@@ -19,8 +21,13 @@ AQSV.slot13 = initSV(AQSV.slot13, 0)
 AQSV.slot14 = initSV(AQSV.slot14, 0)
 AQSV.x = initSV(AQSV.x, 200)
 AQSV.y = initSV(AQSV.y, 0)
+AQSV.point = initSV(AQSV.point, "CENTER")
 AQSV.locked = initSV(AQSV.locked, false)
 AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
+AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
+
+debug(AQSV)
 
 -- 注册事件
 AQSELF.main = CreateFrame("Frame")
@@ -30,7 +37,7 @@ AQSELF.main.TimeSinceLastUpdate = 0
 -- 函数执行间隔时间
 AQSELF.main.Interval = 1
 
-AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
+AQSELF.onMainUpdate = function(self, elapsed)
 
     self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
@@ -47,8 +54,11 @@ AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
             return
         end
 
+
         -- 插件初始化，包括构建选项菜单
         if not AQSELF.init then
+            print("3")
+            debug(AQSV)
             AQSELF.addonInit()
             AQSELF.createItemBar()
             print(L["AutoEquip: Loaded"])
@@ -62,9 +72,13 @@ AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
 
         -- 记录装备栏位置
         if AQSELF.bar then
+            print(AQSELF.bar)
             local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
+            print(xOfs, yOfs)
+            print(point, relativeTo, relativePoint)
             AQSV.x = xOfs
             AQSV.y = yOfs
+            AQSV.point = point
         end
         
 
@@ -85,4 +99,7 @@ AQSELF.main:SetScript("OnUpdate",function(self, elapsed)
         AQSELF.changeTrinket()
         
     end
-end)
+end
+
+
+AQSELF.main:SetScript("OnUpdate", AQSELF.onMainUpdate)
