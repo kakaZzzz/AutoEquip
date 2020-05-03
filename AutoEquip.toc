@@ -1,7 +1,7 @@
 ## Interface: 11304
 ## Title: AutoEquip
 ## Author: kaka
-## Version: 2.9
+## Version: 2.10
 ## Notes: After combat, auto change the useable trinket.
 ## Notes-zhCN: 战斗结束，自动更换主动饰品。
 ## SavedVariablesPerCharacter: AQSV
