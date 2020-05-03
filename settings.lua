@@ -101,12 +101,29 @@ function AQSELF.settingInit()
 
            info.func = function( frame )
                 -- 选中现有饰品则无效
-                if v ~= AQSV.slot13 and v ~= AQSV.slot14 then
+                if v ~= AQSV["slot"..(12+index)] then
                     UIDropDownMenu_SetSelectedValue(f.resident[index], v, 0)
                     UIDropDownMenu_SetText(f.resident[index], GetItemLink(v)) 
-                    -- 更新数据
-                    AQSV["slot"..(12+index)] = v
                 end
+
+                local one = AQSV["slot"..(12+index)]
+
+                -- 如果跟另一个饰品一样，则更换
+                if v == AQSV["slot"..(15-index)] then
+                    UIDropDownMenu_SetSelectedValue(f.resident[3-index], one, 0)
+                    UIDropDownMenu_SetText(f.resident[3-index], GetItemLink(one)) 
+                    AQSV["slot"..(15-index)] = one
+                end
+
+                AQSV["slot"..(12+index)] = v
+
+
+                -- if v ~= AQSV.slot13 and v ~= AQSV.slot14 then
+                --     UIDropDownMenu_SetSelectedValue(f.resident[index], v, 0)
+                --     UIDropDownMenu_SetText(f.resident[index], GetItemLink(v)) 
+                --     -- 更新数据
+                --     AQSV["slot"..(12+index)] = v
+                -- end
             end
            UIDropDownMenu_AddButton(info, level);
          end
