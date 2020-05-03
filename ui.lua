@@ -14,8 +14,9 @@ function AQSELF.createItemBar()
 	local f = CreateFrame("Button", "AutoEquip_ItemBar", UIParent)
 	AQSELF.bar = f
 	AQSELF.list = {}
+	AQSELF.trinketsFrames = {}
 
-	f:SetFrameStrata("BACKGROUND")
+	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
 	f:SetHeight(40)
 
@@ -43,8 +44,10 @@ function AQSELF.createItemBar()
 
   	f:SetFrameLevel(1)
 
+  	-- 初始化位置
 	f:SetPoint(AQSV.point, AQSV.x, AQSV.y)
 
+	-- 换装备时更新按钮
 	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
 	f:SetScript("OnEvent", AQSELF.onInventoryChanged)
 
@@ -62,6 +65,24 @@ function AQSELF.createItemBar()
 		AQSELF.createItemButton( v, k )
 	end
 
+	-- 创建PVP标识
+	local pvpIcon = CreateFrame("Frame", nil, f)
+	pvpIcon:SetSize(20,20)
+	pvpIcon:SetPoint("TOPLEFT", f, -23, 0)
+
+	local pvpTexture = pvpIcon:CreateTexture(nil, "BACKGROUND")
+	pvpTexture:SetTexture(132147)
+	pvpTexture:SetAllPoints(pvpIcon)
+
+	if AQSV.pvpMode then
+		pvpIcon:Show()
+	else
+		pvpIcon:Hide()
+	end
+
+	AQSELF.pvpIcon = pvpIcon
+
+	-- 设置里是否启用装备栏
 	if AQSV.enableItemBar then
 		f:Show()
 	else
@@ -149,14 +170,15 @@ function AQSELF.createItemButton( slot_id, position )
 	text:SetFont(STANDARD_TEXT_FONT, 18)
 	text:SetShadowColor(0, 0, 0, 1)
 	text:SetShadowOffset(1, -1)
-    text:SetPoint("TOP", button, 2, 8)
+    text:SetPoint("TOPLEFT", button, 2, 8)
     
     button.text = text
 
+    -- 冷却动画层
     local cooldown = CreateFrame("Frame", nil, button)
     -- 设0不成功
     cooldown:SetSize(40, 1)
-    cooldown:SetPoint("TOP", button, 0, 0)
+    cooldown:SetPoint("TOPLEFT", button, 0, 0)
     cooldown:SetFrameLevel(3)
 
    	local t1 = cooldown:CreateTexture(nil, "BACKGROUND")
@@ -166,6 +188,18 @@ function AQSELF.createItemButton( slot_id, position )
 	
 	button.cooldown = cooldown
 
+	-- 饰品队列层
+    local wait = CreateFrame("Frame", nil, button)
+    -- 设0不成功
+    wait:SetSize(20, 20)
+    wait:SetPoint("BOTTOMRIGHT", button, 0, 0)
+    wait:SetFrameLevel(4)
+
+   	local t2 = wait:CreateTexture(nil, "BACKGROUND")
+	t2:SetAllPoints(wait)
+	
+	button.wait = t2
+
 	-- 按钮定位
    	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 +3), 0)
    	button:Show()
@@ -173,11 +207,139 @@ function AQSELF.createItemButton( slot_id, position )
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
 		AQSELF.showTooltip("inventory", slot_id)
+
+		-- 显示可用饰品的下拉框
+		AQSELF.itemDropdownTimestamp = nil
+
+		local index = 1
+		local itemId1 = GetInventoryItemID("player", slot_id)
+		local itemId2 = GetInventoryItemID("player", 27 - slot_id)
+
+		for k,v in pairs(AQSV.usable) do
+			if v ~= itemId1 and v ~= itemId2 then
+				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+				index = index + 1
+			elseif AQSELF.trinketsFrames[v] then
+				AQSELF.trinketsFrames[v]:Hide()
+			end
+		end
+
+		for k,v in pairs(AQSELF.trinkets) do
+			if v ~= itemId1 and v ~= itemId2 then
+				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+				index = index + 1
+			elseif AQSELF.trinketsFrames[v] then
+				AQSELF.trinketsFrames[v]:Hide()
+			end
+		end
 	end)
-   	button:SetScript("OnLeave", AQSELF.hideTooltip)
+   	button:SetScript("OnLeave", function( self )
+   		AQSELF.hideTooltip()
+   		AQSELF.hideItemDropdown( 0.5 )
+   	end)
 
    	-- 缓存
    	AQSELF.slotFrames[slot_id] = button
+end
+
+
+function AQSELF.hideItemDropdown( delay )
+	-- 设置计时
+	AQSELF.itemDropdownTimestamp = GetTime()
+	AQSELF.itemDropdownDelay =  delay
+end
+
+-- 在update里执行
+function AQSELF.doHideItemDropdown()
+	if AQSELF.itemDropdownTimestamp then
+		if GetTime() - AQSELF.itemDropdownTimestamp > AQSELF.itemDropdownDelay then
+			for k,v in pairs(AQSELF.trinketsFrames) do
+	   			v:Hide()
+	   		end
+	   		AQSELF.itemDropdownTimestamp = nil
+		end
+	end
+end
+
+-- 创建饰品下拉框
+function AQSELF.createItemDropdown(item_id, x, position, slot_id)
+
+	-- 如果已经创建过物品图层，只修改位置
+	if AQSELF.trinketsFrames[item_id] then
+		AQSELF.trinketsFrames[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x, 5+43 * position)
+		AQSELF.trinketsFrames[item_id]:Show()
+		-- 点击图标是获取正确的slot
+		AQSELF.trinketsFrames[item_id].inSlot = slot_id
+		return
+	end
+
+	local button = CreateFrame("Button", nil, AQSELF.bar)
+	button:SetSize(40, 40)
+
+	local itemTexture = GetItemTexture(item_id)
+
+  	button:SetFrameLevel(100)
+  	-- 高亮材质
+  	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
+	
+
+    local t = button:CreateTexture(nil, "BACKGROUND")
+    -- 贴上物品的材质
+	t:SetTexture(itemTexture)
+	t:SetAllPoints(button)
+	button.texture = t
+
+	-- 文字单独一个frame，因为要盖住冷却动画
+	local tf = CreateFrame("Frame", nil, button)
+	tf:SetAllPoints(button)
+	tf:SetFrameLevel(101)
+
+	local text = tf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	text:SetFont(STANDARD_TEXT_FONT, 16)
+	text:SetShadowColor(0, 0, 0, 1)
+	text:SetShadowOffset(1, -1)
+    text:SetPoint("TOP", button, 40, 0)
+    text:SetJustifyH("LEFT")
+    
+    button.text = text
+
+	-- 按钮定位
+   	button:SetPoint("TOPLEFT", AQSELF.bar, x, 5+43 * position)
+   	button:Show()
+
+   	button:SetScript("OnEnter", function(self)
+   		-- 停掉隐藏下拉框的计时器
+		AQSELF.itemDropdownTimestamp = nil
+	end)
+   	button:SetScript("OnLeave", function( self )
+   		-- 开启隐藏计时
+   		AQSELF.hideItemDropdown( 0.5 )
+   	end)
+
+	button.inSlot = slot_id
+
+   	button:EnableMouse(true)
+   	button:RegisterForClicks("AnyDown");
+	button:SetScript('OnClick', function(self)
+
+		-- 点击后立即隐藏下拉框
+	    for k,v in pairs(AQSELF.trinketsFrames) do
+   			v:Hide()
+   		end
+
+        if not AQSELF.playerCanEquip() then
+        	-- 缓存起来
+        	AQSELF.setWait(item_id, button.inSlot)
+            return 
+        else
+        	-- 立即装备
+        	AQSELF.equipWait(item_id, button.inSlot)
+        end
+       
+	end)
+
+   	-- 缓存
+   	AQSELF.trinketsFrames[item_id] = button
 end
 
 -- 更新按钮材质
@@ -203,7 +365,7 @@ end
 -- 绘制下方的饰品队列
 function AQSELF.createCooldownUnit( item_id, position )
 	local f = CreateFrame("Frame", nil, AQSELF.bar)
-	f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 45 - (position - 1) * 22)
+	f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 43 - (position - 1) * 23)
 	f:SetSize(20, 20)
 
 	local t = f:CreateTexture(nil, "BACKGROUND")
@@ -252,6 +414,8 @@ function AQSELF.cooldownUpdate( self, elapsed )
     	-- 重新计时
         self.TimeSinceLastUpdate = 0
 
+        AQSELF.doHideItemDropdown()
+
         -- 计算图标上的冷却时间
     	for k,v in pairs(AQSELF.slots) do
     		local itemId = GetInventoryItemID("player", v)
@@ -280,6 +444,28 @@ function AQSELF.cooldownUpdate( self, elapsed )
     		end
 		end
 
+		-- 计算饰品下拉框的冷却时间
+		for k,v in pairs(AQSV.usable) do
+			if AQSELF.trinketsFrames[v] then
+				-- 获取饰品的冷却状态
+			    local start, duration, enable = GetItemCooldown(v)
+			    -- 剩余冷却时间
+			    local rest = math.ceil(duration - GetTime() + start)
+
+			    -- 在队列中的显示冷却时间
+			    if duration > 0 and rest > 0 then
+			    	local text = rest
+			    	if rest > 60 then
+			    		text = math.ceil(rest/60).."m"
+			    	end
+
+			    	AQSELF.trinketsFrames[v].text:SetText(text)
+			    else
+					AQSELF.trinketsFrames[v].text:SetText()
+			    end
+			end
+		end
+
 		-- 计算冷却队列
 		local  queue = AQSELF.buildQueueRealtime()
 
@@ -297,7 +483,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 	    		-- print(v)
 	    		AQSELF.list[v] = AQSELF.createCooldownUnit(v, k)
 	    	else
-	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -45 - (k - 1) * 22)
+	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
 	    		AQSELF.list[v]:Show()
 	    	end
 	    end

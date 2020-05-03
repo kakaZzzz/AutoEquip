@@ -9,6 +9,7 @@
 base.lua
 localization.lua
 config.lua
+data.lua
 settings.lua
 core.lua
 ui.lua

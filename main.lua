@@ -55,6 +55,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
+            AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
+            AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
@@ -82,12 +84,11 @@ AQSELF.onMainUpdate = function(self, elapsed)
         end
 
         -- 角色处在战斗状态或跑尸状态，不进行换饰品逻辑，退出函数
-        local f=UnitAffectingCombat("player")
-        local d=UnitIsDeadOrGhost("player")
-
-        if f or d then
+        if not AQSELF.playerCanEquip() then
             return 
         end
+
+        AQSELF.checkAllWait()
 
         -- 自动更换饰品
         AQSELF.changeTrinket()

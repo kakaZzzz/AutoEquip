@@ -42,4 +42,8 @@ if locale == 'zhCN' then
 	L[" Settings"] = " 打开设置"
 	L[" Close"] = " 关闭菜单"
 	L["Enable ItemBar"] = "启用装备栏"
+
+	L["|cFF00FF00Enabled|r"] = "<|cFF00FF00启用|r>"
+	L["|cFFFF0000Disabled|r"] = "<|cFFFF0000停用|r>"
+	L["AutoEquip: PVP mode "] = "AutoEquip: PVP模式 "
 end

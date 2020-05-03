@@ -6,6 +6,7 @@ local diff = AQSELF.diff
 local L = AQSELF.L
 local player = AQSELF.player
 local initSV = AQSELF.initSV
+local GetItemTexture = AQSELF.GetItemTexture
 
 -- 初始化插件
 function AQSELF.addonInit()
@@ -41,6 +42,10 @@ function AQSELF.addonInit()
             if msg == "settings" then
                  InterfaceOptionsFrame_OpenToCategory("AutoEquip");
                  InterfaceOptionsFrame_OpenToCategory("AutoEquip");
+            end
+
+            if msg == "pvp" then
+                 aq_pvp()
             end
         end
 
@@ -161,13 +166,18 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
     slot["busy"] = false
 
-    if tContains(queue, slot["id"]) 
-        then slot["busy"] = true 
+    if tContains(queue, slot["id"]) then 
+        slot["busy"] = true 
+    end
+
+    if AQSV["slot"..slot_id.."Locked"] then
+        slot["busy"] = true 
     end
 
     -- 饰品已经使用，并且超过了buff时间
     if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] + 1 then
         slot["busy"] = false
+        AQSV["slot"..slot_id.."Locked"] = false
     end
 
     -- 使用busy属性，控制饰品槽是否参与更换逻辑
@@ -208,11 +218,13 @@ function AQSELF.buildQueueRealtime()
     local inBattleground = UnitInBattleground("player")
 
     for k,v in pairs(AQSV.usable) do
-        if inBattleground or AQSELF.pvpMode then
+        if inBattleground or AQSV.pvpMode then
+            AQSELF.pvpIcon:Show()
             if AQSV.pvpTrinkets[v] then
                 table.insert(queue, v)
             end
         else
+            AQSELF.pvpIcon:Hide()
             if AQSV.pveTrinkets[v] then
                 table.insert(queue, v)
             end
@@ -282,12 +294,60 @@ function AQSELF.changeTrinket()
 end
 
 function aq_pvp()
-    AQSELF.pvpMode = not AQSELF.pvpMode
+    AQSV.pvpMode = not AQSV.pvpMode
     local on = ""
-    if AQSELF.pvpMode then
-        on =L["Enabled"]
+    if AQSV.pvpMode then
+        on =L["|cFF00FF00Enabled|r"]
     else
-        on =L["Disabled"]
+        on =L["|cFFFF0000Disabled|r"]
     end
-    print("AutoEquip: PVP mode "..on)
+
+    if AQSV.pvpMode then
+        AQSELF.pvpIcon:Show()
+    else
+        AQSELF.pvpIcon:Hide()
+    end
+    print(L["AutoEquip: PVP mode "]..on)
+end
+
+function AQSELF.setWait(item_id, slot_id)
+    local texture = GetItemTexture(item_id)
+    AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
+
+    AQSV["slot"..slot_id.."Wait"] = {
+        item_id,
+        slot_id
+    }
+    debug(AQSV["slot"..slot_id.."Wait"])
+end
+
+function AQSELF.equipWait(item_id, slot_id)
+    EquipItemByName(item_id, slot_id)
+    AQSV["slot"..slot_id.."Locked"] = true
+    AQSV["slot"..slot_id.."Wait"] = nil
+    AQSELF.slotFrames[slot_id].wait:SetTexture()
+end
+
+function AQSELF.checkAllWait()
+    for k,v in pairs(AQSELF.slots) do
+        if AQSV["slot"..v.."Wait"] then
+            debug(AQSV["slot"..v.."Wait"])
+            local one = AQSV["slot"..v.."Wait"]
+            AQSELF.equipWait(one[1], one[2])
+        end
+    end
+end
+
+function AQSELF.playerCanEquip()
+    local f=UnitAffectingCombat("player")
+    local d=UnitIsDeadOrGhost("player")
+    local c1 = CastingInfo("player") 
+    local c2 = ChannelInfo("player") 
+
+
+    if f or d or c1 or c2 then
+        return false
+    else
+        return true
+    end
 end
