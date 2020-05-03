@@ -208,7 +208,7 @@ function AQSELF.buildQueueRealtime()
     local inBattleground = UnitInBattleground("player")
 
     for k,v in pairs(AQSV.usable) do
-        if inBattleground then
+        if inBattleground or AQSELF.pvpMode then
             if AQSV.pvpTrinkets[v] then
                 table.insert(queue, v)
             end
@@ -279,4 +279,15 @@ function AQSELF.changeTrinket()
     if not slot14["busy"] and AQSV.slot14 ~= slot14["id"] and AQSV.slot14 >0 then
         EquipItemByName(AQSV.slot14, 14)
     end
+end
+
+function aq_pvp()
+    AQSELF.pvpMode = not AQSELF.pvpMode
+    local on = ""
+    if AQSELF.pvpMode then
+        on =L["Enabled"]
+    else
+        on =L["Disabled"]
+    end
+    print("AutoEquip: PVP mode "..on)
 end

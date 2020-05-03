@@ -54,6 +54,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
+            AQSV.pvpMode = initSV(AQSV.pvpMode, false)
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
