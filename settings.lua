@@ -10,10 +10,14 @@ local player = AQSELF.player
 -- 设置菜单初始化
 function AQSELF.settingInit()
 
-    local f = CreateFrame("Frame", nil, UIParent)
+    
+    local p = CreateFrame("ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
+    local f = CreateFrame("Frame", nil, p)
+    
+
     AQSELF.f = f
 
-    f.name = "AutoEquip"
+    p.name = "AutoEquip"
     -- 缓存主动饰品下拉框
     f.dropdown = {}
     -- 缓存常驻饰品下拉框
@@ -32,19 +36,19 @@ function AQSELF.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Usable Trinkets:"])
-        t:SetPoint("TOPLEFT", f, 25, -235)
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["If you get a new trinket (include take it from bank)."])
-        t:SetPoint("TOPLEFT", f, 135, -180)
+        t:SetPoint("TOPLEFT", f, 135, -270)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
         b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 23, -170)
+        b:SetPoint("TOPLEFT", f, 23, -260)
         b:SetScript("OnClick", function(self)
             debug("rl")
             C_UI.Reload()
@@ -132,9 +136,10 @@ function AQSELF.settingInit()
 
     -- 构建两个饰品组
     function buildDropdownGroup()
+        local height = 0
         for k,v in ipairs(AQSV.usable) do
             local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, -(230 + k*35))
+            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeight + 5 - k*35)
             -- 保存当前选项序号
             dropdown.index = k
             -- 缓存到父框架中，供后续调用
@@ -142,10 +147,10 @@ function AQSELF.settingInit()
 
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["No. "]..k)
-            l:SetPoint("TOPLEFT", f, 25, -(235 + k*35))
+            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - k*35)
 
             -- 保存最后一个下拉框的位置
-            AQSELF.lastHeight = -(235 + k*35)
+            height = AQSELF.lastHeight - k*35
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
@@ -159,7 +164,7 @@ function AQSELF.settingInit()
 
             -- 后面追加checkbox
             local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-            b:SetPoint("TOPLEFT", 350, -(228 + k*35))
+            b:SetPoint("TOPLEFT", 350, AQSELF.lastHeight + 7 - k*35)
             b:SetChecked(AQSV.pveTrinkets[v])
             f.pveCheckbox[k] = b
 
@@ -174,7 +179,7 @@ function AQSELF.settingInit()
             end)
 
             local b1 = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-            b1:SetPoint("TOPLEFT", 420, -(228 + k*35))
+            b1:SetPoint("TOPLEFT", 420, AQSELF.lastHeight + 7 - k*35)
             b1:SetChecked(AQSV.pvpTrinkets[v])
             f.pvpCheckbox[k] = b1
 
@@ -189,13 +194,15 @@ function AQSELF.settingInit()
             end)
         end
 
+        AQSELF.lastHeight = height
+
         -- 没有主动饰品的情况
         if #AQSV.usable == 0 then
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
             l:SetPoint("TOPLEFT", f, 25, -(235 + 35))
 
-            AQSELF.lastHeight = -(235 + 35)
+            AQSELF.lastHeight = AQSELF.lastHeight - 35
         end
 
         do
@@ -246,33 +253,62 @@ function AQSELF.settingInit()
         b:SetChecked(AQSV[key])
 
         b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        b.text:SetPoint("LEFT", b, "RIGHT", 0, 1)
+        b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
         b.text:SetText(text)
         b:SetScript("OnClick", function()
             AQSV[key] = not AQSV[key]
             b:SetChecked(AQSV[key])
 
-            if key == "enable" or key == "enableItemBar" then  
+            if key == "enableItemBar" then  
                 -- 装备栏的开关
-                if not AQSV.enableItemBar or not AQSV.enable then
+                if not AQSV.enableItemBar then
                     AQSELF.bar:Hide()
                 else
                     AQSELF.bar:Show()
                 end
+            end
+
+            if key == "enableBuff" then  
+                -- 装备栏的开关
+                if not AQSV.enableBuff then
+                    AQSELF.buff:Hide()
+                else
+                    AQSELF.buff:Show()
+                end
+            end
+
+            if key == "locked" then
+                AQSELF.lockItemBar()
+            end
+
+            if key == "buffLocked" then
+                AQSELF.lockBuff()
             end
         end)
 
         f.checkbox[key] = b
     end
 
-    buildCheckbox(L["Enable"].." <"..player..">", "enable", -60)
-    buildCheckbox(L["Enable ItemBar"], "enableItemBar", -60, 240)
-    buildCheckbox(L["enable_battleground"], "enableBattleground", -85)
-    buildCheckbox(L["enable_carrot"], "enableCarrot", -110)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", -135)
+    buildCheckbox(L["Enable AutoEquip function"].." <"..player..">", "enable", -60)
+
+    buildCheckbox(L["Enable ItemBar"], "enableItemBar", -85)
+    buildCheckbox(L["Lock"], "locked", -85, 200)
+
+    buildCheckbox(L["Enable BuffAlert"], "enableBuff", -110)
+    buildCheckbox(L["Lock"], "buffLocked", -110, 200)
+
+    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -150)
+    buildCheckbox(L["enable_carrot"], "enableCarrot", -175)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", -200)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -225)
 
     buildDropdownGroup()
-    InterfaceOptions_AddCategory(f)
+
+    f:SetAllPoints(p)
+    p:SetScrollChild(f)
+    f:SetSize(1000, -AQSELF.lastHeight)
+
+    InterfaceOptions_AddCategory(p)
 
     -- 运行两遍才行
     -- InterfaceOptionsFrame_OpenToCategory("AutoEquip");

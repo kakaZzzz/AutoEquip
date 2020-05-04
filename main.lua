@@ -57,9 +57,18 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
+            AQSV.xBuff = initSV(AQSV.xBuff, 200)
+            AQSV.yBuff = initSV(AQSV.yBuff, 50)
+            AQSV.pointBuff = initSV(AQSV.pointBuff, "CENTER")
+
+            AQSV.enableBuff = initSV(AQSV.enableBuff, true)
+            AQSV.buffLocked = initSV(AQSV.buffLocked, false)
+
+            AQSV.forcePriority = initSV(AQSV.forcePriority, false)
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
+            AQSELF.createBuffIcon()
             print(L["AutoEquip: Loaded"])
             AQSELF.init = true
         end

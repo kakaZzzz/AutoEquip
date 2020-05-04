@@ -12,5 +12,6 @@ config.lua
 data.lua
 settings.lua
 core.lua
+buff.lua
 ui.lua
 main.lua

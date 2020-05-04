@@ -101,14 +101,7 @@ function  AQSELF.createMenu()
 	menu[1]["checked"] = AQSV.locked
 	menu[1]["func"] = function()
 		AQSV.locked = not AQSV.locked
-		menu[1]["checked"] = AQSV.locked
-
-		AQSELF.bar:SetMovable(not AQSV.locked)
-		if AQSV.locked then
-			AQSELF.bar:RegisterForDrag("")
-		else
-			AQSELF.bar:RegisterForDrag("LeftButton")
-		end
+		AQSELF.lockItemBar()
 	end
 
 	menu[2] = {}
@@ -125,11 +118,26 @@ function  AQSELF.createMenu()
 	end
 
 	AQSELF.menu = menuFrame
+	AQSELF.menuList = menu
 
 	AQSELF.bar:RegisterForClicks("RightButtonDown");
 	AQSELF.bar:SetScript('OnClick', function(self, button)
 	    EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
 	end)
+end
+
+function AQSELF.lockItemBar()
+	
+	AQSELF.menuList[1]["checked"] = AQSV.locked
+
+	AQSELF.bar:SetMovable(not AQSV.locked)
+	if AQSV.locked then
+		AQSELF.bar:RegisterForDrag("")
+	else
+		AQSELF.bar:RegisterForDrag("LeftButton")
+	end
+
+	AQSELF.f.checkbox["locked"]:SetChecked(AQSV.locked)
 end
 
 function AQSELF.createItemButton( slot_id, position )
@@ -199,6 +207,21 @@ function AQSELF.createItemButton( slot_id, position )
 	t2:SetAllPoints(wait)
 	
 	button.wait = t2
+
+	-- 锁定层
+    local locker = CreateFrame("Frame", nil, button)
+    -- 设0不成功
+    locker:SetSize(16, 16)
+    locker:SetPoint("BOTTOMRIGHT", button, 0, 2)
+    locker:SetFrameLevel(4)
+
+   	local t3 = locker:CreateTexture(nil, "BACKGROUND")
+	t3:SetAllPoints(locker)
+	t3:SetTexture("Interface\\GLUES\\CharacterSelect\\Glues-AddOn-Icons.blp")
+	t3:SetTexCoord(0, 0.25, 0, 1)
+	t3:Hide()
+	
+	button.locker = t3
 
 	-- 按钮定位
    	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 +3), 0)
