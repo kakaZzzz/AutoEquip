@@ -21,19 +21,19 @@ function AQSELF.createBuffIcon()
 	f:SetBackdropColor(0,0,0,1);
 
 	-- buff时间倒计时
-	local t1 = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-	t1:SetFont(STANDARD_TEXT_FONT, 22)
-	t1:SetShadowColor(0, 0, 0, 1)
-	t1:SetShadowOffset(1, -1)
+	local t1 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	t1:SetFont(STANDARD_TEXT_FONT, 18, "OUTLINE")
+	-- t1:SetShadowColor(0, 0, 0, 1)
+	-- t1:SetShadowOffset(1, -1)
     t1:SetPoint("BOTTOM", f, 2, -24)
     
     f.buffTime = t1
 
     -- buff层数
-    local t2 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	t2:SetFont(STANDARD_TEXT_FONT, 18)
-	t2:SetShadowColor(0, 0, 0, 1)
-	t2:SetShadowOffset(1, -1)
+    local t2 = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	t2:SetFont(STANDARD_TEXT_FONT, 18, "OUTLINE")
+	-- t2:SetShadowColor(0, 0, 0, 1)
+	-- t2:SetShadowOffset(1, -1)
     t2:SetPoint("CENTER", f, 2, 0)
     
     f.count = t2
@@ -44,11 +44,11 @@ function AQSELF.createBuffIcon()
 	f.texture = texture
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	text:SetFont(STANDARD_TEXT_FONT, 12)
+	text:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE")
 	text:SetText("DRAG")
-	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, -1)
-    text:SetPoint("CENTER", f, 0, 0)
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
+    text:SetPoint("CENTER", f, 2, 0)
 
     f.drag = text
 
@@ -78,10 +78,6 @@ function AQSELF.createBuffIcon()
 	f:SetScript('OnClick', function(self, button)
 	    EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
 	end)
-
-	AQSV.buffNames = {
-		"能量无常","思维敏捷"
-	}
 
 	-- 定位判断
 	AQSELF.lockBuff()
@@ -140,7 +136,7 @@ function AQSELF.onBuffChanged(self, elapsed)
 		local name, icon, count, debuffType, duration, expire = UnitBuff("player", index)
 
 		while name do
-			if tContains(AQSV.buffNames, name) then
+			if string.find(AQSV.buffNames, name) then
 				name = nil
 				find = true
 			else
@@ -169,9 +165,4 @@ function AQSELF.onBuffChanged(self, elapsed)
 			AQSELF.buff.buffTime:SetText()
 		end
 	end
-end
-
-function AQSELF.cancelLocker( slot_id )
-	AQSV["slot"..slot_id.."Locked"] = false
-    AQSELF.slotFrames[slot_id].locker:Hide()
 end

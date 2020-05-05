@@ -238,6 +238,8 @@ function AQSELF.settingInit()
             UIDropDownMenu_SetWidth(dropdown, 200)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
         end
+
+        AQSELF.lastHeight = AQSELF.lastHeight-(45 + 2*35)
     end
 
     function buildCheckbox(text, key, pos, x)
@@ -303,6 +305,51 @@ function AQSELF.settingInit()
     buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -225)
 
     buildDropdownGroup()
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Buff Alert:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-50)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - BuffName1,BuffName2,BuffName3"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 75)
+    end
+
+    local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+    s:SetSize(350,80)
+    s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 100)
+    s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+    s:SetBackdropBorderColor(1,1,1,0.7);
+    local e = CreateFrame("EditBox", nil, s)
+    e:SetMultiLine(true)
+    e:SetFontObject("GameFontHighlight")
+    e:SetWidth(300)
+    -- AQSV.buffNames = nil
+    e:SetText(AQSV.buffNames)
+    e:SetTextInsets(8,8,8,8)
+    e:SetAutoFocus(false)
+
+    s:SetScrollChild(e)
+    --- demo multi line text
+    -- e:HighlightText() -- select all (if to be used for copy paste)
+    -- optional/just to close that frame
+
+    do
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Submit"])
+        b:SetWidth(80)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 98)
+        b:SetScript("OnClick", function(self)
+            debug(e:GetText())
+            AQSV.buffNames = e:GetText()
+        end)
+    end
+
+    AQSELF.lastHeight = AQSELF.lastHeight - 200
 
     f:SetAllPoints(p)
     p:SetScrollChild(f)

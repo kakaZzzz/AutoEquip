@@ -175,9 +175,9 @@ function AQSELF.createItemButton( slot_id, position )
 	tf:SetFrameLevel(4)
 
 	local text = tf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	text:SetFont(STANDARD_TEXT_FONT, 18)
-	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, -1)
+	text:SetFont(STANDARD_TEXT_FONT, 18, "OUTLINE")
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
     text:SetPoint("TOPLEFT", button, 2, 8)
     
     button.text = text
@@ -318,9 +318,9 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	tf:SetFrameLevel(101)
 
 	local text = tf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	text:SetFont(STANDARD_TEXT_FONT, 16)
-	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, -1)
+	text:SetFont(STANDARD_TEXT_FONT, 16, "OUTLINE")
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
     text:SetPoint("TOP", button, 40, 0)
     text:SetJustifyH("LEFT")
     
@@ -396,9 +396,9 @@ function AQSELF.createCooldownUnit( item_id, position )
 	t:SetAllPoints(f)
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	text:SetFont(STANDARD_TEXT_FONT, 14)
-	text:SetShadowColor(0, 0, 0, 1)
-	text:SetShadowOffset(1, -1)
+	text:SetFont(STANDARD_TEXT_FONT, 14, "OUTLINE")
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
     text:SetPoint("TOP", f, 25, 0)
     text:SetJustifyH("LEFT")
 

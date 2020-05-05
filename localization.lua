@@ -48,4 +48,7 @@ if locale == 'zhCN' then
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
 	L["|cFFFF0000Disabled|r"] = "|cFFFF0000停用|r"
 	L["AutoEquip: PVP mode "] = "AutoEquip: PVP模式 "
+
+	L["Buff Alert:"] = "Buff提醒:"
+	L["Format - BuffName1,BuffName2,BuffName3"] = "格式 - Buff名称1,Buff名称2,Buff名称3"
 end

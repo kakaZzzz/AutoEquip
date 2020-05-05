@@ -47,6 +47,12 @@ function AQSELF.addonInit()
             if msg == "pvp" then
                  aq_pvp()
             end
+
+            if msg == "unlock" then
+                 for k,v in pairs(AQSELF.slots) do
+                     AQSELF.cancelLocker(v)
+                 end
+            end
         end
 
 end
@@ -367,6 +373,11 @@ function AQSELF.setWait(item_id, slot_id)
         slot_id
     }
     debug(AQSV["slot"..slot_id.."Wait"])
+end
+
+function AQSELF.cancelLocker( slot_id )
+    AQSV["slot"..slot_id.."Locked"] = false
+    AQSELF.slotFrames[slot_id].locker:Hide()
 end
 
 function AQSELF.equipWait(item_id, slot_id)

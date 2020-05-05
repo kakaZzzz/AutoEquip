@@ -16,7 +16,7 @@ AQSELF.init = false
 AQSELF.player = UnitName("player")
 
 -- 构建下拉框组时，记录纵坐标
-AQSELF.lastHeight = -350
+AQSELF.lastHeight = -315
 
 -- 操作的装备栏
 AQSELF.slots = {13, 14}
