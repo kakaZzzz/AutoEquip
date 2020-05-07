@@ -45,7 +45,7 @@ function AQSELF.createBuffIcon()
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	text:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE")
-	text:SetText("DRAG")
+	text:SetText(L["DRAG"])
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
     text:SetPoint("CENTER", f, 2, 0)
@@ -107,9 +107,12 @@ end
 function AQSELF.lockBuff()
 
 	AQSELF.buff.menuList[1]["checked"] = AQSV.buffLocked
+
+	print(AQSV.buffLocked)
 	
 	AQSELF.buff:EnableMouse(not AQSV.buffLocked)
 	AQSELF.buff:SetMovable(not AQSV.buffLocked)
+	AQSELF.buff:RegisterForDrag("LeftButton")
 
 	AQSELF.f.checkbox["buffLocked"]:SetChecked(AQSV.buffLocked)
 

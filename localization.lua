@@ -59,4 +59,5 @@ if locale == 'zhCN' then
 	L["Submit & Reload UI"] = "提交并重载UI"
 
 	L["Command:"] = "命令行:"
+	L["DRAG"] = "拖拽"
 end
