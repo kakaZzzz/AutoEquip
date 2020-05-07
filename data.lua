@@ -54,10 +54,10 @@ AQSELF.chests = {}
 AQSELF.pvpSet = {
 	18854,18856,18857,18858,18859,18862,18863,18864,
 	18834,18845,18846,18849,18850,18851,18852,18853,
-	14023,10645
+	10645
 }
 
-buffTime[14023] = 0                    	-- 管家铃（测试用）
+-- buffTime[14023] = 0                    	-- 管家铃（测试用）
 buffTime[10645] = 0                    	-- 侏儒死亡射线
 
 AQSELF.usable = merge(AQSELF.pveSet, AQSELF.pvpSet)

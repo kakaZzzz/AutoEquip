@@ -151,9 +151,19 @@ function AQSELF.createItemButton( slot_id, position )
 		itemTexture = GetItemTexture(itemId)
 	end
 
+	-- 不然会继承parent的按键设置
+	button:RegisterForClicks("AnyDown")
+
+	-- 左键触发物品
 	button:SetAttribute("type1", "item")
-	-- 饰品切换后自动匹配
+	-- 饰品切换后自动匹配点击功能
     button:SetAttribute("slot", slot_id)
+
+    -- 右键解锁
+    button:SetAttribute("type2", "unlockSlot")
+    button.unlockSlot = function( ... )
+    	AQSELF.cancelLocker(slot_id)
+    end
 
   	button:SetFrameLevel(2)
   	-- 高亮材质
@@ -219,9 +229,19 @@ function AQSELF.createItemButton( slot_id, position )
 	t3:SetAllPoints(locker)
 	t3:SetTexture("Interface\\GLUES\\CharacterSelect\\Glues-AddOn-Icons.blp")
 	t3:SetTexCoord(0, 0.25, 0, 1)
-	t3:Hide()
+
+	if AQSV["slot"..slot_id.."Locked"] then
+		t3:Show()
+	else
+		t3:Hide()
+	end
 	
 	button.locker = t3
+
+	-- button:RegisterForClicks("RightButtonDown");
+	-- button:SetScript('OnClick', function(self, button)
+	--     EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
+	-- end)
 
 	-- 按钮定位
    	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 +3), 0)
@@ -230,6 +250,9 @@ function AQSELF.createItemButton( slot_id, position )
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
 		AQSELF.showTooltip("inventory", slot_id)
+
+		-- 更新物品在背包里的位置
+		AQSELF.updateItemInBags()
 
 		-- 显示可用饰品的下拉框
 		AQSELF.itemDropdownTimestamp = nil
@@ -333,10 +356,12 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
    	button:SetScript("OnEnter", function(self)
    		-- 停掉隐藏下拉框的计时器
 		AQSELF.itemDropdownTimestamp = nil
+		AQSELF.showTooltip("bag", AQSELF.itemInBags[item_id][1], AQSELF.itemInBags[item_id][2])
 	end)
    	button:SetScript("OnLeave", function( self )
    		-- 开启隐藏计时
    		AQSELF.hideItemDropdown( 0.5 )
+   		AQSELF.hideTooltip()
    	end)
 
 	button.inSlot = slot_id

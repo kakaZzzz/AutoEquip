@@ -11,6 +11,8 @@ local GetItemTexture = AQSELF.GetItemTexture
 -- 初始化插件
 function AQSELF.addonInit()
 
+        AQSELF.addItems()
+
         for k,v in pairs(AQSELF.pvpSet) do
             if GetItemCount(v) > 0 then
                 table.insert(AQSELF.pvp, v)
@@ -57,6 +59,34 @@ function AQSELF.addonInit()
 
 end
 
+AQSELF.addItems = function()
+    -- 兼容全角逗号
+    AQSV.additionItems = string.gsub(AQSV.additionItems,"，", ",")
+    local t = { strsplit(",", AQSV.additionItems) }
+
+    for k,v in pairs(t) do
+        -- 去掉两端空格
+        v= strtrim(v)
+        local id, time = strsplit("/", v)
+        -- 避免非数字的情况
+        id = tonumber(id)
+        time = tonumber(time)
+
+        if not tContains(AQSELF.usable, id) and id and time then
+            table.insert(AQSELF.usable, id)
+            AQSELF.buffTime[id] = time
+
+            if AQSV.pvpTrinkets[id] == nil then
+                AQSV.pvpTrinkets[id] = false
+            end
+            if AQSV.pveTrinkets[id] == nil then
+                AQSV.pveTrinkets[id] = false
+            end
+        end
+    end
+    debug(AQSELF.usable)
+end
+
 AQSELF.initGroupCheckbox = function()
     for k,v in pairs(AQSELF.pvp) do
         if AQSV.pveTrinkets[v] == nil then
@@ -80,11 +110,14 @@ AQSELF.checkUsable = function()
     -- print(AQSV.usable)
     local new = {}
     for i,v in ipairs(AQSV.usable) do
-        if GetItemCount(v) > 0 then
+
+        if GetItemCount(v) > 0 and not tContains(new, v) and tContains(AQSELF.usable, v) then
             table.insert(new, v)
         end
+        -- debug(new)
     end
     AQSV.usable = new
+    -- debug(AQSV.usable)
 
     -- 获得新饰品，或者从银行取出，保持优先级不变，追加到最后
     for i,v in ipairs(AQSELF.usable) do
@@ -92,6 +125,7 @@ AQSELF.checkUsable = function()
             table.insert(AQSV.usable, v)
         end
     end
+    -- debug(AQSV.usable)
 end
 
 -- 检查角色身上所有的饰品
@@ -113,6 +147,9 @@ AQSELF.checkTrinket = function( )
         table.insert(AQSELF.chests, slot5Id)
     end
 
+    -- 保存饰品在背包中的位置
+    AQSELF.itemInBags = {}
+
     for i=0,NUM_BAG_SLOTS do
         local count = GetContainerNumSlots(i)
 
@@ -129,6 +166,7 @@ AQSELF.checkTrinket = function( )
 
                     if itemEquipLoc == "INVTYPE_TRINKET" then
                         table.insert(AQSELF.trinkets, id)
+                        AQSELF.itemInBags[id] = {i,s}
                     end
 
                     if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
@@ -149,6 +187,32 @@ AQSELF.checkTrinket = function( )
         return a > b
     end)
 
+end
+
+AQSELF.updateItemInBags = function()
+    for i=0,NUM_BAG_SLOTS do
+        local count = GetContainerNumSlots(i)
+
+        for s=1,count do
+            if GetContainerItemInfo(i,s) then
+
+                -- fix：背包槽位是空的时候，会中断循环
+                local id = GetContainerItemID(i,s)
+
+                -- if id ~= "" then
+                    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
+
+                    if itemEquipLoc == "INVTYPE_TRINKET" then
+                        AQSELF.itemInBags[id] = {i,s}
+                    end
+
+                    -- if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
+                    --     table.insert(AQSELF.chests, id)
+                    -- end
+                -- end
+            end  
+        end
+    end
 end
 
 
@@ -289,7 +353,7 @@ function AQSELF.changeTrinket()
                     slot13["busy"] = true
                     slot13["priority"] = k
                     -- AQSELF.cancelLocker( 13 )
-                elseif k <  slot14["priority"] and not AQSV["slot14Locked"] then
+                elseif k <  slot14["priority"] and not AQSV["slot14Locked"] and not AQSV.disableSlot14 then
                     EquipItemByName(v, 14)
                     slot14["busy"] = true
                     slot14["priority"] = k

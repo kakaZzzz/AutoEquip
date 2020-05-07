@@ -67,6 +67,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.forcePriority = initSV(AQSV.forcePriority, false)
 
             AQSV.buffNames = initSV(AQSV.buffNames, "能量无常,思维敏捷")
+            AQSV.additionItems = initSV(AQSV.additionItems, "14023/0")
 
             AQSELF.addonInit()
             AQSELF.createItemBar()

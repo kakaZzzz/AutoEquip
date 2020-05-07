@@ -19,6 +19,7 @@ L["enable_carrot"] = "Equip \124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[Carr
 if locale == 'zhCN' then
 
 	L["Enable"] = "启用"
+	L["Enable AutoEquip function"] = "启用自动换装备功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备\124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[棍子上的胡萝卜]\124h\124r（饰品栏2/战场中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2（让极品被动饰品常驻，如耐泪）"
@@ -44,11 +45,18 @@ if locale == 'zhCN' then
 	L[" Settings"] = " 打开设置"
 	L[" Close"] = " 关闭菜单"
 	L["Enable ItemBar"] = "启用装备栏"
+	L["Enable BuffAlert"] = "启用Buff提醒"
 
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
 	L["|cFFFF0000Disabled|r"] = "|cFFFF0000停用|r"
-	L["AutoEquip: PVP mode "] = "AutoEquip: PVP模式 "
+	L["AutoEquip: PVP mode "] = "AutoEquip: PVP模式"
 
-	L["Buff Alert:"] = "Buff提醒:"
-	L["Format - BuffName1,BuffName2,BuffName3"] = "格式 - Buff名称1,Buff名称2,Buff名称3"
+	L["Custom Buff Alert:"] = "自定义Buff提醒:"
+	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
+	L["Append Usable Items:"] = "追加主动装备"
+	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 装备ID/Buff持续时间,装备ID/Buff持续时间"
+	L["Submit"] = "提交"
+	L["Submit & Reload UI"] = "提交并重载UI"
+
+	L["Command:"] = "命令行:"
 end

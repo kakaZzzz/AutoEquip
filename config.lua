@@ -5,10 +5,10 @@ local initSV = AQSELF.initSV
 
 -- 配置 --
 
-AQSELF.version = "v2.10"
+AQSELF.version = "v3.0"
 
-AQSELF.enableDebug = true          -- 调试开关
--- AQSELF.enableDebug = false          -- 调试开关
+-- AQSELF.enableDebug = true          -- 调试开关
+AQSELF.enableDebug = false          -- 调试开关
 
 AQSELF.init = false
 

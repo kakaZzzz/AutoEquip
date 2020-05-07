@@ -42,7 +42,7 @@ function AQSELF.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["If you get a new trinket (include take it from bank)."])
-        t:SetPoint("TOPLEFT", f, 135, -270)
+        t:SetPoint("TOPLEFT", f, 135, -265)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
@@ -291,13 +291,13 @@ function AQSELF.settingInit()
         f.checkbox[key] = b
     end
 
-    buildCheckbox(L["Enable AutoEquip function"].." <"..player..">", "enable", -60)
+    buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
     buildCheckbox(L["Enable ItemBar"], "enableItemBar", -85)
-    buildCheckbox(L["Lock"], "locked", -85, 200)
+    buildCheckbox(L["Lock"], "locked", -85, 300)
 
     buildCheckbox(L["Enable BuffAlert"], "enableBuff", -110)
-    buildCheckbox(L["Lock"], "buffLocked", -110, 200)
+    buildCheckbox(L["Lock"], "buffLocked", -110, 300)
 
     buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -150)
     buildCheckbox(L["enable_carrot"], "enableCarrot", -175)
@@ -308,48 +308,179 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Buff Alert:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-50)
+        t:SetText(L["Custom Buff Alert:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["Format - BuffName1,BuffName2,BuffName3"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 75)
+        t:SetText(L["Format - BuffName,BuffName,BuffName"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
     end
 
-    local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
-    s:SetSize(350,80)
-    s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 100)
-    s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-    s:SetBackdropBorderColor(1,1,1,0.7);
-    local e = CreateFrame("EditBox", nil, s)
-    e:SetMultiLine(true)
-    e:SetFontObject("GameFontHighlight")
-    e:SetWidth(300)
-    -- AQSV.buffNames = nil
-    e:SetText(AQSV.buffNames)
-    e:SetTextInsets(8,8,8,8)
-    e:SetAutoFocus(false)
-
-    s:SetScrollChild(e)
-    --- demo multi line text
-    -- e:HighlightText() -- select all (if to be used for copy paste)
-    -- optional/just to close that frame
-
     do
+
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        s:SetSize(350,80)
+        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+        s:SetBackdropBorderColor(1,1,1,0.7);
+        local e = CreateFrame("EditBox", nil, s)
+        e:SetMultiLine(true)
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(300)
+        -- AQSV.buffNames = nil
+        e:SetText(AQSV.buffNames)
+        e:SetTextInsets(8,8,8,8)
+        e:SetAutoFocus(false)
+
+        s:SetScrollChild(e)
+
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Submit"])
-        b:SetWidth(80)
+        b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 98)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
         b:SetScript("OnClick", function(self)
             debug(e:GetText())
             AQSV.buffNames = e:GetText()
         end)
     end
 
+    AQSELF.lastHeight = AQSELF.lastHeight - 160
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Append Usable Items:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        s:SetSize(350,80)
+        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+        s:SetBackdropBorderColor(1,1,1,0.7);
+        local e = CreateFrame("EditBox", nil, s)
+        e:SetMultiLine(true)
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(300)
+        -- AQSV.buffNames = nil
+        e:SetText(AQSV.additionItems)
+        e:SetTextInsets(8,8,8,8)
+        e:SetAutoFocus(false)
+
+        s:SetScrollChild(e)
+
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Submit & Reload UI"])
+        b:SetWidth(160)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
+        b:SetScript("OnClick", function(self)
+            debug(e:GetText())
+            AQSV.additionItems = e:GetText()
+            C_UI.Reload()
+        end)
+    end
+
+    AQSELF.lastHeight = AQSELF.lastHeight - 160
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Command:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- 启用/禁用自动更换装备功能"])
+        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 85)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq settings"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 105)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- 打开设置页面"])
+        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 105)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq pvp"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- 手动启动/禁用PVP模式"])
+        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 125)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq unlock"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 145)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- 解锁装备栏（锁定时自动更换不生效）"])
+        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 145)
+    end
+
+    AQSELF.lastHeight = AQSELF.lastHeight - 130
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Tips:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["1. 通过装备栏手动更换装备，将会暂时锁定对应装备栏（自动更换功能不生效）"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["2. 解锁装备栏可以右键点击，或者聊天框输入/aq unlock"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 105)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["3. 使用物品后，对应装备栏将会自动解锁"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["4. 自动换装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+    end
+
     AQSELF.lastHeight = AQSELF.lastHeight - 200
+
 
     f:SetAllPoints(p)
     p:SetScrollChild(f)
