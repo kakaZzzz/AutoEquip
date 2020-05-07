@@ -244,8 +244,24 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         slot["busy"] = true 
     end
 
+    -- 如果buff时间没有记录，默认为0
+    if AQSELF.buffTime[slot["id"]] == nil then
+        AQSELF.buffTime[slot["id"]] = 0
+    end
+
+    -- 如果当前饰品可用，或者剩余时间30秒之内，取消CD锁
+    -- 主动换饰品后，延迟5秒判断，避免出现实际判断的是上一个饰品
+    if (slot["duration"] <= 30 or slot["rest"] <30) and (GetTime() - AQSV["slot"..slot_id.."LockedTime"]) > 5  then
+        AQSV["slot"..slot_id.."LockedCD"] = false
+        AQSV["slot"..slot_id.."LockedTime"] = 0
+    end
+
+        print(slot_id, AQSV["slot"..slot_id.."LockedCD"])
+
     -- 饰品已经使用，并且超过了buff时间
-    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] + 1 then
+    -- 剩余时间要大于30，避免饰品使用后，但是cd快到了，还被换下
+    -- 主动CD锁判断
+    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] + 1 and slot["rest"] > 30 and not AQSV["slot"..slot_id.."LockedCD"] then
         slot["busy"] = false
         -- 饰品使用后，取消锁定
         AQSELF.cancelLocker( slot_id )
@@ -428,6 +444,20 @@ function aq_pvp()
     print(L["AutoEquip: PVP mode "]..on)
 end
 
+function AQSELF.setCDLock( item_id, slot_id )
+
+    local start, duration, enable = GetItemCooldown(item_id)
+
+    -- 处在使用CD时，才加锁
+    if duration > 30 then
+        AQSV["slot"..slot_id.."LockedCD"] = true
+        AQSV["slot"..slot_id.."LockedTime"] = GetTime()
+    -- else
+    --     AQSV["slot"..slot_id.."LockedCD"] = false
+    --     AQSV["slot"..slot_id.."LockedItem"] = 0
+    end
+end
+
 function AQSELF.setWait(item_id, slot_id)
     local texture = GetItemTexture(item_id)
     AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
@@ -445,11 +475,14 @@ function AQSELF.cancelLocker( slot_id )
 end
 
 function AQSELF.equipWait(item_id, slot_id)
+
     EquipItemByName(item_id, slot_id)
     AQSV["slot"..slot_id.."Locked"] = true
     AQSV["slot"..slot_id.."Wait"] = nil
     AQSELF.slotFrames[slot_id].wait:SetTexture()
     AQSELF.slotFrames[slot_id].locker:Show()
+
+    AQSELF.setCDLock( item_id, slot_id )
 end
 
 function AQSELF.checkAllWait()

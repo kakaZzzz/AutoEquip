@@ -55,8 +55,18 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
+
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
+
+            AQSV.slot13LockedCD = initSV(AQSV.slot13LockedCD, false)
+            AQSV.slot14LockedCD = initSV(AQSV.slot14LockedCD, false)
+            
+            AQSV.slot13LockedTime = initSV(AQSV.slot13LockedTime, 0)
+            AQSV.slot14LockedTime = initSV(AQSV.slot14LockedTime, 0)
+            AQSV.slot13LockedTime = 0
+            AQSV.slot14LockedTime = 0
+
             AQSV.xBuff = initSV(AQSV.xBuff, 200)
             AQSV.yBuff = initSV(AQSV.yBuff, 50)
             AQSV.pointBuff = initSV(AQSV.pointBuff, "CENTER")

@@ -493,10 +493,10 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		end
 
 		-- 计算饰品下拉框的冷却时间
-		for k,v in pairs(AQSV.usable) do
-			if AQSELF.trinketsFrames[v] then
+		for k,v in pairs(AQSELF.trinketsFrames) do
+			-- if AQSELF.trinketsFrames[v] then
 				-- 获取饰品的冷却状态
-			    local start, duration, enable = GetItemCooldown(v)
+			    local start, duration, enable = GetItemCooldown(k)
 			    -- 剩余冷却时间
 			    local rest = math.ceil(duration - GetTime() + start)
 
@@ -507,11 +507,11 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    		text = math.ceil(rest/60).."m"
 			    	end
 
-			    	AQSELF.trinketsFrames[v].text:SetText(text)
+			    	v.text:SetText(text)
 			    else
-					AQSELF.trinketsFrames[v].text:SetText()
+					v.text:SetText()
 			    end
-			end
+			-- end
 		end
 
 		-- 计算冷却队列
