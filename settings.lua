@@ -476,7 +476,7 @@ function AQSELF.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["4. 自动换装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 145)
     end
 
     AQSELF.lastHeight = AQSELF.lastHeight - 200
