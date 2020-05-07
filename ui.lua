@@ -528,7 +528,6 @@ function AQSELF.cooldownUpdate( self, elapsed )
 	    -- 根据顺序创建图标，或者使其显示
 	    for k,v in pairs(wait) do
 	    	if not AQSELF.list[v] then
-	    		-- print(v)
 	    		AQSELF.list[v] = AQSELF.createCooldownUnit(v, k)
 	    	else
 	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)

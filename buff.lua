@@ -107,8 +107,6 @@ end
 function AQSELF.lockBuff()
 
 	AQSELF.buff.menuList[1]["checked"] = AQSV.buffLocked
-
-	print(AQSV.buffLocked)
 	
 	AQSELF.buff:EnableMouse(not AQSV.buffLocked)
 	AQSELF.buff:SetMovable(not AQSV.buffLocked)
