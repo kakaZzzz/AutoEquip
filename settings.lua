@@ -194,16 +194,18 @@ function AQSELF.settingInit()
             end)
         end
 
-        AQSELF.lastHeight = height
+        
 
         -- 没有主动饰品的情况
         if #AQSV.usable == 0 then
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
-            l:SetPoint("TOPLEFT", f, 25, -(235 + 35))
+            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 35)
 
-            AQSELF.lastHeight = AQSELF.lastHeight - 35
+            height = AQSELF.lastHeight - 35
         end
+
+        AQSELF.lastHeight = height
 
         do
             local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -330,6 +332,7 @@ function AQSELF.settingInit()
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(300)
         -- AQSV.buffNames = nil
+        -- print(AQSV.buffNames[2])
         e:SetText(AQSV.buffNames)
         e:SetTextInsets(8,8,8,8)
         e:SetAutoFocus(false)
