@@ -19,11 +19,12 @@ L["enable_carrot"] = "Equip \124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[Carr
 if locale == 'zhCN' then
 
 	L["Enable"] = "启用"
-	L["Enable AutoEquip function"] = "启用自动换装备功能"
+	L["Enable AutoEquip function"] = "启用自动装备功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备\124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[棍子上的胡萝卜]\124h\124r（饰品栏2/战场中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2（让极品被动饰品常驻，如耐泪）"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
+	L["Item queue is displayed above the Inventory Bar"] = "物品队列在装备栏上方显示"
 
 	L["Reload UI"] = "重载UI"
 	L["If you get a new trinket (include take it from bank)."] = "<=下方罗列的饰品和实际不一致"
@@ -37,8 +38,8 @@ if locale == 'zhCN' then
 	L["<There is no suitable trinkets>"] = "<没有适合的饰品>"
 	L["<Select a trinket>"] = "<选择一个饰品>"
 
-	L["AutoEquip: Enabled"] = "AutoEquip: 已启用"
-	L["AutoEquip: Disabled"] = "AutoEquip: 已禁用"
+	L["AutoEquip: |cFF00FF00Enabled|r"] = "AutoEquip: |cFF00FF00启用|r"
+	L["AutoEquip: |cFFFF0000Disabled|r"] = "AutoEquip: |cFFFF0000停用|r"
 
 	L[" Lock"] = " 锁定位置"
 	L["Lock"] = "锁定位置"
@@ -60,4 +61,5 @@ if locale == 'zhCN' then
 
 	L["Command:"] = "命令行:"
 	L["DRAG"] = "拖拽"
+	L[" Enable PVP mode"] = " 启用PVP模式"
 end

@@ -97,23 +97,37 @@ function  AQSELF.createMenu()
 	local menu = {}
 
 	menu[1] = {}
-	menu[1]["text"] = L[" Lock"]
-	menu[1]["checked"] = AQSV.locked
+	menu[1]["text"] = " "..L["Enable AutoEquip function"]
+	menu[1]["checked"] = AQSV.enable
 	menu[1]["func"] = function()
+		AQSELF.enableAutoEuquip()
+	end
+
+	menu[2] = {}
+	menu[2]["text"] = L[" Enable PVP mode"]
+	menu[2]["checked"] = AQSV.pvpMode
+	menu[2]["func"] = function()
+		AQSELF.enablePvpMode()
+	end
+
+	menu[3] = {}
+	menu[3]["text"] = L[" Settings"]
+	menu[3]["func"] = function()
+		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
+		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
+	end
+
+	menu[4] = {}
+	menu[4]["text"] = L[" Lock"]
+	menu[4]["checked"] = AQSV.locked
+	menu[4]["func"] = function()
 		AQSV.locked = not AQSV.locked
 		AQSELF.lockItemBar()
 	end
 
-	menu[2] = {}
-	menu[2]["text"] = L[" Settings"]
-	menu[2]["func"] = function()
-		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-	end
-
-	menu[3] = {}
-	menu[3]["text"] = L[" Close"]
-	menu[3]["func"] = function()
+	menu[5] = {}
+	menu[5]["text"] = L[" Close"]
+	menu[5]["func"] = function()
 		menuFrame:Hide()
 	end
 
@@ -128,7 +142,7 @@ end
 
 function AQSELF.lockItemBar()
 	
-	AQSELF.menuList[1]["checked"] = AQSV.locked
+	AQSELF.menuList[4]["checked"] = AQSV.locked
 
 	AQSELF.bar:SetMovable(not AQSV.locked)
 	if AQSV.locked then
@@ -413,7 +427,7 @@ end
 -- 绘制下方的饰品队列
 function AQSELF.createCooldownUnit( item_id, position )
 	local f = CreateFrame("Frame", nil, AQSELF.bar)
-	f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 43 - (position - 1) * 23)
+	-- f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 43 - (position - 1) * 23)
 	f:SetSize(20, 20)
 
 	local t = f:CreateTexture(nil, "BACKGROUND")
@@ -530,9 +544,16 @@ function AQSELF.cooldownUpdate( self, elapsed )
 	    	if not AQSELF.list[v] then
 	    		AQSELF.list[v] = AQSELF.createCooldownUnit(v, k)
 	    	else
-	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
+	    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
 	    		AQSELF.list[v]:Show()
 	    	end
+	    	
+	    	if AQSV.reverseCooldownUnit then
+	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , 30 + (k - 1) * 23)
+	    	else
+	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
+	    	end
+	    	
 	    end
 
 	    for k,v in pairs(AQSELF.list) do

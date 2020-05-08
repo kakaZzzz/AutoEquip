@@ -39,22 +39,6 @@ function AQSELF.settingInit()
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight)
     end
 
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["If you get a new trinket (include take it from bank)."])
-        t:SetPoint("TOPLEFT", f, 135, -265)
-
-        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
-        b:SetText(L["Reload UI"])
-        b:SetWidth(100)
-        b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 23, -260)
-        b:SetScript("OnClick", function(self)
-            debug("rl")
-            C_UI.Reload()
-        end)
-    end
-
     -- 构建主动饰品组
     function DropDown_Initialize(self,level)
         level = level or 1;
@@ -305,6 +289,23 @@ function AQSELF.settingInit()
     buildCheckbox(L["enable_carrot"], "enableCarrot", -175)
     buildCheckbox(L["Disable Slot 2"], "disableSlot14", -200)
     buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -225)
+    buildCheckbox(L["Item queue is displayed above the Inventory Bar"], "reverseCooldownUnit", -250)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["If you get a new trinket (include take it from bank)."])
+        t:SetPoint("TOPLEFT", f, 135, -290)
+
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Reload UI"])
+        b:SetWidth(100)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 23, -285)
+        b:SetScript("OnClick", function(self)
+            debug("rl")
+            C_UI.Reload()
+        end)
+    end
 
     buildDropdownGroup()
 

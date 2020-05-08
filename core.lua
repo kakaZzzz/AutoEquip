@@ -25,20 +25,12 @@ function AQSELF.addonInit()
         AQSELF.checkTrinket()
 
         AQSELF.settingInit()
-
+        
         SLASH_AQCMD1 = "/aq";
         function SlashCmdList.AQCMD(msg)
 
             if msg == "" then
-                AQSV.enable = not AQSV.enable
-
-                AQSELF.f.checkbox["enable"]:SetChecked(AQSV.enable)
-
-                if AQSV.enable then
-                    print(L["AutoEquip: Enabled"])
-                else
-                    print(L["AutoEquip: Disabled"])
-                end
+                AQSELF.enableAutoEuquip()
             end
 
             if msg == "settings" then
@@ -47,7 +39,7 @@ function AQSELF.addonInit()
             end
 
             if msg == "pvp" then
-                 aq_pvp()
+                AQSELF. enablePvpMode()
             end
 
             if msg == "unlock" then
@@ -256,8 +248,6 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         AQSV["slot"..slot_id.."LockedTime"] = 0
     end
 
-        print(slot_id, AQSV["slot"..slot_id.."LockedCD"])
-
     -- 饰品已经使用，并且超过了buff时间
     -- 剩余时间要大于30，避免饰品使用后，但是cd快到了，还被换下
     -- 主动CD锁判断
@@ -278,7 +268,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if(IsMounted() and not UnitOnTaxi("player"))  then
             if slot["id"] ~= AQSELF.carrot then
-                AQSELF.carrotBackup = slot["id"]
+                AQSV.carrotBackup = slot["id"]
                 EquipItemByName(AQSELF.carrot, 14)
             end
             -- 骑马时一直busy，中断更换主动饰品的逻辑
@@ -288,12 +278,12 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         elseif (AQSV.disableSlot14 or #queue== 0) and slot["id"] == AQSELF.carrot then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
-            if AQSELF.carrotBackup == AQSELF.carrot then
-                AQSELF.carrotBackup = 0
+            if AQSV.carrotBackup == AQSELF.carrot then
+                AQSV.carrotBackup = 0
             end
             
-            if AQSELF.carrotBackup > 0 then
-                EquipItemByName(AQSELF.carrotBackup, 14)
+            if AQSV.carrotBackup > 0 then
+                EquipItemByName(AQSV.carrotBackup, 14)
             end
         end
     end
@@ -427,8 +417,11 @@ function AQSELF.changeTrinket()
     end
 end
 
-function aq_pvp()
+function AQSELF.enablePvpMode()
     AQSV.pvpMode = not AQSV.pvpMode
+
+    AQSELF.menuList[2]["checked"] = AQSV.pvpMode
+
     local on = ""
     if AQSV.pvpMode then
         on =L["|cFF00FF00Enabled|r"]
@@ -442,6 +435,19 @@ function aq_pvp()
         AQSELF.pvpIcon:Hide()
     end
     print(L["AutoEquip: PVP mode "]..on)
+end
+
+function AQSELF.enableAutoEuquip()
+    AQSV.enable = not AQSV.enable
+
+    AQSELF.f.checkbox["enable"]:SetChecked(AQSV.enable)
+    AQSELF.menuList[1]["checked"] = AQSV.enable
+
+    if AQSV.enable then
+        print(L["AutoEquip: |cFF00FF00Enabled|r"])
+    else
+        print(L["AutoEquip: |cFFFF0000Disabled|r"])
+    end
 end
 
 function AQSELF.setCDLock( item_id, slot_id )
@@ -472,6 +478,10 @@ end
 function AQSELF.cancelLocker( slot_id )
     AQSV["slot"..slot_id.."Locked"] = false
     AQSELF.slotFrames[slot_id].locker:Hide()
+
+    -- 解开CD锁
+    AQSV["slot"..slot_id.."LockedCD"] = false
+    AQSV["slot"..slot_id.."LockedTime"] = 0
 end
 
 function AQSELF.equipWait(item_id, slot_id)

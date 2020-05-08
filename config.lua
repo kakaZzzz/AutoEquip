@@ -5,7 +5,7 @@ local initSV = AQSELF.initSV
 
 -- 配置 --
 
-AQSELF.version = "v3.0"
+AQSELF.version = "v3.2"
 
 -- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
@@ -16,7 +16,7 @@ AQSELF.init = false
 AQSELF.player = UnitName("player")
 
 -- 构建下拉框组时，记录纵坐标
-AQSELF.lastHeight = -315
+AQSELF.lastHeight = -340
 
 -- 操作的装备栏
 AQSELF.slots = {13, 14}

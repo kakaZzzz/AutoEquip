@@ -55,6 +55,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
+            AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, false)
+            AQSV.carrotBackup = initSV(AQSV.carrotBackup, false)
 
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
