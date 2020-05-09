@@ -75,6 +75,11 @@ AQSELF.addItems = function()
                 AQSV.pveTrinkets[id] = false
             end
         end
+
+        -- 手动修改buff持续时间
+        if id and time then
+            AQSELF.buffTime[id] = time
+        end
     end
     debug(AQSELF.usable)
 end

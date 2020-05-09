@@ -118,7 +118,7 @@ function  AQSELF.createMenu()
 	end
 
 	menu[4] = {}
-	menu[4]["text"] = L[" Lock"]
+	menu[4]["text"] = L[" Lock frame"]
 	menu[4]["checked"] = AQSV.locked
 	menu[4]["func"] = function()
 		AQSV.locked = not AQSV.locked

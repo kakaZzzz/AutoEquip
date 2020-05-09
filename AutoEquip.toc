@@ -1,9 +1,9 @@
 ## Interface: 11304
 ## Title: AutoEquip
 ## Author: kaka
-## Version: 3.2
-## Notes: After combat, auto change the useable trinket.
-## Notes-zhCN: 战斗结束，自动更换主动饰品。
+## Version: 3.3
+## Notes: Equip trinket by the customized priority automatically.
+## Notes-zhCN: 按照自定义的优先级自动更换饰品。
 ## SavedVariablesPerCharacter: AQSV
 
 base.lua

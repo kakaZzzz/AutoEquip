@@ -78,7 +78,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             AQSV.forcePriority = initSV(AQSV.forcePriority, false)
 
-            AQSV.buffNames = initSV(AQSV.buffNames, "能量无常,思维敏捷")
+            AQSV.buffNames = initSV(AQSV.buffNames, L["Unstable Power, Mind Quickening"])
             AQSV.additionItems = initSV(AQSV.additionItems, "14023/0")
 
             AQSELF.addonInit()
@@ -99,6 +99,14 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.x = xOfs
             AQSV.y = yOfs
             AQSV.point = point
+        end
+
+        -- 记录buff提醒位置
+        if AQSELF.buff then
+            local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.buff:GetPoint()
+            AQSV.xBuff = xOfs
+            AQSV.yBuff = yOfs
+            AQSV.pointBuff = point
         end
         
 

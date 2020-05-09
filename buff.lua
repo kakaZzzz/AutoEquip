@@ -57,7 +57,7 @@ function AQSELF.createBuffIcon()
 	local menu = {}
 
 	menu[1] = {}
-	menu[1]["text"] = L[" Lock"]
+	menu[1]["text"] = L[" Lock frame"]
 	menu[1]["checked"] = AQSV.buffLocked
 	menu[1]["func"] = function()
 		AQSV.buffLocked = not AQSV.buffLocked

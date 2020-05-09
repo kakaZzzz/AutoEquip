@@ -279,11 +279,11 @@ function AQSELF.settingInit()
 
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
-    buildCheckbox(L["Enable ItemBar"], "enableItemBar", -85)
-    buildCheckbox(L["Lock"], "locked", -85, 300)
+    buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
+    buildCheckbox(L["Lock frame"], "locked", -85, 300)
 
-    buildCheckbox(L["Enable BuffAlert"], "enableBuff", -110)
-    buildCheckbox(L["Lock"], "buffLocked", -110, 300)
+    buildCheckbox(L["Enable Buff Alert"], "enableBuff", -110)
+    buildCheckbox(L["Lock frame"], "buffLocked", -110, 300)
 
     buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -150)
     buildCheckbox(L["enable_carrot"], "enableCarrot", -175)
@@ -293,7 +293,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["If you get a new trinket (include take it from bank)."])
+        t:SetText(L["<=The items shown below are different from the actual ones"])
         t:SetPoint("TOPLEFT", f, 135, -290)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
@@ -411,7 +411,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- 启用/禁用自动更换装备功能"])
+        t:SetText(L["-- Enable/disable AutoEquip function"])
         t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 85)
     end
 
@@ -423,7 +423,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- 打开设置页面"])
+        t:SetText(L["-- Open settings"])
         t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 105)
     end
 
@@ -435,7 +435,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- 手动启动/禁用PVP模式"])
+        t:SetText(L["-- Enable/disable PVP mode manually"])
         t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 125)
     end
 
@@ -447,7 +447,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- 解锁装备栏（锁定时自动更换不生效）"])
+        t:SetText(L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"])
         t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 145)
     end
 
@@ -461,25 +461,25 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["1. 通过装备栏手动更换装备，将会暂时锁定对应装备栏（自动更换功能不生效）"])
+        t:SetText(L["1. Equip item manually through the Inventory Bar will temporarily lock the button."])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["2. 解锁装备栏可以右键点击，或者聊天框输入/aq unlock"])
+        t:SetText(L["2. Right click or use the '/aq unlock' command will unlock the button."])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 105)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["3. 使用物品后，对应装备栏将会自动解锁"])
+        t:SetText(L["3. Before using item, the button will be unlocked automatically."])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["4. 自动换装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"])
+        t:SetText(L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 145)
     end
 
