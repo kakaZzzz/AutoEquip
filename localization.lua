@@ -28,7 +28,7 @@ if locale == 'zhCN' then
 	L["Item queue is displayed above the Inventory Bar"] = "物品队列在装备栏上方显示"
 
 	L["Reload UI"] = "重载UI"
-	L["<=The items shown below are different from the actual ones"] = "<=下方罗列的饰品和实际不一致"
+	L["#When the items shown below are different from the actual ones"] = "#下方罗列的饰品和实际不一致时"
 
 	L["Usable Trinkets:"] = "主动饰品:"
 	L["Resident Trinkets:"] = "常驻饰品:"
@@ -67,12 +67,12 @@ if locale == 'zhCN' then
 	L["-- Enable/disable AutoEquip function"] = "-- 启用/禁用自动更换装备功能"
 	L["-- Open settings"] = "-- 打开设置页面"
 	L["-- Enable/disable PVP mode manually"] = "-- 手动启动/禁用PVP模式"
-	L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏（锁定时自动更换不生效）"
+	L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
 
-	L["1. Equip item manually through the Inventory Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应装备栏（自动更换功能不生效）"
-	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击，或者聊天框输入/aq unlock"
-	L["3. Before using item, the button will be unlocked automatically."] = "3. 使用物品后，对应装备栏将会自动解锁"
-	L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动换装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
+	L["1. Equip item manually through the Inventory Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
+	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/aq unlock"
+	L["3. Before using item, the button will be unlocked automatically."] = "3. 使用物品后，对应装备栏按钮将会自动解锁"
+	L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
 
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
 end

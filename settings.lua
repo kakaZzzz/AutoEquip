@@ -293,8 +293,8 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["<=The items shown below are different from the actual ones"])
-        t:SetPoint("TOPLEFT", f, 135, -290)
+        t:SetText(L["#When the items shown below are different from the actual ones"])
+        t:SetPoint("TOPLEFT", f, 135, -295)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
