@@ -75,4 +75,6 @@ if locale == 'zhCN' then
 	L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
 
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
+
+	L["Zoom"] = "缩放"
 end

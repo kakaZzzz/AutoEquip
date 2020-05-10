@@ -280,10 +280,76 @@ function AQSELF.settingInit()
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
     buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
-    buildCheckbox(L["Lock frame"], "locked", -85, 300)
+    buildCheckbox(L["Lock frame"], "locked", -85, 220)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Zoom"])
+        t:SetPoint("TOPLEFT", f, 370, -93)
+
+        local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(60)
+        e:SetHeight(40)
+        e:SetJustifyH("CENTER")
+        e:SetPoint("TOPLEFT", f, 420,  -80)
+        e:SetAutoFocus(false)
+        e:SetText(AQSV.barZoom)
+        e:SetCursorPosition(0)
+
+        e:SetScript("OnEnterPressed", function(self)
+            self:ClearFocus()
+
+            local v = self:GetText()
+            v = tonumber(v)
+
+            if not v then
+                v = 1
+            end
+
+            self:SetText(v)
+            AQSV.barZoom = v
+
+            AQSELF.bar:SetScale(AQSV.barZoom)
+
+        end)
+    end
 
     buildCheckbox(L["Enable Buff Alert"], "enableBuff", -110)
-    buildCheckbox(L["Lock frame"], "buffLocked", -110, 300)
+    buildCheckbox(L["Lock frame"], "buffLocked", -110, 220)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Zoom"])
+        t:SetPoint("TOPLEFT", f, 370, -118)
+
+        local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(60)
+        e:SetHeight(40)
+        e:SetJustifyH("CENTER")
+        e:SetPoint("TOPLEFT", f, 420,  -105)
+        e:SetAutoFocus(false)
+        e:SetText(AQSV.buffZoom)
+        e:SetCursorPosition(0)
+
+        e:SetScript("OnEnterPressed", function(self)
+            self:ClearFocus()
+
+            local v = self:GetText()
+            v = tonumber(v)
+
+            if not v then
+                v = 1
+            end
+
+            self:SetText(v)
+            AQSV.buffZoom = v
+
+            AQSELF.buff:SetScale(AQSV.buffZoom)
+
+        end)
+    end
 
     buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -150)
     buildCheckbox(L["enable_carrot"], "enableCarrot", -175)

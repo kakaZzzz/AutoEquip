@@ -515,9 +515,9 @@ function AQSELF.playerCanEquip()
     local d=UnitIsDeadOrGhost("player")
     local c1 = CastingInfo("player") 
     local c2 = ChannelInfo("player") 
+    local fd = UnitIsFeignDeath("player")
 
-
-    if f or d or c1 or c2 then
+    if f or (d and not fd) or c1 or c2 then
         return false
     else
         return true

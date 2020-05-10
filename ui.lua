@@ -19,6 +19,7 @@ function AQSELF.createItemBar()
 	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
 	f:SetHeight(40)
+	f:SetScale(AQSV.barZoom)
 
 	-- 可以使用鼠标
 	f:EnableMouse(true)

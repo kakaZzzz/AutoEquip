@@ -81,6 +81,10 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.buffNames = initSV(AQSV.buffNames, L["Unstable Power, Mind Quickening"])
             AQSV.additionItems = initSV(AQSV.additionItems, "14023/0")
 
+            AQSV.barZoom = initSV(AQSV.barZoom, 1)
+            AQSV.buffZoom = initSV(AQSV.buffZoom, 1)
+
+
             AQSELF.addonInit()
             AQSELF.createItemBar()
             AQSELF.createBuffIcon()

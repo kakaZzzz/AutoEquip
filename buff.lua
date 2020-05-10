@@ -16,6 +16,7 @@ function AQSELF.createBuffIcon()
 	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(40)
 	f:SetHeight(40)
+	f:SetScale(AQSV.buffZoom)
 
 	f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
 	f:SetBackdropColor(0,0,0,1);
