@@ -2,7 +2,7 @@
 ## Title: AutoEquip
 ## Author: kaka
 ## Version: 3.3
-## Notes: Equip trinket by the customized priority automatically.
+## Notes: Swap trinket by the customized priority automatically.
 ## Notes-zhCN: 按照自定义的优先级自动更换饰品。
 ## SavedVariablesPerCharacter: AQSV
 
