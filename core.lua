@@ -239,7 +239,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
     slot["busy"] = false
 
-    if tContains(queue, slot["id"]) then 
+    if tContains(queue, slot["id"]) and AQSV["queue"..slot_id][slot["id"]] then 
         slot["busy"] = true 
     end
 

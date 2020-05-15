@@ -77,4 +77,6 @@ if locale == 'zhCN' then
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
 
 	L["Zoom"] = "缩放"
+	L["Mode:"] = "模式:"
+	L["Slot:"] = "装备栏:"
 end
