@@ -83,6 +83,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             AQSV.barZoom = initSV(AQSV.barZoom, 1)
             AQSV.buffZoom = initSV(AQSV.buffZoom, 1)
+            AQSV.hideBackdrop = initSV(AQSV.hideBackdrop, false)
 
 
             AQSELF.addonInit()

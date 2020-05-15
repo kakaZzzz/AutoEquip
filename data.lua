@@ -93,6 +93,16 @@ buffTime[1404] = 3                        -- 潮汐咒符
 buffTime[2820] = 10                      -- 灵巧秒表			
 buffTime[10645] = 0                    	-- 侏儒死亡射线	
 
+-- 工程
+buffTime[18984] = 0						-- 冬泉谷传送器
+buffTime[18986] = 0						-- 加基森传送器
+buffTime[10577] = 3						-- 地精迫击炮
+buffTime[10725] = 60					-- 侏儒作战小鸡
+-- 任务/掉落
+buffTime[19141] = 0						-- 丝瓜
+buffTime[17744] = 0						-- 诺克赛恩之心
+
+
 
 -- 主动饰品集合
 AQSELF.usable = {}

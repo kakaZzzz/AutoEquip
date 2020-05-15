@@ -272,6 +272,10 @@ function AQSELF.settingInit()
             if key == "buffLocked" then
                 AQSELF.lockBuff()
             end
+
+            if key == "hideBackdrop" then
+                AQSELF.hideBackdrop()
+            end
         end)
 
         f.checkbox[key] = b
@@ -280,19 +284,20 @@ function AQSELF.settingInit()
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
     buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
-    buildCheckbox(L["Lock frame"], "locked", -85, 220)
+    buildCheckbox(L["Lock frame"], "locked", -85, 190)
+    buildCheckbox(L["Hide backdrop"], "hideBackdrop", -85, 460)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 370, -93)
+        t:SetPoint("TOPLEFT", f, 320, -93)
 
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(60)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 420,  -80)
+        e:SetPoint("TOPLEFT", f, 370,  -80)
         e:SetAutoFocus(false)
         e:SetText(AQSV.barZoom)
         e:SetCursorPosition(0)
@@ -316,19 +321,19 @@ function AQSELF.settingInit()
     end
 
     buildCheckbox(L["Enable Buff Alert"], "enableBuff", -110)
-    buildCheckbox(L["Lock frame"], "buffLocked", -110, 220)
+    buildCheckbox(L["Lock frame"], "buffLocked", -110, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 370, -118)
+        t:SetPoint("TOPLEFT", f, 320, -118)
 
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(60)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 420,  -105)
+        e:SetPoint("TOPLEFT", f, 370,  -105)
         e:SetAutoFocus(false)
         e:SetText(AQSV.buffZoom)
         e:SetCursorPosition(0)

@@ -37,9 +37,12 @@ function AQSELF.createItemBar()
 	f:SetScript("OnDragStop", f.StopMovingOrSizing)
 
     local t = f:CreateTexture(nil, "BACKGROUND")
+    f.texture = t
     -- 有材质才能设置颜色和透明度
 	t:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
-	t:SetVertexColor(0, 0, 0, 0.9)
+	
+	AQSELF.hideBackdrop()
+
 	-- 尺寸和位置覆盖
 	t:SetAllPoints(f)
 
@@ -88,6 +91,14 @@ function AQSELF.createItemBar()
 		f:Show()
 	else
 		f:Hide()
+	end
+end
+
+function AQSELF.hideBackdrop(  )
+	if AQSV.hideBackdrop then
+		AQSELF.bar.texture:SetVertexColor(0, 0, 0, 0)
+	else
+		AQSELF.bar.texture:SetVertexColor(0, 0, 0, 0.9)
 	end
 end
 
