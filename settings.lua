@@ -11,7 +11,7 @@ local player = AQSELF.player
 function AQSELF.settingInit()
 
     
-    local p = CreateFrame("ScrollFrame", nil, p, "UIPanelScrollFrameTemplate")
+    local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
     
 
@@ -26,6 +26,8 @@ function AQSELF.settingInit()
     f.checkbox = {}
     f.pveCheckbox = {}
     f.pvpCheckbox = {}
+    f.queue13 = {}
+    f.queue14 = {}
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -37,6 +39,18 @@ function AQSELF.settingInit()
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Usable Trinkets:"])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Mode:"])
+        t:SetPoint("TOPLEFT", f, 354, AQSELF.lastHeight)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Slot:"])
+        t:SetPoint("TOPLEFT", f, 494, AQSELF.lastHeight)
     end
 
     -- 构建主动饰品组
@@ -121,6 +135,7 @@ function AQSELF.settingInit()
     -- 构建两个饰品组
     function buildDropdownGroup()
         local height = 0
+        -- 主动饰品
         for k,v in ipairs(AQSV.usable) do
             local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
             dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeight + 5 - k*35)
@@ -147,35 +162,73 @@ function AQSELF.settingInit()
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
             -- 后面追加checkbox
-            local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-            b:SetPoint("TOPLEFT", 350, AQSELF.lastHeight + 7 - k*35)
-            b:SetChecked(AQSV.pveTrinkets[v])
-            f.pveCheckbox[k] = b
+            do
+                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 350, AQSELF.lastHeight + 7 - k*35)
+                b:SetChecked(AQSV.pveTrinkets[v])
+                f.pveCheckbox[k] = b
 
-            b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-            b.text:SetText("PVE")
-            b:SetScript("OnClick", function()
-                local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                debug(vaule)
-                AQSV.pveTrinkets[vaule] = not AQSV.pveTrinkets[vaule]
-                b:SetChecked(AQSV.pveTrinkets[vaule])
-            end)
+                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.text:SetText("PVE")
+                b:SetScript("OnClick", function()
+                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                    debug(vaule)
+                    AQSV.pveTrinkets[vaule] = not AQSV.pveTrinkets[vaule]
+                    b:SetChecked(AQSV.pveTrinkets[vaule])
+                end)
+            end
 
-            local b1 = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-            b1:SetPoint("TOPLEFT", 420, AQSELF.lastHeight + 7 - k*35)
-            b1:SetChecked(AQSV.pvpTrinkets[v])
-            f.pvpCheckbox[k] = b1
+            do
+                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 420, AQSELF.lastHeight + 7 - k*35)
+                b:SetChecked(AQSV.pvpTrinkets[v])
+                f.pvpCheckbox[k] = b
 
-            b1.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-            b1.text:SetPoint("LEFT", b1, "RIGHT", 0, 0)
-            b1.text:SetText("PVP")
-            b1:SetScript("OnClick", function()
-                local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                debug(vaule)
-                AQSV.pvpTrinkets[vaule] = not AQSV.pvpTrinkets[vaule]
-                b1:SetChecked(AQSV.pvpTrinkets[vaule])
-            end)
+                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.text:SetText("PVP")
+                b:SetScript("OnClick", function()
+                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                    debug(vaule)
+                    AQSV.pvpTrinkets[vaule] = not AQSV.pvpTrinkets[vaule]
+                    b:SetChecked(AQSV.pvpTrinkets[vaule])
+                end)
+            end
+
+            do
+                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 490, AQSELF.lastHeight + 7 - k*35)
+                b:SetChecked(AQSV.queue13[v])
+                f.queue13[k] = b
+
+                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.text:SetText("1")
+                b:SetScript("OnClick", function()
+                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                    debug(vaule)
+                    AQSV.queue13[vaule] = not AQSV.queue13[vaule]
+                    b:SetChecked(AQSV.queue13[vaule])
+                end)
+            end
+
+            do
+                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 540, AQSELF.lastHeight + 7 - k*35)
+                b:SetChecked(AQSV.queue14[v])
+                f.queue14[k] = b
+
+                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.text:SetText("2")
+                b:SetScript("OnClick", function()
+                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                    debug(vaule)
+                    AQSV.queue14[vaule] = not AQSV.queue14[vaule]
+                    b:SetChecked(AQSV.queue14[vaule])
+                end)
+            end
         end
 
         
@@ -294,7 +347,7 @@ function AQSELF.settingInit()
 
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(60)
+        e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
         e:SetPoint("TOPLEFT", f, 370,  -80)
@@ -330,7 +383,7 @@ function AQSELF.settingInit()
 
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(60)
+        e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
         e:SetPoint("TOPLEFT", f, 370,  -105)

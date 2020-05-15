@@ -47,6 +47,10 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
             AQSV.slot13 = initSV(AQSV.slot13, 0)
             AQSV.slot14 = initSV(AQSV.slot14, 0)
+            AQSV.queue13 = initSV(AQSV.queue13, {})
+            AQSV.queue14 = initSV(AQSV.queue14, {})
+
+
             AQSV.x = initSV(AQSV.x, 200)
             AQSV.y = initSV(AQSV.y, 0)
             AQSV.point = initSV(AQSV.point, "CENTER")

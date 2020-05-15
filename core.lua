@@ -98,6 +98,12 @@ AQSELF.initGroupCheckbox = function()
         if AQSV.pveTrinkets[v] == nil then
             AQSV.pveTrinkets[v] = true
         end
+        if AQSV.queue13[v] == nil then
+            AQSV.queue13[v] = true
+        end
+        if AQSV.queue14[v] == nil then
+            AQSV.queue14[v] = true
+        end
     end
 end
 
@@ -269,18 +275,22 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换萝卜
-    if slot_id == 14 and not AQSV["slot14Locked"] and AQSV.enableCarrot and not UnitInBattleground("player") then
+    if slot_id == 14 and not AQSV["slot14Locked"] and AQSV.enableCarrot then
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
-        if(IsMounted() and not UnitOnTaxi("player"))  then
-            if slot["id"] ~= AQSELF.carrot then
-                AQSV.carrotBackup = slot["id"]
-                EquipItemByName(AQSELF.carrot, 14)
-            end
-            -- 骑马时一直busy，中断更换主动饰品的逻辑
-            slot["busy"] = true
-            slot["priority"] = 0
+        if(IsMounted() and not UnitOnTaxi("player")) then
 
-        elseif (AQSV.disableSlot14 or #queue== 0) and slot["id"] == AQSELF.carrot then
+            -- 战场判断放这里，不然进战场不会换下
+            if not UnitInBattleground("player") then
+                if slot["id"] ~= AQSELF.carrot then
+                    AQSV.carrotBackup = slot["id"]
+                    EquipItemByName(AQSELF.carrot, 14)
+                end
+                -- 骑马时一直busy，中断更换主动饰品的逻辑
+                slot["busy"] = true
+                slot["priority"] = 0
+            end
+
+        elseif slot["id"] == AQSELF.carrot and (AQSV.disableSlot14 or #queue== 0 or AQSV.slot14 == 0) then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
             if AQSV.carrotBackup == AQSELF.carrot then
@@ -359,12 +369,12 @@ function AQSELF.changeTrinket()
 
             -- 饰品是可用状态，或者剩余时间30秒之内
             if (duration == 0 or rest < 30) and v ~= slot13["id"] and v ~= slot14["id"]  then
-                if k <  slot13["priority"] and not AQSV["slot13Locked"] then
+                if k <  slot13["priority"] and not AQSV["slot13Locked"] and AQSV.queue13[v] then
                     EquipItemByName(v, 13)
                     slot13["busy"] = true
                     slot13["priority"] = k
                     -- AQSELF.cancelLocker( 13 )
-                elseif k <  slot14["priority"] and not AQSV["slot14Locked"] and not AQSV.disableSlot14 then
+                elseif k <  slot14["priority"] and not AQSV["slot14Locked"] and not AQSV.disableSlot14 and AQSV.queue14[v] then
                     EquipItemByName(v, 14)
                     slot14["busy"] = true
                     slot14["priority"] = k
@@ -394,11 +404,11 @@ function AQSELF.changeTrinket()
             -- 当前不在13或14槽里
             if v ~= slot13["id"] and v ~= slot14["id"] then
                 -- 优先13
-                if not slot13["busy"] then
+                if not slot13["busy"] and AQSV.queue13[v] then
                     EquipItemByName(v, 13)
                     slot13["busy"] = true
                     
-                elseif not slot14["busy"] then
+                elseif not slot14["busy"] and AQSV.queue14[v] then
                     EquipItemByName(v, 14)
                     slot14["busy"] = true
                     
