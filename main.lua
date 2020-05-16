@@ -8,6 +8,10 @@ local initSV = AQSELF.initSV
 
 -- 主函数 --
 
+_G.BINDING_AUTOEQUIP_BUTTON13 = L['Trinket Slot 1']
+_G.BINDING_AUTOEQUIP_BUTTON14 = L['Trinket Slot 2']
+_G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Inventory Bar Button"]
+
 -- 注册事件
 AQSELF.main = CreateFrame("Frame")
 

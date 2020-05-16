@@ -53,7 +53,8 @@ function AQSELF.createItemBar()
 
 	-- 换装备时更新按钮
 	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	f:SetScript("OnEvent", AQSELF.onInventoryChanged)
+	f:RegisterEvent("UPDATE_BINDINGS")
+	f:SetScript("OnEvent", AQSELF.barOnEvent)
 
 	-- 创建右键菜单
 	AQSELF.createMenu()
@@ -92,6 +93,8 @@ function AQSELF.createItemBar()
 	else
 		f:Hide()
 	end
+
+	AQSELF.bindingSlot( )
 end
 
 function AQSELF.hideBackdrop(  )
@@ -168,7 +171,7 @@ end
 
 function AQSELF.createItemButton( slot_id, position )
 
-	local button = CreateFrame("Button", nil, AQSELF.bar, "SecureActionButtonTemplate")
+	local button = CreateFrame("Button", "AQBTN"..slot_id, AQSELF.bar, "SecureActionButtonTemplate")
 	button:SetSize(40, 40)
 
 	local itemId = GetInventoryItemID("player", slot_id)
@@ -428,12 +431,35 @@ function AQSELF.updateItemButton( slot_id )
 	button.texture:SetTexture(itemTexture)
 end
 
-function AQSELF.onInventoryChanged( self, event, arg1 )
+function AQSELF.barOnEvent( self, event, arg1 )
 	if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
 		for k,v in pairs(AQSELF.slots) do
 			AQSELF.updateItemButton( v )
 		end
 	end
+
+	if event == "UPDATE_BINDINGS" then
+		AQSELF.bindingSlot()
+	end
+end
+
+function AQSELF.bindingSlot( )
+	if UnitAffectingCombat("player") then return end
+
+	for k,v in pairs(AQSELF.slotFrames) do
+		ClearOverrideBindings(v)
+
+		local keys = {GetBindingKey("AUTOEQUIP_BUTTON"..k)}
+
+		for k1,v1 in pairs(keys) do
+
+			if v1 and v1 ~= "" then
+				SetOverrideBindingClick(v, false, v1, "AQBTN"..k)
+			end
+		end
+	end
+
+
 end
 
 -- 绘制下方的饰品队列

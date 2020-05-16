@@ -6,6 +6,7 @@
 ## Notes-zhCN: 按照自定义的优先级自动更换饰品。
 ## SavedVariablesPerCharacter: AQSV
 
+bindings.xml
 base.lua
 localization.lua
 config.lua

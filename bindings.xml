@@ -1,0 +1,4 @@
+<Bindings>
+	<Binding name="AUTOEQUIP_BUTTON13" category="AutoEquip" header="AUTOEQUIP_INVENTORYBAR_BUTTON"/>
+	<Binding name="AUTOEQUIP_BUTTON14" category="AutoEquip"/>
+</Bindings>
