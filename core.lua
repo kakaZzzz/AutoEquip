@@ -7,6 +7,8 @@ local L = AQSELF.L
 local player = AQSELF.player
 local initSV = AQSELF.initSV
 local GetItemTexture = AQSELF.GetItemTexture
+local GetItemEquipLoc = AQSELF.GetItemEquipLoc
+local tableInsert = AQSELF.tableInsert
 
 -- 初始化插件
 function AQSELF.addonInit()
@@ -25,6 +27,7 @@ function AQSELF.addonInit()
         AQSELF.checkTrinket()
 
         AQSELF.settingInit()
+        AQSELF.chance2hitInit()
         
         SLASH_AQCMD1 = "/aq";
         function SlashCmdList.AQCMD(msg)
@@ -81,7 +84,6 @@ AQSELF.addItems = function()
             AQSELF.buffTime[id] = time
         end
     end
-    debug(AQSELF.usable)
 end
 
 AQSELF.initGroupCheckbox = function()
@@ -134,6 +136,31 @@ end
 -- 检查角色身上所有的饰品
 AQSELF.checkTrinket = function( )
 
+    AQSELF.items = {}
+
+    for i=1,18 do
+        if i ~= 4 then
+            AQSELF.items[i] = tableInsert(AQSELF.items[i], 0)
+
+            local id = GetInventoryItemID("player", i)
+
+            if id then
+                tableInsert(AQSELF.items[i], id)
+                if i == 11 or i == 13 then
+                    AQSELF.items[i+1] = tableInsert(AQSELF.items[i+1], id)
+                elseif i == 12 or i == 14 then
+                    AQSELF.items[i-1] = tableInsert(AQSELF.items[i-1], id)
+                elseif i == 16 or i == 17 then
+                    if(GetItemEquipLoc(id) == "INVTYPE_WEAPON") then
+                        AQSELF.items[23-i] = tableInsert(AQSELF.items[23-i], id)
+                    end
+                end
+            end
+        end
+    end
+
+    AQSELF.trinkets[1] = 0
+
     local slot13Id = GetInventoryItemID("player", 13)
     local slot14Id = GetInventoryItemID("player", 14)
     local slot5Id = GetInventoryItemID("player", 5)
@@ -167,18 +194,55 @@ AQSELF.checkTrinket = function( )
 
                      -- debug(itemEquipLoc)
 
+                     -- if id == 7961 then
+                     --    print(itemEquipLoc)
+                     -- end
+
                     if itemEquipLoc == "INVTYPE_TRINKET" then
+                        table.insert(AQSELF.items[13], id)
+                        table.insert(AQSELF.items[14], id)
                         table.insert(AQSELF.trinkets, id)
                         AQSELF.itemInBags[id] = {i,s}
-                    end
-
-                    if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
+                    elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
+                        table.insert(AQSELF.items[5], id)
                         table.insert(AQSELF.chests, id)
+                    elseif itemEquipLoc == "INVTYPE_HEAD" then
+                        table.insert(AQSELF.items[1], id)
+                    elseif itemEquipLoc == "INVTYPE_NECK" then
+                        table.insert(AQSELF.items[2], id)
+                    elseif itemEquipLoc == "INVTYPE_SHOULDER" then
+                        table.insert(AQSELF.items[3], id)
+                    elseif itemEquipLoc == "INVTYPE_WAIST" then
+                        table.insert(AQSELF.items[6], id)
+                    elseif itemEquipLoc == "INVTYPE_LEGS" then
+                        table.insert(AQSELF.items[7], id)
+                    elseif itemEquipLoc == "INVTYPE_FEET" then
+                        table.insert(AQSELF.items[8], id)
+                    elseif itemEquipLoc == "INVTYPE_WRIST" then
+                        table.insert(AQSELF.items[9], id)
+                    elseif itemEquipLoc == "INVTYPE_HAND" then
+                        table.insert(AQSELF.items[10], id)
+                    elseif itemEquipLoc == "INVTYPE_FINGER" then
+                        table.insert(AQSELF.items[11], id)
+                        table.insert(AQSELF.items[12], id)
+                    elseif itemEquipLoc == "INVTYPE_CLOAK" then
+                        table.insert(AQSELF.items[15], id)
+                    elseif itemEquipLoc == "INVTYPE_WEAPON" then
+                        table.insert(AQSELF.items[16], id)
+                        table.insert(AQSELF.items[17], id)
+                    elseif itemEquipLoc == "INVTYPE_SHIELD" or itemEquipLoc == "INVTYPE_WEAPONOFFHAND" or itemEquipLoc == "INVTYPE_HOLDABLE" then
+                        table.insert(AQSELF.items[17], id)
+                    elseif itemEquipLoc == "INVTYPE_2HWEAPON" or itemEquipLoc == "INVTYPE_WEAPONMAINHAND" then
+                        table.insert(AQSELF.items[16], id)
+                    elseif itemEquipLoc == "INVTYPE_RANGED" or itemEquipLoc == "INVTYPE_THROWN" or itemEquipLoc == "INVTYPE_RANGEDRIGHT" or itemEquipLoc == "INVTYPE_RELIC" then
+                        table.insert(AQSELF.items[18], id)
                     end
+                    
                 -- end
             end  
         end
     end
+    -- debug(AQSELF.items[16])
 
     -- 去掉主动饰品
     AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
@@ -280,7 +344,8 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         if(IsMounted() and not UnitOnTaxi("player")) then
 
             -- 战场判断放这里，不然进战场不会换下
-            if not UnitInBattleground("player") then
+            -- 副本里也不使用
+            if not AQSELF.inInstance() then
                 if slot["id"] ~= AQSELF.carrot then
                     AQSV.carrotBackup = slot["id"]
                     EquipItemByName(AQSELF.carrot, 14)
@@ -487,7 +552,6 @@ function AQSELF.setWait(item_id, slot_id)
         item_id,
         slot_id
     }
-    debug(AQSV["slot"..slot_id.."Wait"])
 end
 
 function AQSELF.cancelLocker( slot_id )
@@ -513,11 +577,16 @@ end
 function AQSELF.checkAllWait()
     for k,v in pairs(AQSELF.slots) do
         if AQSV["slot"..v.."Wait"] then
-            debug(AQSV["slot"..v.."Wait"])
             local one = AQSV["slot"..v.."Wait"]
             AQSELF.equipWait(one[1], one[2])
         end
     end
+end
+
+function AQSELF.inInstance()
+    local inInstance, instanceType = IsInInstance()
+
+    return inInstance
 end
 
 function AQSELF.playerCanEquip()
@@ -532,4 +601,14 @@ function AQSELF.playerCanEquip()
     else
         return true
     end
+end
+
+function AQSELF.slotsCanEquip()
+    local slots = {16,17,18}
+
+    if AQSELF.playerCanEquip() then
+        slots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}
+    end
+
+    return slots
 end

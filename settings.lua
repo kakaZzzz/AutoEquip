@@ -111,7 +111,7 @@ function AQSELF.settingInit()
                 local one = AQSV["slot"..(12+index)]
 
                 -- 如果跟另一个饰品一样，则更换
-                if v == AQSV["slot"..(15-index)] then
+                if v == AQSV["slot"..(15-index)] and v ~= 0 then
                     UIDropDownMenu_SetSelectedValue(f.resident[3-index], one, 0)
                     UIDropDownMenu_SetText(f.resident[3-index], GetItemLink(one)) 
                     AQSV["slot"..(15-index)] = one
@@ -173,7 +173,6 @@ function AQSELF.settingInit()
                 b.text:SetText("PVE")
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    debug(vaule)
                     AQSV.pveTrinkets[vaule] = not AQSV.pveTrinkets[vaule]
                     b:SetChecked(AQSV.pveTrinkets[vaule])
                 end)
@@ -190,7 +189,6 @@ function AQSELF.settingInit()
                 b.text:SetText("PVP")
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    debug(vaule)
                     AQSV.pvpTrinkets[vaule] = not AQSV.pvpTrinkets[vaule]
                     b:SetChecked(AQSV.pvpTrinkets[vaule])
                 end)
@@ -207,7 +205,6 @@ function AQSELF.settingInit()
                 b.text:SetText("1")
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    debug(vaule)
                     AQSV.queue13[vaule] = not AQSV.queue13[vaule]
                     b:SetChecked(AQSV.queue13[vaule])
                 end)
@@ -224,7 +221,6 @@ function AQSELF.settingInit()
                 b.text:SetText("2")
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    debug(vaule)
                     AQSV.queue14[vaule] = not AQSV.queue14[vaule]
                     b:SetChecked(AQSV.queue14[vaule])
                 end)
@@ -338,7 +334,7 @@ function AQSELF.settingInit()
 
     buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
     buildCheckbox(L["Lock frame"], "locked", -85, 190)
-    buildCheckbox(L["Hide backdrop"], "hideBackdrop", -85, 460)
+    buildCheckbox(L["Hide backdrop"], "hideBackdrop", -85, 440)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -426,7 +422,6 @@ function AQSELF.settingInit()
         b:SetHeight(30)
         b:SetPoint("TOPLEFT", f, 23, -285)
         b:SetScript("OnClick", function(self)
-            debug("rl")
             C_UI.Reload()
         end)
     end
@@ -470,7 +465,6 @@ function AQSELF.settingInit()
         b:SetHeight(30)
         b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
         b:SetScript("OnClick", function(self)
-            debug(e:GetText())
             AQSV.buffNames = e:GetText()
         end)
     end
@@ -513,7 +507,6 @@ function AQSELF.settingInit()
         b:SetHeight(30)
         b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
         b:SetScript("OnClick", function(self)
-            debug(e:GetText())
             AQSV.additionItems = e:GetText()
             C_UI.Reload()
         end)

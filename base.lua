@@ -1,5 +1,7 @@
 local _, AQSELF = ...
 
+local L = AQSELF.L
+
 -- 复制table的数据，而不是引用
 AQSELF.clone =  function(org)
     local function copy(org, res)
@@ -16,6 +18,17 @@ AQSELF.clone =  function(org)
     local res = {}
     copy(org, res)
     return res
+end
+
+AQSELF.tableInsert = function(t,v)
+    if t == nil then
+        t = {}
+    end
+
+    if v then
+        table.insert(t,v)
+    end
+    return t
 end
 
 -- 合并两个数组
@@ -81,11 +94,14 @@ AQSELF.initSV = function( v, init )
 end
 
 AQSELF.GetItemLink = function( id )
+    if id == 0 then
+        return L["[Empty]"]
+    end
     local _, link = GetItemInfo(id)
     return link
 end
 
-AQSELF.GetItemTpye = function( id )
+AQSELF.GetItemEquipLoc = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
 end
@@ -94,3 +110,15 @@ AQSELF.GetItemTexture = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemTexture
 end
+
+AQSELF.GetSlotID = function(slot_id)
+    local id = GetInventoryItemID("player", slot_id)
+
+    if id == nil then
+        id = 0
+    end
+
+    return id
+end
+
+    

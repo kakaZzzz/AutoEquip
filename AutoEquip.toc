@@ -7,11 +7,12 @@
 ## SavedVariablesPerCharacter: AQSV
 
 bindings.xml
-base.lua
 localization.lua
+base.lua
 config.lua
 data.lua
 settings.lua
+chance2hit.lua
 core.lua
 buff.lua
 ui.lua
