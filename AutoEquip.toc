@@ -12,7 +12,7 @@ base.lua
 config.lua
 data.lua
 settings.lua
-chance2hit.lua
+## suit.lua
 core.lua
 buff.lua
 ui.lua

@@ -28,28 +28,33 @@ function AQSELF.addonInit()
         AQSELF.checkTrinket()
 
         AQSELF.settingInit()
-        AQSELF.chance2hitInit()
+        -- AQSELF.suitInit()
         
         SLASH_AQCMD1 = "/aq";
         function SlashCmdList.AQCMD(msg)
 
             if msg == "" then
                 AQSELF.enableAutoEuquip()
-            end
 
-            if msg == "settings" then
+            elseif msg == "settings" then
                  InterfaceOptionsFrame_OpenToCategory("AutoEquip");
                  InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-            end
 
-            if msg == "pvp" then
+            elseif msg == "pvp" then
                 AQSELF. enablePvpMode()
-            end
 
-            if msg == "unlock" then
+            elseif msg == "unlock" then
                  for k,v in pairs(AQSELF.slots) do
                      AQSELF.cancelLocker(v)
                  end
+
+            elseif msg == "60" or msg == "63" or msg == "64"   then
+                if AQSELF.playerCanEquip()  then
+                    AQSELF.changeSuit(tonumber(msg))
+                else
+                    print(L["AutoEquip: |cFF00FF00In combat|r"])
+                end
+
             end
         end
 
@@ -384,34 +389,6 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     return slot
 end
 
--- function AQSELF.buildQueueRealtime()
-
---     local inBattleground = UnitInBattleground("player")
-
---     for k,v in pairs(AQSV.usable) do
-
---         local id = 0
-
---         if inBattleground or AQSV.pvpMode then
---             AQSELF.pvpIcon:Show()
---             if AQSV.pvpTrinkets[v] then
---                 id = v
---             end
---         else
---             AQSELF.pvpIcon:Hide()
---             if AQSV.pveTrinkets[v] then
---                 id = v
---             end
---         end
-
---         if not AQSV.enable then
---             id = 0
---         end
-
---         AQSELF.realtimeQueue[k] = v
---     end
--- end
-
 function AQSELF.buildQueueRealtime()
 
     wipe(AQSELF.empty1)
@@ -438,30 +415,6 @@ function AQSELF.buildQueueRealtime()
     end
 
     return queue
-end
-
-function AQSELF.getRealtimeQueue( id )
-    if not AQSV.enable then
-        return false
-    end
-
-    local inBattleground = UnitInBattleground("player")
-
-    if (inBattleground and AQSV.enablePvpMode) or AQSV.pvpMode then
-        AQSELF.pvpIcon:Show()
-        if AQSV.pvpTrinkets[id] then
-            return true
-        else
-            return false
-        end
-    else
-        AQSELF.pvpIcon:Hide()
-        if AQSV.pveTrinkets[id] then
-            return true
-        else
-            return false
-        end
-    end
 end
 
 function AQSELF.changeTrinket()

@@ -17,8 +17,15 @@ L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hite
 L["enable_carrot"] = "Equip \124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[Carrot on a Stick]\124h\124r when you're riding (Slot 2 /Not in Battleground). "
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
+L[60] = "|cFF00FF0060|r"
+L[64] = "|cFFFF0000Boss|r"
+L[63] = "|cFFFF000063|r"
+
+L["prefix"] = "|cFF00BFFF[AutoEquip]|r"
+
 if locale == 'zhCN' then
 
+	L[" Loaded"] = " 加载完毕"
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动装备功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"

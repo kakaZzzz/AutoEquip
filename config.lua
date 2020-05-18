@@ -8,8 +8,8 @@ local L = AQSELF.L
 
 AQSELF.version = "v3.6"
 
-AQSELF.enableDebug = true          -- 调试开关
--- AQSELF.enableDebug = false          -- 调试开关
+-- AQSELF.enableDebug = true          -- 调试开关
+AQSELF.enableDebug = false          -- 调试开关
 
 AQSELF.init = false
 

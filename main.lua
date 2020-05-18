@@ -114,7 +114,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSELF.addonInit()
             AQSELF.createItemBar()
             AQSELF.createBuffIcon()
-            print(L["AutoEquip: Loaded"])
+            print(L["prefix"]..L[" Loaded"])
             AQSELF.init = true
 
         end

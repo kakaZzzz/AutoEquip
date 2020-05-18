@@ -198,8 +198,8 @@ function AQSELF.createItemButton( slot_id, position )
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
-  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	button:SetBackdropBorderColor(0,0,0,1);
+ --  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	-- button:SetBackdropBorderColor(0,0,0,1);
 	
 
     local t = button:CreateTexture(nil, "BACKGROUND")
@@ -338,6 +338,10 @@ end
 
 -- 创建饰品下拉框
 function AQSELF.createItemDropdown(item_id, x, position, slot_id)
+
+	if item_id == 0 then
+		return
+	end
 
 	-- 如果已经创建过物品图层，只修改位置
 	if AQSELF.trinketsFrames[item_id] then

@@ -11,7 +11,7 @@ local GetSlotID = AQSELF.GetSlotID
 local player = AQSELF.player
 
 -- 设置菜单初始化
-function AQSELF.chance2hitInit()
+function AQSELF.suitInit()
 
     
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
@@ -20,6 +20,75 @@ function AQSELF.chance2hitInit()
     function updateSuit60(  )
         for k,v in pairs(AQSELF.gearSlots) do
             AQSV.suit[60][v] = GetSlotID(v)
+        end
+    end
+
+    function AQSELF.changeSuit(boss)
+        -- 如果目标等级相同，不更换
+        if AQSV.currentSuit == boss then
+            return
+        end
+
+        print(L["prefix"]..L[" Suit "]..L[boss])
+
+        --如果之前是60，缓存起来
+        if AQSV.currentSuit == 60 then
+            updateSuit60()
+        end
+
+        AQSV.currentSuit = boss
+
+         for k,v in pairs(AQSELF.gearSlots) do
+
+            -- 判断当前栏是否需要更换
+            wipe(AQSELF.empty5)
+            local waitId = AQSELF.empty5
+
+            waitId[63] = AQSV.suit[63][v]
+            waitId[64] = AQSV.suit[64][v]
+
+            -- print(AQSV.suit[63][17])
+            -- 需要换装的栏位
+            if waitId[63] > 0 or waitId[64] > 0 then
+
+                local slotId = GetSlotID(v)
+
+                -- 需要换上指定装备
+                if boss > 60 and waitId[boss] > 0 then
+                    -- 跟当前装备的id不同时
+                    if slotId ~= waitId[boss] then
+
+                        if v ==13 or v == 14 then
+                            -- 避免被马上换下
+                            AQSELF.equipWait(waitId[boss], v)
+                        else
+                            EquipItemByName(waitId[boss], v)
+                        end
+                    end
+                else
+                    -- 需要换回普通装备
+                    if AQSV.suit[60][v] > 0 then
+
+                        -- 如果当前套装是双手武器，则副手不换
+                        if v == 17 and GetItemEquipLoc(AQSV.suit[boss][16]) == "INVTYPE_2HWEAPON" then
+
+                        else
+                            EquipItemByName(AQSV.suit[60][v], v)
+                        end
+
+                        if v ==13 or v == 14 then
+                            AQSELF.cancelLocker( v )
+                        end
+                    end
+                end
+
+            elseif boss == 60 then
+                 if v == 17 and GetItemEquipLoc(GetSlotID(16)) == "INVTYPE_2HWEAPON" then
+                    EquipItemByName(AQSV.suit[boss][v], v)
+                else
+                    -- AQSV.suit[boss][v] = 0
+                end
+            end
         end
     end
 
@@ -43,76 +112,10 @@ function AQSELF.chance2hitInit()
                 boss = 64
             end
 
-            print("-------------")
-
             -- 目标为空或者是玩家的情况下，不做更换
             if level ~= 0 and not UnitIsPlayer("target") and AQSELF.playerCanEquip() then
-                print("change "..boss)
-
-                -- 如果目标等级相同，不更换
-                if AQSV.currentSuit == boss then
-                    return
-                end
-
-                --如果之前是60，缓存起来
-                if AQSV.currentSuit == 60 then
-                    updateSuit60()
-                end
-
-                AQSV.currentSuit = boss
-
-                 for k,v in pairs(AQSELF.gearSlots) do
-
-                    -- 判断当前栏是否需要更换
-                    wipe(AQSELF.empty5)
-                    local waitId = AQSELF.empty5
-
-                    waitId[63] = AQSV.suit[63][v]
-                    waitId[64] = AQSV.suit[64][v]
-
-                    -- print(AQSV.suit[63][17])
-                    -- 需要换装的栏位
-                    if waitId[63] > 0 or waitId[64] > 0 then
-
-                        local slotId = GetSlotID(v)
-
-                        -- 需要换上指定装备
-                        if boss > 60 and waitId[boss] > 0 then
-                            -- 跟当前装备的id不同时
-                            if slotId ~= waitId[boss] then
-
-                                if v ==13 or v == 14 then
-                                    -- 避免被马上换下
-                                    AQSELF.equipWait(waitId[boss], v)
-                                else
-                                    EquipItemByName(waitId[boss], v)
-                                end
-                            end
-                        else
-                            -- 需要换回普通装备
-                            if AQSV.suit[60][v] > 0 then
-
-                                -- 如果当前套装是双手武器，则副手不换
-                                if v == 17 and GetItemEquipLoc(AQSV.suit[boss][16]) == "INVTYPE_2HWEAPON" then
-
-                                else
-                                    EquipItemByName(AQSV.suit[60][v], v)
-                                end
-
-                                if v ==13 or v == 14 then
-                                    AQSELF.cancelLocker( v )
-                                end
-                            end
-                        end
-
-                    elseif boss == 60 then
-                         if v == 17 and GetItemEquipLoc(GetSlotID(16)) == "INVTYPE_2HWEAPON" then
-                            EquipItemByName(AQSV.suit[boss][v], v)
-                        else
-                            -- AQSV.suit[boss][v] = 0
-                        end
-                    end
-                end
+                
+                AQSELF.changeSuit(boss)               
                
             end
         end
@@ -192,6 +195,17 @@ function AQSELF.chance2hitInit()
 
     buildCheckbox(L["Equip items that increase chance to hit when you target the lv.63 and boss"], "enableChance2hit", -60)
 
+    do
+        local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        l:SetText(L["Lv.63:"])
+        l:SetPoint("TOPLEFT", f, 25, -110)
+    end
+
+    do
+        local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        l:SetText(L["Boss:"])
+        l:SetPoint("TOPLEFT", f, 259, -110)
+    end
 
     function DropDown_Initialize(self,level)
         level = level or 1;
@@ -223,7 +237,7 @@ function AQSELF.chance2hitInit()
         local left = 7
 
         if boss == 64 then
-            left = 220
+            left = 240
         end
 
         dropdown:SetPoint("TOPLEFT", left, height)
@@ -245,7 +259,7 @@ function AQSELF.chance2hitInit()
         UIDropDownMenu_JustifyText(dropdown, "LEFT")
     end
 
-    local height = -90
+    local height = -105
     local lastHeight = 0
 
     for k,v in pairs(AQSELF.items) do
@@ -270,7 +284,7 @@ function AQSELF.chance2hitInit()
 
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         l:SetText(AQSELF.slotToName[k])
-        l:SetPoint("TOPLEFT", f, 460, height - heightK*35)
+        l:SetPoint("TOPLEFT", f, 490, height - heightK*35)
 
         buildLine(63, v, k, height + 5 - heightK*35)
         buildLine(64, v, k, height + 5 - heightK*35)
