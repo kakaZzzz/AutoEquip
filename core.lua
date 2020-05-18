@@ -3,6 +3,7 @@ local _, AQSELF = ...
 local debug = AQSELF.debug
 local clone = AQSELF.clone
 local diff = AQSELF.diff
+local diff2 = AQSELF.diff2
 local L = AQSELF.L
 local player = AQSELF.player
 local initSV = AQSELF.initSV
@@ -242,10 +243,11 @@ AQSELF.checkTrinket = function( )
             end  
         end
     end
-    -- debug(AQSELF.items[16])
+    -- debug(AQSELF.trinkets)
 
     -- 去掉主动饰品
-    AQSELF.trinkets = diff(AQSELF.trinkets, AQSV.usable)
+    AQSELF.trinkets = diff2(AQSELF.trinkets, AQSV.usable)
+    -- debug(AQSELF.trinkets)
     -- AQSELF.chests = diff(AQSELF.chests, AQSV.usableChests)
 
     -- 降幂排序，序号大的正常来看是等级高的饰品
@@ -253,6 +255,7 @@ AQSELF.checkTrinket = function( )
         -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
         return a > b
     end)
+    -- debug(AQSELF.trinkets)
 
 end
 
@@ -270,7 +273,13 @@ AQSELF.updateItemInBags = function()
                     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
 
                     if itemEquipLoc == "INVTYPE_TRINKET" then
-                        AQSELF.itemInBags[id] = {i,s}
+                        
+                        if AQSELF.itemInBags[id] then
+                            AQSELF.itemInBags[id][1] = i
+                            AQSELF.itemInBags[id][2] = s
+                        else
+                            AQSELF.itemInBags[id] = {i,s}
+                        end
                     end
 
                     -- if itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
@@ -285,7 +294,10 @@ end
 
 -- 获取当前装备饰品的状态
 AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
-    local slot = {}
+    
+    wipe(AQSELF["empty"..slot_id])
+
+    local slot = AQSELF["empty"..slot_id]
 
     slot["id"] = GetInventoryItemID("player", slot_id)
 
@@ -349,6 +361,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 if slot["id"] ~= AQSELF.carrot then
                     AQSV.carrotBackup = slot["id"]
                     EquipItemByName(AQSELF.carrot, 14)
+                    -- collectgarbage("collect")
                 end
                 -- 骑马时一直busy，中断更换主动饰品的逻辑
                 slot["busy"] = true
@@ -371,13 +384,43 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     return slot
 end
 
+-- function AQSELF.buildQueueRealtime()
+
+--     local inBattleground = UnitInBattleground("player")
+
+--     for k,v in pairs(AQSV.usable) do
+
+--         local id = 0
+
+--         if inBattleground or AQSV.pvpMode then
+--             AQSELF.pvpIcon:Show()
+--             if AQSV.pvpTrinkets[v] then
+--                 id = v
+--             end
+--         else
+--             AQSELF.pvpIcon:Hide()
+--             if AQSV.pveTrinkets[v] then
+--                 id = v
+--             end
+--         end
+
+--         if not AQSV.enable then
+--             id = 0
+--         end
+
+--         AQSELF.realtimeQueue[k] = v
+--     end
+-- end
+
 function AQSELF.buildQueueRealtime()
 
+    wipe(AQSELF.empty1)
+
     if not AQSV.enable then
-        return {}
+        return AQSELF.empty1
     end
 
-    local queue = {}
+    local queue = AQSELF.empty1
     local inBattleground = UnitInBattleground("player")
 
     for k,v in pairs(AQSV.usable) do
@@ -397,10 +440,34 @@ function AQSELF.buildQueueRealtime()
     return queue
 end
 
+function AQSELF.getRealtimeQueue( id )
+    if not AQSV.enable then
+        return false
+    end
+
+    local inBattleground = UnitInBattleground("player")
+
+    if (inBattleground and AQSV.enablePvpMode) or AQSV.pvpMode then
+        AQSELF.pvpIcon:Show()
+        if AQSV.pvpTrinkets[id] then
+            return true
+        else
+            return false
+        end
+    else
+        AQSELF.pvpIcon:Hide()
+        if AQSV.pveTrinkets[id] then
+            return true
+        else
+            return false
+        end
+    end
+end
+
 function AQSELF.changeTrinket()
     -- 主要代码部分 --
     
-    local  queue = AQSELF.buildQueueRealtime()
+    local queue = AQSELF.buildQueueRealtime()
 
     -- 获取当前饰品的状态
     local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)

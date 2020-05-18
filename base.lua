@@ -54,7 +54,8 @@ end
 
 -- 去掉重复的值
 AQSELF.diff =  function( t1, t2 )
-    local new = {}
+    wipe(AQSELF.empty3)
+    local new = AQSELF.empty3
 
     for i,v in ipairs(t1) do
         if not tContains(t2, v) then
@@ -63,6 +64,29 @@ AQSELF.diff =  function( t1, t2 )
     end
 
     return new
+end
+
+AQSELF.diff2 =  function( t1, t2 )
+    wipe(AQSELF.empty4)
+    local new = AQSELF.empty4
+
+    for i,v in ipairs(t1) do
+        if not tContains(t2, v) then
+            table.insert(new, v)
+        end
+    end
+
+    return new
+end
+
+AQSELF.empty = function( t )
+    
+    if t == nil then
+        t = {}
+    end
+    
+    wipe(t)
+
 end
 
 -- 调试函数

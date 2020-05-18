@@ -35,11 +35,11 @@ function AQSELF.chance2hitInit()
             local level = UnitLevel("target")
             local boss = 60
 
-            -- if level == 63 then
-            if level == 6 then
+            if level == 63 then
+            -- if level == 6 then
                 boss = 63
-            -- elseif level == -1 then
-            elseif level == 7 then
+            elseif level == -1 then
+            -- elseif level == 7 then
                 boss = 64
             end
 
@@ -47,7 +47,7 @@ function AQSELF.chance2hitInit()
 
             -- 目标为空或者是玩家的情况下，不做更换
             if level ~= 0 and not UnitIsPlayer("target") and AQSELF.playerCanEquip() then
-                print("change")
+                print("change "..boss)
 
                 -- 如果目标等级相同，不更换
                 if AQSV.currentSuit == boss then
@@ -64,10 +64,11 @@ function AQSELF.chance2hitInit()
                  for k,v in pairs(AQSELF.gearSlots) do
 
                     -- 判断当前栏是否需要更换
-                    local waitId = {
-                        [63] = AQSV.suit[63][v],
-                        [64] = AQSV.suit[64][v],
-                    }
+                    wipe(AQSELF.empty5)
+                    local waitId = AQSELF.empty5
+
+                    waitId[63] = AQSV.suit[63][v]
+                    waitId[64] = AQSV.suit[64][v]
 
                     -- print(AQSV.suit[63][17])
                     -- 需要换装的栏位

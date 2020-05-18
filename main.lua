@@ -6,6 +6,9 @@ local diff = AQSELF.diff
 local L = AQSELF.L
 local initSV = AQSELF.initSV
 
+
+
+
 -- 主函数 --
 
 _G.BINDING_NAME_AUTOEQUIP_BUTTON13 = L['Trinket Slot ']..1
@@ -19,6 +22,7 @@ AQSELF.main = CreateFrame("Frame")
 AQSELF.main.TimeSinceLastUpdate = 0
 -- 函数执行间隔时间
 AQSELF.main.Interval = 1
+AQSELF.main.garbageCount = 0
 
 AQSELF.onMainUpdate = function(self, elapsed)
 
@@ -29,6 +33,13 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
         -- 重新计时
         self.TimeSinceLastUpdate = 0;
+
+        self.garbageCount = self.garbageCount + 1
+
+        if self.garbageCount > 5 then
+            -- collectgarbage("collect")
+            self.garbageCount = 0
+        end
 
         -- 以能读取到物品信息为基准，开始执行
         -- 尝试过在ADDON_LOADED等事件中初始化，发现无法读取物品信息，所以改为现在这个逻辑
@@ -105,6 +116,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSELF.createBuffIcon()
             print(L["AutoEquip: Loaded"])
             AQSELF.init = true
+
         end
 
         -- 插件整体开关，以角色为单位
@@ -127,7 +139,10 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.yBuff = yOfs
             AQSV.pointBuff = point
         end
-        
+
+        -- collectgarbage("collect")
+        -- UpdateAddOnMemoryUsage()
+        -- print(string.format("%.2f mb", (GetAddOnMemoryUsage("AutoEquip") / 1024)))
 
         -- 战场开关
         if UnitInBattleground("player") and not AQSV.enableBattleground then

@@ -23,6 +23,17 @@ AQSELF.lastHeight = -340
 AQSELF.slots = {13, 14}
 AQSELF.slotFrames = {}
 
+AQSELF.realtimeQueue = {}
+
+-- 避免数组内容泄露，全程缓存数组
+AQSELF.empty1 = {}			-- realtimeQueue/core
+AQSELF.empty2 = {}			-- slotIds/ui
+AQSELF.empty3 = {}			-- diff/base
+AQSELF.empty4 = {}			-- diff2/base
+AQSELF.empty5 = {}			-- waitId/chance2hit
+AQSELF.empty13 = {}		-- slot13/core
+AQSELF.empty14 = {}		-- slot14/core
+
 AQSELF.slotToName = {
 	[1] = L["Head"],
 	[2] = L["Neck"],

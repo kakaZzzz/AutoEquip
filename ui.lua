@@ -488,7 +488,6 @@ end
 
 function AQSELF.showTooltip( t, arg1, arg2 )
 	local tooltip = _G["GameTooltip"]
-	AQSELF.tooltip = 
     tooltip:ClearLines()
 	tooltip:SetOwner(UIParent)
 	GameTooltip_SetDefaultAnchor(tooltip, UIParent)
@@ -567,14 +566,20 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		end
 
 		-- 计算冷却队列
-		local  queue = AQSELF.buildQueueRealtime()
+		local queue = AQSELF.buildQueueRealtime()
 
-	    local slot13Id = GetInventoryItemID("player", 13)
-	    local slot14Id = GetInventoryItemID("player", 14)
+		-- print(queue)
 
-	    local slotIds = {slot13Id, slot14Id}
+		wipe(AQSELF.empty2)
 
-	    -- 算出等待换上的饰品
+		local slotIds = AQSELF.empty2
+
+	    slotIds[1] = GetInventoryItemID("player", 13)
+	    slotIds[2] = GetInventoryItemID("player", 14)
+
+	    -- local slotIds = {slot13Id, slot14Id}
+
+	    -- -- 算出等待换上的饰品
 	    local wait = diff(queue, slotIds)
 
 	    -- 根据顺序创建图标，或者使其显示
@@ -617,5 +622,6 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    end
 	    	end
 	    end
+
     end
 end
