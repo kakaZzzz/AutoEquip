@@ -28,35 +28,7 @@ function AQSELF.addonInit()
         AQSELF.checkTrinket()
 
         AQSELF.settingInit()
-        -- AQSELF.suitInit()
-        
-        SLASH_AQCMD1 = "/aq";
-        function SlashCmdList.AQCMD(msg)
-
-            if msg == "" then
-                AQSELF.enableAutoEuquip()
-
-            elseif msg == "settings" then
-                 InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-                 InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-
-            elseif msg == "pvp" then
-                AQSELF. enablePvpMode()
-
-            elseif msg == "unlock" then
-                 for k,v in pairs(AQSELF.slots) do
-                     AQSELF.cancelLocker(v)
-                 end
-
-            elseif msg == "60" or msg == "63" or msg == "64"   then
-                if AQSELF.playerCanEquip()  then
-                    AQSELF.changeSuit(tonumber(msg))
-                else
-                    print(L["AutoEquip: |cFF00FF00In combat|r"])
-                end
-
-            end
-        end
+        AQSELF.suitInit()
 
 end
 
@@ -534,7 +506,7 @@ function AQSELF.enablePvpMode()
     else
         AQSELF.pvpIcon:Hide()
     end
-    print(L["AutoEquip: PVP mode "]..on)
+    print(L["prefix"]..L[" PVP mode "]..on)
 end
 
 function AQSELF.enableAutoEuquip()

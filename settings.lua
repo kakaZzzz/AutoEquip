@@ -11,13 +11,18 @@ local player = AQSELF.player
 function AQSELF.settingInit()
 
     
+    local top = CreateFrame("Frame", nil, UIParent)
+
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
     
-
+    AQSELF.general = p
     AQSELF.f = f
 
-    p.name = "AutoEquip"
+    top.name = "AutoEquip"
+    p.name = L["General"]
+    p.parent = "AutoEquip"
+
     -- 缓存主动饰品下拉框
     f.dropdown = {}
     -- 缓存常驻饰品下拉框
@@ -607,7 +612,13 @@ function AQSELF.settingInit()
     p:SetScrollChild(f)
     f:SetSize(1000, -AQSELF.lastHeight)
 
+    InterfaceOptions_AddCategory(top)
     InterfaceOptions_AddCategory(p)
+
+     top:SetScript('OnShow', function(self)
+        InterfaceOptionsFrame_OpenToCategory(p);
+        InterfaceOptionsFrame_OpenToCategory(p);
+    end)
 
     -- 运行两遍才行
     -- InterfaceOptionsFrame_OpenToCategory("AutoEquip");

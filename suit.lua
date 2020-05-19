@@ -17,6 +17,16 @@ function AQSELF.suitInit()
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
 
+    AQSELF.chance2hit = f
+    f.checkbox = {}
+    f.dropdown = {
+        [63] = {},
+        [64] = {}
+    }
+
+    p.name = L["Suit for 63+"]
+    p.parent = "AutoEquip"
+
     function updateSuit60(  )
         for k,v in pairs(AQSELF.gearSlots) do
             AQSV.suit[60][v] = GetSlotID(v)
@@ -24,12 +34,17 @@ function AQSELF.suitInit()
     end
 
     function AQSELF.changeSuit(boss)
+
+        if not AQSV.enableSuit then
+            return
+        end
+
         -- 如果目标等级相同，不更换
         if AQSV.currentSuit == boss then
             return
         end
 
-        print(L["prefix"]..L[" Suit "]..L[boss])
+        print(L["prefix"].." "..L["Suit "..L[boss]])
 
         --如果之前是60，缓存起来
         if AQSV.currentSuit == 60 then
@@ -92,47 +107,6 @@ function AQSELF.suitInit()
         end
     end
 
-    f:RegisterEvent("PLAYER_TARGET_CHANGED") 
-    f:SetScript("OnEvent", function(self, event, ...) 
-
-        if event == "PLAYER_TARGET_CHANGED" then
-
-            if not AQSV.enableChance2hit then
-                return
-            end
-
-            local level = UnitLevel("target")
-            local boss = 60
-
-            if level == 63 then
-            -- if level == 6 then
-                boss = 63
-            elseif level == -1 then
-            -- elseif level == 7 then
-                boss = 64
-            end
-
-            -- 目标为空或者是玩家的情况下，不做更换
-            if level ~= 0 and not UnitIsPlayer("target") and AQSELF.playerCanEquip() then
-                
-                AQSELF.changeSuit(boss)               
-               
-            end
-        end
-
-    end)
-    
-
-    AQSELF.chance2hit = f
-    f.checkbox = {}
-    f.dropdown = {
-        [63] = {},
-        [64] = {}
-    }
-
-    p.name = L["Chance to hit"]
-    p.parent = "AutoEquip"
-
     function buildCheckbox(text, key, pos, x)
 
         local posX = 20
@@ -188,23 +162,25 @@ function AQSELF.suitInit()
 
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        t:SetText(L["AutoEquip "]..AQSELF.version)
-        t:SetPoint("TOPLEFT", f, 25, -20)
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Autosave current inventories to Suit "..L[60]])
+        t:SetPoint("TOPLEFT", f, 52, -58)
     end
 
-    buildCheckbox(L["Equip items that increase chance to hit when you target the lv.63 and boss"], "enableChance2hit", -60)
+    buildCheckbox(L["Equip customized suit when you target lv.63 elite and lv.?? boss"], "enableSuit", -25)
+    buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -75)
+    buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -100)
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        l:SetText(L["Lv.63:"])
-        l:SetPoint("TOPLEFT", f, 25, -110)
+        l:SetText(L["Suit "..L[63]])
+        l:SetPoint("TOPLEFT", f, 25, -155)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        l:SetText(L["Boss:"])
-        l:SetPoint("TOPLEFT", f, 259, -110)
+        l:SetText(L["Suit "..L[64]])
+        l:SetPoint("TOPLEFT", f, 259, -155)
     end
 
     function DropDown_Initialize(self,level)
@@ -259,7 +235,7 @@ function AQSELF.suitInit()
         UIDropDownMenu_JustifyText(dropdown, "LEFT")
     end
 
-    local height = -105
+    local height = -150
     local lastHeight = 0
 
     for k,v in pairs(AQSELF.items) do

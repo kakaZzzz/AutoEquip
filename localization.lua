@@ -1,5 +1,13 @@
 local _, AQSELF = ...
 
+local color = AQSELF.color
+
+AQSELF.color =  function( rgb, text )
+    return "|cFF"..rgb..text.."|r"
+end
+
+local color = AQSELF.color
+
 local L = setmetatable({}, {
     __index = function(table, key)
         if key then
@@ -17,11 +25,11 @@ L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hite
 L["enable_carrot"] = "Equip \124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[Carrot on a Stick]\124h\124r when you're riding (Slot 2 /Not in Battleground). "
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
-L[60] = "|cFF00FF0060|r"
-L[64] = "|cFFFF0000Boss|r"
-L[63] = "|cFFFF000063|r"
+L[60] = color("00FF00", "General")
+L[64] = color("FF0000", "Lv.?? Boss")
+L[63] = color("FF4500", "Lv.63 Elite")
 
-L["prefix"] = "|cFF00BFFF[AutoEquip]|r"
+L["prefix"] = "|cFFFFFF00<AutoEquip>|r"
 
 if locale == 'zhCN' then
 
@@ -58,7 +66,7 @@ if locale == 'zhCN' then
 
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
 	L["|cFFFF0000Disabled|r"] = "|cFFFF0000停用|r"
-	L["AutoEquip: PVP mode "] = "AutoEquip: PVP模式"
+	L[" PVP mode "] = " PVP模式"
 
 	L["Custom Buff Alert:"] = "自定义Buff提醒:"
 	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
@@ -106,4 +114,17 @@ if locale == 'zhCN' then
 	L["Main-Hand"] = "主手"
 	L["Off-Hand"] = "副手"
 	L["Ranged"] = "远程"
+
+	L[60] = color("00FF00", "常规")
+	L[63] = color("FF4500", "Lv.63 精英")
+
+	L["General"] = "常规设置"
+	L["Suit for 63+"] = "63+套装"
+	L["Equip customized suit when you target lv.63 elite and lv.?? boss"] = "当目标为63级精英或??级Boss时，装备自定义的套装"
+	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
+	L["#Autosave current inventories to Suit "..L[60]] = "#自动将当前装备保存成"..L[60].."套装"
+	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "当目标为63级以下的敌方单位，装备"..L[60].."套装"
+	L["Suit "..L[64]] = L[64].."套装"
+	L["Suit "..L[63]] = L[63].."套装"
+	L["Suit "..L[60]] = L[60].."套装"
 end

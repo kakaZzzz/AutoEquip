@@ -52,9 +52,7 @@ function AQSELF.createItemBar()
 	f:SetPoint(AQSV.point, AQSV.x, AQSV.y)
 
 	-- 换装备时更新按钮
-	f:RegisterEvent("UNIT_INVENTORY_CHANGED")
-	f:RegisterEvent("UPDATE_BINDINGS")
-	f:SetScript("OnEvent", AQSELF.barOnEvent)
+
 
 	-- 创建右键菜单
 	AQSELF.createMenu()
@@ -432,18 +430,8 @@ function AQSELF.updateItemButton( slot_id )
 		itemTexture = GetItemTexture(itemId)
 	end
 
-	button.texture:SetTexture(itemTexture)
-end
-
-function AQSELF.barOnEvent( self, event, arg1 )
-	if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
-		for k,v in pairs(AQSELF.slots) do
-			AQSELF.updateItemButton( v )
-		end
-	end
-
-	if event == "UPDATE_BINDINGS" then
-		AQSELF.bindingSlot()
+	if button then
+		button.texture:SetTexture(itemTexture)
 	end
 end
 

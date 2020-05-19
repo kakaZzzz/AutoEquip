@@ -108,13 +108,19 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.suit[63] = initSV(AQSV.suit[63], {})
             AQSV.suit[64] = initSV(AQSV.suit[64], {})
             AQSV.suit[60] = initSV(AQSV.suit[60], {})
-            AQSV.currentSuit = initSV(currentSuit, 60)
+            AQSV.currentSuit = initSV(AQSV.currentSuit, 60)
+            AQSV.enableSuit = initSV(AQSV.enableSuit, false)
+            AQSV.enableAutoSuit60 = initSV(AQSV.enableAutoSuit60, false)
+            AQSV.enableTargetSuit60 = initSV(AQSV.enableTargetSuit60, false)
 
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
             AQSELF.createBuffIcon()
             print(L["prefix"]..L[" Loaded"])
+
+            mainInit( )
+
             AQSELF.init = true
 
         end
@@ -156,10 +162,108 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
         AQSELF.checkAllWait()
 
+        if AQSV.needSuit then
+            if GetTime() - AQSELF.needSuitTimestamp > 1 then
+                AQSELF.changeSuit(AQSV.needSuit)
+                AQSV.needSuit = false
+                AQSELF.needSuitTimestamp = 0
+            end
+        end
+
         -- 自动更换饰品
         AQSELF.changeTrinket()
         
     end
+end
+
+
+function mainInit( )
+
+    SLASH_AQCMD1 = "/aq";
+    function SlashCmdList.AQCMD(msg)
+
+        if msg == "" then
+            AQSELF.enableAutoEuquip()
+
+        elseif msg == "settings" then
+             InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
+             InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
+
+        elseif msg == "pvp" then
+            AQSELF. enablePvpMode()
+
+        elseif msg == "unlock" then
+             for k,v in pairs(AQSELF.slots) do
+                 AQSELF.cancelLocker(v)
+             end
+
+        elseif msg == "60" or msg == "63" or msg == "64"   then
+            -- EquipItemByName(19891, 17)
+            if AQSELF.playerCanEquip()  then
+                AQSV.needSuit = tonumber(msg)
+                AQSELF.needSuitTimestamp = GetTime()
+            else
+                print(L["AutoEquip: |cFF00FF00In combat|r"])
+            end
+
+        end
+    end
+
+    AQSELF.main:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    AQSELF.main:RegisterEvent("UPDATE_BINDINGS")
+    AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
+    AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
+
+    AQSELF.main:SetScript("OnEvent", function( self, event, arg1 )
+        if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
+            for k,v in pairs(AQSELF.slots) do
+                AQSELF.updateItemButton( v )
+            end
+        end
+
+        if event == "UPDATE_BINDINGS" then
+            AQSELF.bindingSlot()
+        end
+
+        if event == "PLAYER_REGEN_ENABLED" then
+            if AQSV.enableSuit and AQSV.enableAutoSuit60 then
+                AQSV.needSuit = 60
+                AQSELF.needSuitTimestamp = GetTime()
+            end
+        end
+
+        if event == "PLAYER_TARGET_CHANGED" then
+
+            if not AQSV.enableSuit then
+                return
+            end
+
+            local level = UnitLevel("target")
+            local boss = 60
+
+            if level == 63 then
+            -- if level == 6 then
+                boss = 63
+            elseif level == -1 then
+            -- elseif level == 7 then
+                boss = 64
+            end
+
+            if boss == 60 and not AQSV.enableTargetSuit60 then
+                return
+            end
+
+            -- print(boss,UnitAffectingCombat("player"))
+            -- 目标为空或者是玩家的情况下，不做更换
+            if level ~= 0 and UnitIsEnemy("player", "target") and AQSELF.playerCanEquip() then
+                -- print(boss,UnitAffectingCombat("player"))
+                -- AQSELF.changeSuit(boss)               
+               AQSV.needSuit = boss
+               AQSELF.needSuitTimestamp = GetTime()
+            end
+        end
+
+    end)
 end
 
 
