@@ -89,6 +89,21 @@ AQSELF.empty = function( t )
 
 end
 
+AQSELF.otherSlot = function(slot_id)
+    
+    local other = 0
+
+    if slot_id == 11 or slot_id == 12 then
+        other = 23 - slot_id
+    elseif slot_id == 13 or slot_id == 14 then
+        other = 27 -slot_id
+    elseif slot_id == 16 or slot_id == 17 then
+        other = 33 -slot_id
+    end
+
+    return other
+end
+
 -- 调试函数
 AQSELF.debug = function( t )
     if not AQSELF.enableDebug then

@@ -16,8 +16,12 @@ AQSELF.init = false
 -- 获取当前角色名字
 AQSELF.player = UnitName("player")
 
+if AQSELF.player == "卡法" then
+	AQSELF.enableDebug = true          -- 调试开关
+end
+
 -- 构建下拉框组时，记录纵坐标
-AQSELF.lastHeight = -340
+
 
 -- 操作的装备栏
 AQSELF.slots = {13, 14}
@@ -52,8 +56,8 @@ AQSELF.slotToName = {
 	[13] = L["Trinkets "]..1,
 	[14] = L["Trinkets "]..2,
 	[15] = L["Cloaks"],
-	[16] = L["Main-Hand"],
-	[17] = L["Off-Hand"],
+	[16] = L["MainHand"],
+	[17] = L["OffHand"],
 	[18] = L["Ranged"],
 }
 

@@ -17,7 +17,7 @@ function AQSELF.suitInit()
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
 
-    AQSELF.chance2hit = f
+    AQSELF.suitOption = f
     f.checkbox = {}
     f.dropdown = {
         [63] = {},
@@ -91,7 +91,7 @@ function AQSELF.suitInit()
                             EquipItemByName(AQSV.suit[60][v], v)
                         end
 
-                        if v ==13 or v == 14 then
+                        if AQSELF.slotFrames[v] then
                             AQSELF.cancelLocker( v )
                         end
                     end

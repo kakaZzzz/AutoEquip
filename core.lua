@@ -176,11 +176,14 @@ AQSELF.checkTrinket = function( )
                      --    print(itemEquipLoc)
                      -- end
 
+                    if itemEquipLoc ~= "" then
+                        AQSELF.itemInBags[id] = {i,s}
+                    end
+
                     if itemEquipLoc == "INVTYPE_TRINKET" then
                         table.insert(AQSELF.items[13], id)
                         table.insert(AQSELF.items[14], id)
                         table.insert(AQSELF.trinkets, id)
-                        AQSELF.itemInBags[id] = {i,s}
                     elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
                         table.insert(AQSELF.items[5], id)
                         table.insert(AQSELF.chests, id)
@@ -249,7 +252,7 @@ AQSELF.updateItemInBags = function()
                 -- if id ~= "" then
                     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
 
-                    if itemEquipLoc == "INVTYPE_TRINKET" then
+                    if itemEquipLoc ~= "" then
                         
                         if AQSELF.itemInBags[id] then
                             AQSELF.itemInBags[id][1] = i

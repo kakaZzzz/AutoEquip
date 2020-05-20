@@ -7,6 +7,7 @@ local diff = AQSELF.diff
 local L = AQSELF.L
 local player = AQSELF.player
 local GetItemTexture = AQSELF.GetItemTexture
+local otherSlot = AQSELF.otherSlot
 
 function AQSELF.createItemBar()
 
@@ -14,7 +15,15 @@ function AQSELF.createItemBar()
 	local f = CreateFrame("Button", "AutoEquip_ItemBar", UIParent)
 	AQSELF.bar = f
 	AQSELF.list = {}
-	AQSELF.trinketsFrames = {}
+	AQSELF.itemButtons = {}
+
+
+	-- 确定装备栏个数
+	for k,v in pairs(AQSV.enableItemBarSlot) do
+		if v then
+			table.insert(AQSELF.slots, k)
+		end
+	end
 
 	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
@@ -126,8 +135,8 @@ function  AQSELF.createMenu()
 	menu[3] = {}
 	menu[3]["text"] = L[" Settings"]
 	menu[3]["func"] = function()
-		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
-		InterfaceOptionsFrame_OpenToCategory("AutoEquip");
+		InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
+		InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
 	end
 
 	menu[4] = {}
@@ -286,25 +295,42 @@ function AQSELF.createItemButton( slot_id, position )
 
 		local index = 1
 		local itemId1 = GetInventoryItemID("player", slot_id)
-		local itemId2 = GetInventoryItemID("player", 27 - slot_id)
+		local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
 
-		for k,v in pairs(AQSV.usable) do
-			if v ~= itemId1 and v ~= itemId2 then
+		-- debug(AQSELF.items[slot_id])
+
+		for k,v in pairs(AQSELF.items[slot_id]) do
+			if v ~= itemId1 and v ~= itemId2 and v > 0 then
 				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
 				index = index + 1
-			elseif AQSELF.trinketsFrames[v] then
-				AQSELF.trinketsFrames[v]:Hide()
+			elseif AQSELF.itemButtons[v] then
+				AQSELF.itemButtons[v]:Hide()
 			end
 		end
 
-		for k,v in pairs(AQSELF.trinkets) do
-			if v ~= itemId1 and v ~= itemId2 then
-				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
-				index = index + 1
-			elseif AQSELF.trinketsFrames[v] then
-				AQSELF.trinketsFrames[v]:Hide()
+		for k,v in pairs(AQSELF.itemButtons) do
+			if v.inSlot ~= slot_id then
+				v:Hide()
 			end
 		end
+
+		-- for k,v in pairs(AQSV.usable) do
+		-- 	if v ~= itemId1 and v ~= itemId2 then
+		-- 		AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+		-- 		index = index + 1
+		-- 	elseif AQSELF.itemButtons[v] then
+		-- 		AQSELF.itemButtons[v]:Hide()
+		-- 	end
+		-- end
+
+		-- for k,v in pairs(AQSELF.trinkets) do
+		-- 	if v ~= itemId1 and v ~= itemId2 then
+		-- 		AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+		-- 		index = index + 1
+		-- 	elseif AQSELF.itemButtons[v] then
+		-- 		AQSELF.itemButtons[v]:Hide()
+		-- 	end
+		-- end
 	end)
    	button:SetScript("OnLeave", function( self )
    		AQSELF.hideTooltip()
@@ -326,7 +352,7 @@ end
 function AQSELF.doHideItemDropdown()
 	if AQSELF.itemDropdownTimestamp then
 		if GetTime() - AQSELF.itemDropdownTimestamp > AQSELF.itemDropdownDelay then
-			for k,v in pairs(AQSELF.trinketsFrames) do
+			for k,v in pairs(AQSELF.itemButtons) do
 	   			v:Hide()
 	   		end
 	   		AQSELF.itemDropdownTimestamp = nil
@@ -341,12 +367,19 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 		return
 	end
 
+	-- 分列，计算位置
+	position = position - 1
+		
+	local newX = math.floor(position / AQSV.itemsPerColumn)
+	local newY = position % AQSV.itemsPerColumn + 1
+
 	-- 如果已经创建过物品图层，只修改位置
-	if AQSELF.trinketsFrames[item_id] then
-		AQSELF.trinketsFrames[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x, 5+43 * position)
-		AQSELF.trinketsFrames[item_id]:Show()
+	if AQSELF.itemButtons[item_id] then
+
+		AQSELF.itemButtons[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x + newX * 43, 5+43 * newY)
+		AQSELF.itemButtons[item_id]:Show()
 		-- 点击图标是获取正确的slot
-		AQSELF.trinketsFrames[item_id].inSlot = slot_id
+		AQSELF.itemButtons[item_id].inSlot = slot_id
 		return
 	end
 
@@ -381,12 +414,13 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", AQSELF.bar, x, 5+43 * position)
+   	button:SetPoint("TOPLEFT", AQSELF.bar, x + newX * 43, 5+43 * newY)
    	button:Show()
 
    	button:SetScript("OnEnter", function(self)
    		-- 停掉隐藏下拉框的计时器
 		AQSELF.itemDropdownTimestamp = nil
+
 		AQSELF.showTooltip("bag", AQSELF.itemInBags[item_id][1], AQSELF.itemInBags[item_id][2])
 	end)
    	button:SetScript("OnLeave", function( self )
@@ -402,7 +436,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	button:SetScript('OnClick', function(self)
 
 		-- 点击后立即隐藏下拉框
-	    for k,v in pairs(AQSELF.trinketsFrames) do
+	    for k,v in pairs(AQSELF.itemButtons) do
    			v:Hide()
    		end
 
@@ -418,7 +452,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	end)
 
    	-- 缓存
-   	AQSELF.trinketsFrames[item_id] = button
+   	AQSELF.itemButtons[item_id] = button
 end
 
 -- 更新按钮材质
@@ -536,8 +570,8 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		end
 
 		-- 计算饰品下拉框的冷却时间
-		for k,v in pairs(AQSELF.trinketsFrames) do
-			-- if AQSELF.trinketsFrames[v] then
+		for k,v in pairs(AQSELF.itemButtons) do
+			-- if AQSELF.itemButtons[v] then
 				-- 获取饰品的冷却状态
 			    local start, duration, enable = GetItemCooldown(k)
 			    -- 剩余冷却时间

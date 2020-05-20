@@ -111,8 +111,8 @@ if locale == 'zhCN' then
 	L["Fingers "] = "手指"
 	L["Trinkets "] = "饰品"
 	L["Cloaks"] = "背部"
-	L["Main-Hand"] = "主手"
-	L["Off-Hand"] = "副手"
+	L["MainHand"] = "主手"
+	L["OffHand"] = "副手"
 	L["Ranged"] = "远程"
 
 	L[60] = color("00FF00", "常规")
@@ -120,6 +120,8 @@ if locale == 'zhCN' then
 
 	L["General"] = "常规设置"
 	L["Suit for 63+"] = "63+套装"
+	L["Usable Queue"] = "主动队列"
+
 	L["Equip customized suit when you target lv.63 elite and lv.?? boss"] = "当目标为63级精英或??级Boss时，装备自定义的套装"
 	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
 	L["#Autosave current inventories to Suit "..L[60]] = "#自动将当前装备保存成"..L[60].."套装"

@@ -15,13 +15,26 @@ function AQSELF.settingInit()
 
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
+
+    local queueOption = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
+    local queueFrame = CreateFrame("Frame", nil, queueOption)
     
     AQSELF.general = p
     AQSELF.f = f
 
+    AQSELF.queueOption = queueOption
+    AQSELF.queueFrame = queueFrame
+
     top.name = "AutoEquip"
+
     p.name = L["General"]
     p.parent = "AutoEquip"
+
+    queueOption.name = L["Usable Queue"]
+    queueOption.parent = "AutoEquip"
+
+    AQSELF.lastHeight = -400
+    AQSELF.lastHeightQueue = -20
 
     -- 缓存主动饰品下拉框
     f.dropdown = {}
@@ -38,24 +51,6 @@ function AQSELF.settingInit()
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
         t:SetText(L["AutoEquip "]..AQSELF.version)
         t:SetPoint("TOPLEFT", f, 25, -20)
-    end
-
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Usable Trinkets:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight)
-    end
-
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Mode:"])
-        t:SetPoint("TOPLEFT", f, 354, AQSELF.lastHeight)
-    end
-
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Slot:"])
-        t:SetPoint("TOPLEFT", f, 494, AQSELF.lastHeight)
     end
 
     -- 构建主动饰品组
@@ -137,24 +132,45 @@ function AQSELF.settingInit()
         end
     end
 
+    
+
     -- 构建两个饰品组
     function buildDropdownGroup()
+
+        do
+            local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            t:SetText(L["Usable Trinkets:"])
+            t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+        end
+
+        do
+            local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            t:SetText(L["Mode:"])
+            t:SetPoint("TOPLEFT", queueFrame, 354, AQSELF.lastHeightQueue)
+        end
+
+        do
+            local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            t:SetText(L["Slot:"])
+            t:SetPoint("TOPLEFT", queueFrame, 494, AQSELF.lastHeightQueue)
+        end
+
         local height = 0
         -- 主动饰品
         for k,v in ipairs(AQSV.usable) do
-            local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeight + 5 - k*35)
+            local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
+            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue + 5 - k*35)
             -- 保存当前选项序号
             dropdown.index = k
             -- 缓存到父框架中，供后续调用
             f.dropdown[k] = dropdown
 
-            local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+            local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["No. "]..k)
-            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - k*35)
+            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - k*35)
 
             -- 保存最后一个下拉框的位置
-            height = AQSELF.lastHeight - k*35
+            height = AQSELF.lastHeightQueue - k*35
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
@@ -168,8 +184,8 @@ function AQSELF.settingInit()
 
             -- 后面追加checkbox
             do
-                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 350, AQSELF.lastHeight + 7 - k*35)
+                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 350, AQSELF.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pveTrinkets[v])
                 f.pveCheckbox[k] = b
 
@@ -184,8 +200,8 @@ function AQSELF.settingInit()
             end
 
             do
-                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 420, AQSELF.lastHeight + 7 - k*35)
+                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 420, AQSELF.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pvpTrinkets[v])
                 f.pvpCheckbox[k] = b
 
@@ -200,8 +216,8 @@ function AQSELF.settingInit()
             end
 
             do
-                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 490, AQSELF.lastHeight + 7 - k*35)
+                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 490, AQSELF.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.queue13[v])
                 f.queue13[k] = b
 
@@ -216,8 +232,8 @@ function AQSELF.settingInit()
             end
 
             do
-                local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 540, AQSELF.lastHeight + 7 - k*35)
+                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 540, AQSELF.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.queue14[v])
                 f.queue14[k] = b
 
@@ -238,29 +254,29 @@ function AQSELF.settingInit()
         if #AQSV.usable == 0 then
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
-            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 35)
+            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeightQueue - 35)
 
-            height = AQSELF.lastHeight - 35
+            height = AQSELF.lastHeightQueue - 35
         end
 
-        AQSELF.lastHeight = height
+        AQSELF.lastHeightQueue = height
 
         do
-            local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+            local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetText(L["Resident Trinkets:"] )
-            t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 45)
+            t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 45)
         end
 
         for k=1, 2 do
-            local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeight-(40 + k*35))
+            local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
+            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue-(40 + k*35))
             dropdown.index = k
 
             f.resident[k] = dropdown
 
-            local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+            local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["Slot "]..k)
-            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-(45 + k*35))
+            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue-(45 + k*35))
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
@@ -279,7 +295,7 @@ function AQSELF.settingInit()
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
         end
 
-        AQSELF.lastHeight = AQSELF.lastHeight-(45 + 2*35)
+        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue-(45 + 2*35)
     end
 
     function buildCheckbox(text, key, pos, x)
@@ -335,6 +351,23 @@ function AQSELF.settingInit()
         f.checkbox[key] = b
     end
 
+    function buildSlotCheckbox(text, key, pos, x)
+
+        local b = CreateFrame("CheckButton", nil, f, "UICheckButtonTemplate")
+        b:SetPoint("TOPLEFT", f, x, pos)
+        b:SetChecked(AQSV.enableItemBarSlot[key])
+
+        b.text = b:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+        b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+        b.text:SetText(text)
+        b:SetScript("OnClick", function()
+            AQSV.enableItemBarSlot[key] = not AQSV.enableItemBarSlot[key]
+            b:SetChecked(AQSV.enableItemBarSlot[key])
+        end)
+
+        f.checkbox[key] = b
+    end
+
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
     buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
@@ -374,20 +407,50 @@ function AQSELF.settingInit()
         end)
     end
 
-    buildCheckbox(L["Enable Buff Alert"], "enableBuff", -110)
-    buildCheckbox(L["Lock frame"], "buffLocked", -110, 190)
+    local slotCheckbosHeight = -115
+
+    buildSlotCheckbox(L["MainHand"], 16, slotCheckbosHeight, 45)
+    buildSlotCheckbox(L["OffHand"], 17, slotCheckbosHeight, 155)
+    buildSlotCheckbox(L["Ranged"], 18, slotCheckbosHeight, 265)
+    buildSlotCheckbox(L["Head"], 1, slotCheckbosHeight, 375)
+    buildSlotCheckbox(L["Neck"], 2, slotCheckbosHeight, 485)
+
+    slotCheckbosHeight = -140
+
+    buildSlotCheckbox(L["Shoulder"], 3, slotCheckbosHeight, 45)
+    buildSlotCheckbox(L["Chest"], 5, slotCheckbosHeight, 155)
+    buildSlotCheckbox(L["Waist"], 6, slotCheckbosHeight, 265)
+    buildSlotCheckbox(L["Legs"], 7, slotCheckbosHeight, 375)
+    buildSlotCheckbox(L["Feet"], 8, slotCheckbosHeight, 485)
+
+    slotCheckbosHeight = -165
+
+    buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
+    buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
+    buildSlotCheckbox(L["Fingers "]..1, 11, slotCheckbosHeight, 265)
+    buildSlotCheckbox(L["Fingers "]..2, 12, slotCheckbosHeight, 375)
+    buildSlotCheckbox(L["Cloaks"], 15, slotCheckbosHeight, 485)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#The above selection will take effect after reloading UI"])
+        t:SetPoint("TOPLEFT", f, 53, -200)
+    end
+
+    buildCheckbox(L["Enable Buff Alert"], "enableBuff", -220)
+    buildCheckbox(L["Lock frame"], "buffLocked", -220, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 320, -118)
+        t:SetPoint("TOPLEFT", f, 320, -228)
 
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 370,  -105)
+        e:SetPoint("TOPLEFT", f, 370,  -215)
         e:SetAutoFocus(false)
         e:SetText(AQSV.buffZoom)
         e:SetCursorPosition(0)
@@ -410,22 +473,22 @@ function AQSELF.settingInit()
         end)
     end
 
-    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -150)
-    buildCheckbox(L["enable_carrot"], "enableCarrot", -175)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", -200)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -225)
-    buildCheckbox(L["Item queue is displayed above the Inventory Bar"], "reverseCooldownUnit", -250)
+    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -250-10)
+    buildCheckbox(L["enable_carrot"], "enableCarrot", -275-10)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", -300-10)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -325-10)
+    buildCheckbox(L["Item queue is displayed above the Inventory Bar"], "reverseCooldownUnit", -350-10)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#When the items shown below are different from the actual ones"])
-        t:SetPoint("TOPLEFT", f, 135, -295)
+        t:SetPoint("TOPLEFT", f, 135, -395-10)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
         b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 23, -285)
+        b:SetPoint("TOPLEFT", f, 23, -385-10)
         b:SetScript("OnClick", function(self)
             C_UI.Reload()
         end)
@@ -612,8 +675,13 @@ function AQSELF.settingInit()
     p:SetScrollChild(f)
     f:SetSize(1000, -AQSELF.lastHeight)
 
+    queueFrame:SetAllPoints(queueOption)
+    queueOption:SetScrollChild(queueFrame)
+    queueFrame:SetSize(1000, -AQSELF.lastHeightQueue)
+
     InterfaceOptions_AddCategory(top)
     InterfaceOptions_AddCategory(p)
+    InterfaceOptions_AddCategory(queueOption)
 
      top:SetScript('OnShow', function(self)
         InterfaceOptionsFrame_OpenToCategory(p);

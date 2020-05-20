@@ -71,6 +71,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.point = initSV(AQSV.point, "CENTER")
             AQSV.locked = initSV(AQSV.locked, false)
             AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
+            AQSV.enableItemBarSlot = initSV(AQSV.enableItemBarSlot, {})
+
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
@@ -112,6 +114,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.enableSuit = initSV(AQSV.enableSuit, false)
             AQSV.enableAutoSuit60 = initSV(AQSV.enableAutoSuit60, false)
             AQSV.enableTargetSuit60 = initSV(AQSV.enableTargetSuit60, false)
+
+            AQSV.itemsPerColumn = initSV(AQSV.itemsPerColumn, 4)
 
 
             AQSELF.addonInit()
@@ -182,6 +186,8 @@ function mainInit( )
     SLASH_AQCMD1 = "/aq";
     function SlashCmdList.AQCMD(msg)
 
+        debug(msg)
+
         if msg == "" then
             AQSELF.enableAutoEuquip()
 
@@ -204,6 +210,15 @@ function mainInit( )
                 AQSELF.needSuitTimestamp = GetTime()
             else
                 print(L["AutoEquip: |cFF00FF00In combat|r"])
+            end
+
+        elseif strfind(msg, "ipc") then
+
+            -- items per column
+            local n = tonumber(strmatch(msg, "%d+"))
+
+            if n > 0 then
+                AQSV.itemsPerColumn = n
             end
 
         end
