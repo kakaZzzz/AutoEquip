@@ -38,8 +38,8 @@ AQSELF.empty2 = {}			-- slotIds/ui
 AQSELF.empty3 = {}			-- diff/base
 AQSELF.empty4 = {}			-- diff2/base
 AQSELF.empty5 = {}			-- waitId/chance2hit
-AQSELF.empty13 = {}		-- slot13/core
-AQSELF.empty14 = {}		-- slot14/core
+AQSELF.e0 = {}		-- slot13/core
+AQSELF.e1 = {}		-- slot14/core
 
 AQSELF.slotToName = {
 	[1] = L["Head"],

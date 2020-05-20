@@ -104,6 +104,12 @@ AQSELF.otherSlot = function(slot_id)
     return other
 end
 
+AQSELF.loopSlots = function( func )
+    for k,v in pairs(AQSELF.needSlots) do
+        func(v)
+    end
+end
+
 -- 调试函数
 AQSELF.debug = function( t )
     if not AQSELF.enableDebug then

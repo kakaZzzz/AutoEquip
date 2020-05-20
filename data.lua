@@ -103,30 +103,32 @@ buffTime[19141] = 0						-- 丝瓜
 buffTime[17744] = 0						-- 诺克赛恩之心
 
 
-
 -- 主动饰品集合
 AQSELF.usable = {}
 AQSELF.pveSet = {}
 
+AQSELF.usable[13] = {}
+AQSELF.pveSet[13] = {}
+
 for k,v in pairs(buffTime) do
-	table.insert(AQSELF.pveSet, k)
+	table.insert(AQSELF.pveSet[13], k)
 end
 
 AQSELF.buffTime = buffTime
 
--- 能主动使用的衣服
+-- 衣服5
 
-local chestBuffTime = {}
-chestBuffTime[14152] = 0				-- 大法师之袍
+local tempBuffTime = {}
+tempBuffTime[14152] = 0				-- 大法师之袍
 
 -- 可使用的胸甲集合
-AQSELF.usableChests = {}
+AQSELF.usable[5] = {}
 
-for k,v in pairs(chestBuffTime) do
-	table.insert(AQSELF.usableChests, k)
+for k,v in pairs(tempBuffTime) do
+	table.insert(AQSELF.usable[5], k)
 end
 
-AQSELF.buffTime = merge(AQSELF.buffTime, chestBuffTime)
+AQSELF.buffTime = merge(AQSELF.buffTime, tempBuffTime)
 
 -- 角色身上和背包中所有饰品
 AQSELF.trinkets = {}
@@ -138,7 +140,7 @@ AQSELF.pvpSet = {
 	18834,18845,18846,18849,18850,18851,18852,18853
 }
 
-AQSELF.usable = merge(AQSELF.pveSet, AQSELF.pvpSet)
+AQSELF.usable[13] = merge(AQSELF.pveSet[13], AQSELF.pvpSet)
 
 -- 徽记的buff时间都是0
 for k,v in pairs(AQSELF.pvpSet) do

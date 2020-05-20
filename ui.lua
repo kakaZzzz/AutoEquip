@@ -17,13 +17,16 @@ function AQSELF.createItemBar()
 	AQSELF.list = {}
 	AQSELF.itemButtons = {}
 
-
+	local new = {}
 	-- 确定装备栏个数
 	for k,v in pairs(AQSV.enableItemBarSlot) do
 		if v then
-			table.insert(AQSELF.slots, k)
+			table.insert(new, k)
 		end
 	end
+
+	table.sort( new )
+	AQSELF.slots = AQSELF.merge(AQSELF.slots, new)
 
 	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
@@ -266,7 +269,7 @@ function AQSELF.createItemButton( slot_id, position )
 	t3:SetTexture("Interface\\GLUES\\CharacterSelect\\Glues-AddOn-Icons.blp")
 	t3:SetTexCoord(0, 0.25, 0, 1)
 
-	if AQSV["slot"..slot_id.."Locked"] then
+	if AQSV.slotStatus[slot_id].locked then
 		t3:Show()
 	else
 		t3:Hide()
@@ -313,24 +316,6 @@ function AQSELF.createItemButton( slot_id, position )
 				v:Hide()
 			end
 		end
-
-		-- for k,v in pairs(AQSV.usable) do
-		-- 	if v ~= itemId1 and v ~= itemId2 then
-		-- 		AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
-		-- 		index = index + 1
-		-- 	elseif AQSELF.itemButtons[v] then
-		-- 		AQSELF.itemButtons[v]:Hide()
-		-- 	end
-		-- end
-
-		-- for k,v in pairs(AQSELF.trinkets) do
-		-- 	if v ~= itemId1 and v ~= itemId2 then
-		-- 		AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
-		-- 		index = index + 1
-		-- 	elseif AQSELF.itemButtons[v] then
-		-- 		AQSELF.itemButtons[v]:Hide()
-		-- 	end
-		-- end
 	end)
    	button:SetScript("OnLeave", function( self )
    		AQSELF.hideTooltip()
@@ -408,7 +393,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	text:SetFont(STANDARD_TEXT_FONT, 16, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOP", button, 40, 0)
+    text:SetPoint("TOPLEFT", button, 0,-1)
     text:SetJustifyH("LEFT")
     
     button.text = text
@@ -499,10 +484,10 @@ function AQSELF.createCooldownUnit( item_id, position )
 	t:SetAllPoints(f)
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	text:SetFont(STANDARD_TEXT_FONT, 14, "OUTLINE")
+	text:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOP", f, 25, 0)
+    text:SetPoint("TOP", f, 20, 0)
     text:SetJustifyH("LEFT")
 
     f.text = text
@@ -591,63 +576,78 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			-- end
 		end
 
-		-- 计算冷却队列
-		local queue = AQSELF.buildQueueRealtime()
+		AQSELF.loopSlots(function(slot_id)
 
-		-- print(queue)
+			-- 计算冷却队列
+			local queue = AQSELF.buildQueueRealtime(slot_id)
 
-		wipe(AQSELF.empty2)
+			-- print(queue)
 
-		local slotIds = AQSELF.empty2
+			wipe(AQSELF.empty2)
 
-	    slotIds[1] = GetInventoryItemID("player", 13)
-	    slotIds[2] = GetInventoryItemID("player", 14)
+			local slotIds = AQSELF.empty2
 
-	    -- local slotIds = {slot13Id, slot14Id}
+		    slotIds[1] = GetInventoryItemID("player", slot_id)
 
-	    -- -- 算出等待换上的饰品
-	    local wait = diff(queue, slotIds)
+		    if slot_id == 13 then
+		    	slotIds[2] = GetInventoryItemID("player", 14)
+		    end
 
-	    -- 根据顺序创建图标，或者使其显示
-	    for k,v in pairs(wait) do
-	    	if not AQSELF.list[v] then
-	    		AQSELF.list[v] = AQSELF.createCooldownUnit(v, k)
-	    	else
-	    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
-	    		AQSELF.list[v]:Show()
-	    	end
-	    	
-	    	if AQSV.reverseCooldownUnit then
-	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , 30 + (k - 1) * 23)
-	    	else
-	    		AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
-	    	end
-	    	
-	    end
+		    -- local slotIds = {slot13Id, slot14Id}
 
-	    for k,v in pairs(AQSELF.list) do
-	    	-- 如果已经换上了，隐藏
-	    	if not tContains(wait, k) then
-	    		v:Hide()
-	    	else
-	    		-- 获取饰品的冷却状态
-			    local start, duration, enable = GetItemCooldown(k)
-			    -- 剩余冷却时间
-			    local rest = math.ceil(duration - GetTime() + start)
+		    -- -- 算出等待换上的饰品
+		    local wait = diff(queue, slotIds)
 
-			    -- 在队列中的显示冷却时间
-			    if duration > 0 and rest > 0 then
-			    	local text = rest
-			    	if rest > 60 then
-			    		text = math.ceil(rest/60).."m"
-			    	end
+		    if AQSELF.list[slot_id] == nil then
+		    	AQSELF.list[slot_id] = {}
+		    end
 
-			    	v.text:SetText(text)
-			    else
-					v.text:SetText()
-			    end
-	    	end
-	    end
+		    -- 根据顺序创建图标，或者使其显示
+		    for k,v in pairs(wait) do
+		    	if not AQSELF.list[slot_id][v] then
+		    		AQSELF.list[slot_id][v] = AQSELF.createCooldownUnit(v, k)
+		    	else
+		    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
+		    		AQSELF.list[slot_id][v]:Show()
+		    	end
+		    	
+		    	local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.slotFrames[slot_id]:GetPoint()
+
+		    	if AQSV.reverseCooldownUnit then
+		    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , 30 + (k - 1) * 23)
+		    	else
+		    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -43 - (k - 1) * 23)
+		    	end
+		    	
+		    end
+
+		    for k,v in pairs(AQSELF.list[slot_id]) do
+		    	-- 如果已经换上了，隐藏
+		    	if not tContains(wait, k) then
+		    		v:Hide()
+		    	else
+		    		-- 获取饰品的冷却状态
+				    local start, duration, enable = GetItemCooldown(k)
+				    -- 剩余冷却时间
+				    local rest = math.ceil(duration - GetTime() + start)
+
+				    -- 在队列中的显示冷却时间
+				    if duration > 0 and rest > 0 then
+				    	local text = rest
+				    	if rest > 60 then
+				    		text = math.ceil(rest/60).."m"
+				    	end
+
+				    	v.text:SetText(text)
+				    else
+						v.text:SetText()
+				    end
+		    	end
+		    end
+
+		end)
+
+		
 
     end
 end

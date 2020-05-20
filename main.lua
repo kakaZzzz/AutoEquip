@@ -5,7 +5,7 @@ local clone = AQSELF.clone
 local diff = AQSELF.diff
 local L = AQSELF.L
 local initSV = AQSELF.initSV
-
+local loopSlots = AQSELF.loopSlots
 
 
 
@@ -54,7 +54,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             -- 初始化全局变量
             AQSV = initSV(AQSV, {})
-            AQSV.usable = initSV(AQSV.usable, AQSELF.usable)
+            AQSV.usableItems = initSV(AQSV.usableItems, AQSELF.usable)
             AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
             AQSV.enable = initSV(AQSV.enable, true)
             AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
@@ -64,7 +64,6 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.slot14 = initSV(AQSV.slot14, 0)
             AQSV.queue13 = initSV(AQSV.queue13, {})
             AQSV.queue14 = initSV(AQSV.queue14, {})
-
 
             AQSV.x = initSV(AQSV.x, 200)
             AQSV.y = initSV(AQSV.y, 0)
@@ -117,6 +116,17 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             AQSV.itemsPerColumn = initSV(AQSV.itemsPerColumn, 4)
 
+            if AQSV.slotStatus == nil then
+                AQSV.slotStatus = {}
+                for k,v in pairs(AQSELF.slotToName) do
+                    AQSV.slotStatus[k] = {
+                        ["backup"] = 0,
+                        ["locked"] = false,
+                        ["lockedCD"] = false,
+                        ["lockedTime"] = 0,
+                    }
+                end
+            end
 
             AQSELF.addonInit()
             AQSELF.createItemBar()
@@ -175,7 +185,14 @@ AQSELF.onMainUpdate = function(self, elapsed)
         end
 
         -- 自动更换饰品
-        AQSELF.changeTrinket()
+
+        loopSlots(function(slot_id)
+            if slot_id == 13 then
+                AQSELF.changeTrinket()
+            else
+                AQSELF.changeItem(slot_id)
+            end
+        end)
         
     end
 end

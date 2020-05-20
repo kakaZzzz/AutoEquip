@@ -57,7 +57,8 @@ function AQSELF.settingInit()
     function DropDown_Initialize(self,level)
         level = level or 1;
         if (level == 1) then
-         for k, v in ipairs(AQSV.usable) do
+            local slot_id = self.slot
+         for k, v in ipairs(AQSV.usableItems[slot_id]) do
            local info = UIDropDownMenu_CreateInfo();
            -- info.hasArrow = true; -- creates submenu
            info.text = GetItemLink(v);
@@ -70,17 +71,24 @@ function AQSELF.settingInit()
                 -- 选择的不是当前顺序的饰品
                 if index ~= key then
                     -- 交换数据table中两个饰品的顺序
-                    local value = AQSV.usable[key]
-                    AQSV.usable[key] = AQSV.usable[index]
-                    AQSV.usable[index] = value
+                    local value = AQSV.usableItems[slot_id][key]
+                    AQSV.usableItems[slot_id][key] = AQSV.usableItems[slot_id][index]
+                    AQSV.usableItems[slot_id][index] = value
 
                     -- 根据新的数据table更新选中状态
-                    for k,v in ipairs(AQSV.usable) do
-                        UIDropDownMenu_SetSelectedValue(f.dropdown[k], v, 0)
-                        UIDropDownMenu_SetText(f.dropdown[k], GetItemLink(v)) 
+                    for k,v in ipairs(AQSV.usableItems[slot_id]) do
+                        UIDropDownMenu_SetSelectedValue(f.dropdown[slot_id][k], v, 0)
+                        UIDropDownMenu_SetText(f.dropdown[slot_id][k], GetItemLink(v)) 
                         f.pveCheckbox[k]:SetChecked(AQSV.pveTrinkets[v])
                         f.pvpCheckbox[k]:SetChecked(AQSV.pvpTrinkets[v])
+
+                        if slot_id == 13 then
+                            f.queue13[k]:SetChecked(AQSV.queue13[v])
+                            f.queue14[k]:SetChecked(AQSV.queue14[v])
+                        end
                     end
+
+
                 end
             end
            UIDropDownMenu_AddButton(info, level);
@@ -92,7 +100,8 @@ function AQSELF.settingInit()
     function Resident_Trinket_Initialize(self,level)
         level = level or 1;
         if (level == 1) then
-         for k, v in ipairs(AQSELF.trinkets) do
+            local slot_id = self.slot
+         for k, v in ipairs(AQSELF.items[slot_id]) do
            local info = UIDropDownMenu_CreateInfo();
            -- info.hasArrow = true; -- creates submenu
            info.text = GetItemLink(v);
@@ -100,24 +109,26 @@ function AQSELF.settingInit()
 
             local index = self.index
             local key = k
-
+            
            info.func = function( frame )
                 -- 选中现有饰品则无效
-                if v ~= AQSV["slot"..(12+index)] then
-                    UIDropDownMenu_SetSelectedValue(f.resident[index], v, 0)
-                    UIDropDownMenu_SetText(f.resident[index], GetItemLink(v)) 
+                if slot_id == 13 or slot_id == 14 then
+                    if v ~= AQSV.slotStatus[slot_id].backup then
+                        UIDropDownMenu_SetSelectedValue(f.resident[slot_id][index], v, 0)
+                        UIDropDownMenu_SetText(f.resident[slot_id][index], GetItemLink(v)) 
+                    end
+
+                    local one = AQSV.slotStatus[slot_id].backup
+
+                    -- 如果跟另一个饰品一样，则更换
+                    if v == AQSV.slotStatus[27 - slot_id].backup and v ~= 0 then
+                        UIDropDownMenu_SetSelectedValue(f.resident[slot_id][3-index], one, 0)
+                        UIDropDownMenu_SetText(f.resident[slot_id][3-index], GetItemLink(one)) 
+                        AQSV.slotStatus[27 - slot_id].backup = one
+                    end
                 end
 
-                local one = AQSV["slot"..(12+index)]
-
-                -- 如果跟另一个饰品一样，则更换
-                if v == AQSV["slot"..(15-index)] and v ~= 0 then
-                    UIDropDownMenu_SetSelectedValue(f.resident[3-index], one, 0)
-                    UIDropDownMenu_SetText(f.resident[3-index], GetItemLink(one)) 
-                    AQSV["slot"..(15-index)] = one
-                end
-
-                AQSV["slot"..(12+index)] = v
+                AQSV.slotStatus[slot_id].backup = v
 
 
                 -- if v ~= AQSV.slot13 and v ~= AQSV.slot14 then
@@ -135,7 +146,7 @@ function AQSELF.settingInit()
     
 
     -- 构建两个饰品组
-    function buildDropdownGroup()
+    function buildDropdownGroup(slot_id)
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -149,21 +160,25 @@ function AQSELF.settingInit()
             t:SetPoint("TOPLEFT", queueFrame, 354, AQSELF.lastHeightQueue)
         end
 
-        do
-            local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            t:SetText(L["Slot:"])
-            t:SetPoint("TOPLEFT", queueFrame, 494, AQSELF.lastHeightQueue)
+        if slot_id == 13 then
+            do
+                local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+                t:SetText(L["Slot:"])
+                t:SetPoint("TOPLEFT", queueFrame, 494, AQSELF.lastHeightQueue)
+            end
         end
 
         local height = 0
+        f.dropdown[slot_id] = {}
         -- 主动饰品
-        for k,v in ipairs(AQSV.usable) do
+        for k,v in ipairs(AQSV.usableItems[slot_id]) do
             local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
             dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue + 5 - k*35)
             -- 保存当前选项序号
             dropdown.index = k
+            dropdown.slot = slot_id
             -- 缓存到父框架中，供后续调用
-            f.dropdown[k] = dropdown
+            f.dropdown[slot_id][k] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["No. "]..k)
@@ -215,43 +230,45 @@ function AQSELF.settingInit()
                 end)
             end
 
-            do
-                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 490, AQSELF.lastHeightQueue + 7 - k*35)
-                b:SetChecked(AQSV.queue13[v])
-                f.queue13[k] = b
+            if slot_id == 13 then
+                do
+                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                    b:SetPoint("TOPLEFT", 490, AQSELF.lastHeightQueue + 7 - k*35)
+                    b:SetChecked(AQSV.queue13[v])
+                    f.queue13[k] = b
 
-                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                b.text:SetText("1")
-                b:SetScript("OnClick", function()
-                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    AQSV.queue13[vaule] = not AQSV.queue13[vaule]
-                    b:SetChecked(AQSV.queue13[vaule])
-                end)
-            end
+                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                    b.text:SetText("1")
+                    b:SetScript("OnClick", function()
+                        local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                        AQSV.queue13[vaule] = not AQSV.queue13[vaule]
+                        b:SetChecked(AQSV.queue13[vaule])
+                    end)
+                end
 
-            do
-                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 540, AQSELF.lastHeightQueue + 7 - k*35)
-                b:SetChecked(AQSV.queue14[v])
-                f.queue14[k] = b
+                do
+                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                    b:SetPoint("TOPLEFT", 540, AQSELF.lastHeightQueue + 7 - k*35)
+                    b:SetChecked(AQSV.queue14[v])
+                    f.queue14[k] = b
 
-                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                b.text:SetText("2")
-                b:SetScript("OnClick", function()
-                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
-                    AQSV.queue14[vaule] = not AQSV.queue14[vaule]
-                    b:SetChecked(AQSV.queue14[vaule])
-                end)
+                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                    b.text:SetText("2")
+                    b:SetScript("OnClick", function()
+                        local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                        AQSV.queue14[vaule] = not AQSV.queue14[vaule]
+                        b:SetChecked(AQSV.queue14[vaule])
+                    end)
+                end
             end
         end
 
         
 
         -- 没有主动饰品的情况
-        if #AQSV.usable == 0 then
+        if #AQSV.usableItems[slot_id] == 0 then
             local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
             l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeightQueue - 35)
@@ -267,12 +284,22 @@ function AQSELF.settingInit()
             t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 45)
         end
 
-        for k=1, 2 do
+        
+
+        local max = 1
+        if slot_id == 13 then
+            max = 2
+        end
+
+        for k=1, max do
+            f.resident[slot_id -1 +k] = {}
+
             local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
             dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue-(40 + k*35))
             dropdown.index = k
+            dropdown.slot = slot_id -1 +k
 
-            f.resident[k] = dropdown
+            f.resident[dropdown.slot][k] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["Slot "]..k)
@@ -281,7 +308,7 @@ function AQSELF.settingInit()
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
 
-            local seleted = AQSV["slot"..(12+k)]
+            local seleted = AQSV.slotStatus[dropdown.slot].backup
 
             if seleted > 0 then
                 UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
@@ -295,7 +322,7 @@ function AQSELF.settingInit()
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
         end
 
-        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue-(45 + 2*35)
+        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue-(45 + 2*35) - 60
     end
 
     function buildCheckbox(text, key, pos, x)
@@ -494,7 +521,7 @@ function AQSELF.settingInit()
         end)
     end
 
-    buildDropdownGroup()
+    AQSELF.loopSlots(buildDropdownGroup)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
