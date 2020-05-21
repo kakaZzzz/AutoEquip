@@ -275,6 +275,8 @@ function AQSELF.suitInit()
     f:SetSize(1000, -lastHeight)
 
     InterfaceOptions_AddCategory(p)
+    -- 最后加载帮助页面
+    InterfaceOptions_AddCategory(AQSELF.helpOption)
 
     -- 运行两遍才行
     -- InterfaceOptionsFrame_OpenToCategory("AutoEquip");

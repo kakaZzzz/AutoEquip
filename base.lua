@@ -151,6 +151,47 @@ AQSELF.GetItemEquipLoc = function( id )
     return itemEquipLoc
 end
 
+AQSELF.GetItemSlot = function( id )
+    local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
+    local slot = 0
+
+    if itemEquipLoc == "INVTYPE_TRINKET" then
+        slot = 13
+    elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
+        slot = 5
+    elseif itemEquipLoc == "INVTYPE_HEAD" then
+        slot = 1
+    elseif itemEquipLoc == "INVTYPE_NECK" then
+        slot = 2
+    elseif itemEquipLoc == "INVTYPE_SHOULDER" then
+        slot = 3
+    elseif itemEquipLoc == "INVTYPE_WAIST" then
+        slot = 6
+    elseif itemEquipLoc == "INVTYPE_LEGS" then
+        slot = 7
+    elseif itemEquipLoc == "INVTYPE_FEET" then
+        slot = 8
+    elseif itemEquipLoc == "INVTYPE_WRIST" then
+        slot = 9
+    elseif itemEquipLoc == "INVTYPE_HAND" then
+        slot = 10
+    elseif itemEquipLoc == "INVTYPE_FINGER" then
+        slot = 11
+    elseif itemEquipLoc == "INVTYPE_CLOAK" then
+        slot = 15
+    elseif itemEquipLoc == "INVTYPE_WEAPON" then
+        slot = 16
+    elseif itemEquipLoc == "INVTYPE_SHIELD" or itemEquipLoc == "INVTYPE_WEAPONOFFHAND" or itemEquipLoc == "INVTYPE_HOLDABLE" then
+        slot = 17
+    elseif itemEquipLoc == "INVTYPE_2HWEAPON" or itemEquipLoc == "INVTYPE_WEAPONMAINHAND" then
+        slot = 16
+    elseif itemEquipLoc == "INVTYPE_RANGED" or itemEquipLoc == "INVTYPE_THROWN" or itemEquipLoc == "INVTYPE_RANGEDRIGHT" or itemEquipLoc == "INVTYPE_RELIC" then
+        slot = 18
+    end
+
+    return slot
+end
+
 AQSELF.GetItemTexture = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemTexture

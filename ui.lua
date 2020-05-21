@@ -487,7 +487,7 @@ function AQSELF.createCooldownUnit( item_id, position )
 	text:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOP", f, 20, 0)
+    text:SetPoint("TOP", f, 20, -1)
     text:SetJustifyH("LEFT")
 
     f.text = text
@@ -539,7 +539,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    local button = AQSELF.slotFrames[v]
 
 			    if duration > 0 and rest > 0 then
-			    	local text = math.ceil(rest)
+			    	local text = math.floor(rest)
 			    	if rest > 60 then
 			    		text = math.ceil(rest/60).."m"
 			    	end
@@ -560,7 +560,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 				-- 获取饰品的冷却状态
 			    local start, duration, enable = GetItemCooldown(k)
 			    -- 剩余冷却时间
-			    local rest = math.ceil(duration - GetTime() + start)
+			    local rest = math.floor(duration - GetTime() + start)
 
 			    -- 在队列中的显示冷却时间
 			    if duration > 0 and rest > 0 then
@@ -629,7 +629,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		    		-- 获取饰品的冷却状态
 				    local start, duration, enable = GetItemCooldown(k)
 				    -- 剩余冷却时间
-				    local rest = math.ceil(duration - GetTime() + start)
+				    local rest = math.floor(duration - GetTime() + start)
 
 				    -- 在队列中的显示冷却时间
 				    if duration > 0 and rest > 0 then

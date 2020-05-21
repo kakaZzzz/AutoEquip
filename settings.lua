@@ -18,12 +18,18 @@ function AQSELF.settingInit()
 
     local queueOption = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local queueFrame = CreateFrame("Frame", nil, queueOption)
+
+    local helpOption = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
+    local helpFrame = CreateFrame("Frame", nil, helpOption)
     
     AQSELF.general = p
     AQSELF.f = f
 
     AQSELF.queueOption = queueOption
     AQSELF.queueFrame = queueFrame
+
+    AQSELF.helpOption = helpOption
+    AQSELF.helpFrame = helpFrame
 
     top.name = "AutoEquip"
 
@@ -33,8 +39,12 @@ function AQSELF.settingInit()
     queueOption.name = L["Usable Queue"]
     queueOption.parent = "AutoEquip"
 
+    helpOption.name = L["Help"]
+    helpOption.parent = "AutoEquip"
+
     AQSELF.lastHeight = -400
-    AQSELF.lastHeightQueue = -20
+    AQSELF.lastHeightQueue = -30
+    AQSELF.lastHeightHelp = 30
 
     -- 缓存主动饰品下拉框
     f.dropdown = {}
@@ -112,18 +122,18 @@ function AQSELF.settingInit()
             
            info.func = function( frame )
                 -- 选中现有饰品则无效
+                
+                if v ~= AQSV.slotStatus[slot_id].backup then
+                    UIDropDownMenu_SetSelectedValue(f.resident[slot_id], v, 0)
+                    UIDropDownMenu_SetText(f.resident[slot_id], GetItemLink(v)) 
+                end
+
                 if slot_id == 13 or slot_id == 14 then
-                    if v ~= AQSV.slotStatus[slot_id].backup then
-                        UIDropDownMenu_SetSelectedValue(f.resident[slot_id][index], v, 0)
-                        UIDropDownMenu_SetText(f.resident[slot_id][index], GetItemLink(v)) 
-                    end
-
                     local one = AQSV.slotStatus[slot_id].backup
-
                     -- 如果跟另一个饰品一样，则更换
                     if v == AQSV.slotStatus[27 - slot_id].backup and v ~= 0 then
-                        UIDropDownMenu_SetSelectedValue(f.resident[slot_id][3-index], one, 0)
-                        UIDropDownMenu_SetText(f.resident[slot_id][3-index], GetItemLink(one)) 
+                        UIDropDownMenu_SetSelectedValue(f.resident[27-slot_id], one, 0)
+                        UIDropDownMenu_SetText(f.resident[27-slot_id], GetItemLink(one)) 
                         AQSV.slotStatus[27 - slot_id].backup = one
                     end
                 end
@@ -150,7 +160,12 @@ function AQSELF.settingInit()
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            t:SetText(L["Usable Trinkets:"])
+            t:SetFont(STANDARD_TEXT_FONT, 20)
+            if slot_id == 13 then
+                t:SetText(AQSELF.color("FF4500", L["Trinkets"]))
+            else
+                t:SetText(AQSELF.color("FF4500", AQSELF.slotToName[slot_id]))
+            end
             t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
         end
 
@@ -181,7 +196,7 @@ function AQSELF.settingInit()
             f.dropdown[slot_id][k] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-            l:SetText(L["No. "]..k)
+            l:SetText(L["Usable "]..k)
             l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - k*35)
 
             -- 保存最后一个下拉框的位置
@@ -280,7 +295,7 @@ function AQSELF.settingInit()
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            t:SetText(L["Resident Trinkets:"] )
+            t:SetText(L["Backup:"] )
             t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 45)
         end
 
@@ -299,10 +314,10 @@ function AQSELF.settingInit()
             dropdown.index = k
             dropdown.slot = slot_id -1 +k
 
-            f.resident[dropdown.slot][k] = dropdown
+            f.resident[dropdown.slot] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-            l:SetText(L["Slot "]..k)
+            l:SetText(AQSELF.slotToName[dropdown.slot])
             l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue-(45 + k*35))
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
@@ -310,19 +325,26 @@ function AQSELF.settingInit()
 
             local seleted = AQSV.slotStatus[dropdown.slot].backup
 
-            if seleted > 0 then
-                UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
-                UIDropDownMenu_SetText(dropdown, GetItemLink(seleted)) 
-            else
-                UIDropDownMenu_SetText(dropdown, L["<Select a trinket>"]) 
-            end
-            
+            UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
+            UIDropDownMenu_SetText(dropdown, GetItemLink(seleted))      
             
             UIDropDownMenu_SetWidth(dropdown, 200)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
+
+            height = AQSELF.lastHeightQueue-(45 + k*35)
         end
 
-        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue-(45 + 2*35) - 60
+        local line = CreateFrame("Button", nil, queueFrame)
+
+        line:SetWidth(570)
+        line:SetHeight(1)
+        line:SetPoint("TOPLEFT", queueFrame, 25, height-43)
+
+        line:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+        line:SetBackdropColor(0.8,0.8,0.8,0.8);
+
+
+        AQSELF.lastHeightQueue = height - 70
     end
 
     function buildCheckbox(text, key, pos, x)
@@ -460,7 +482,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["#The above selection will take effect after reloading UI"])
+        t:SetText(L["#The above selections will take effect after reloading UI"])
         t:SetPoint("TOPLEFT", f, 53, -200)
     end
 
@@ -523,6 +545,7 @@ function AQSELF.settingInit()
 
     AQSELF.loopSlots(buildDropdownGroup)
 
+    -- 自定义buff
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Custom Buff Alert:"])
@@ -566,6 +589,7 @@ function AQSELF.settingInit()
 
     AQSELF.lastHeight = AQSELF.lastHeight - 160
 
+    -- 添加主动装备
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Append Usable Items:"])
@@ -607,95 +631,119 @@ function AQSELF.settingInit()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 160
+    AQSELF.lastHeight = AQSELF.lastHeight - 220
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Command:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 60)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 60)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/aq"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Enable/disable AutoEquip function"])
-        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 85)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/aq settings"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Open settings"])
-        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 105)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/aq pvp"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 125)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Enable/disable PVP mode manually"])
-        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 125)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/aq unlock"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"])
-        t:SetPoint("TOPLEFT", f, 140, AQSELF.lastHeight - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 145)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 130
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq 60/63/64"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 165)
+    end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Equip Suit "]..L[60].."/"..L[63].."/"..L[64])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 165)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq ips 5"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 185)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Set 5 items per column in dropdown list (default 4)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 185)
+    end
+
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 170
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Tips:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 60)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 60)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["1. Equip item manually through the Inventory Bar will temporarily lock the button."])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["2. Right click or use the '/aq unlock' command will unlock the button."])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["3. Before using item, the button will be unlocked automatically."])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 125)
     end
 
     do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 200
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 200
 
 
     f:SetAllPoints(p)
@@ -705,6 +753,10 @@ function AQSELF.settingInit()
     queueFrame:SetAllPoints(queueOption)
     queueOption:SetScrollChild(queueFrame)
     queueFrame:SetSize(1000, -AQSELF.lastHeightQueue)
+
+    helpFrame:SetAllPoints(helpOption)
+    helpOption:SetScrollChild(helpFrame)
+    helpFrame:SetSize(1000, -AQSELF.lastHeightHelp)
 
     InterfaceOptions_AddCategory(top)
     InterfaceOptions_AddCategory(p)

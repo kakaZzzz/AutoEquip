@@ -118,21 +118,17 @@ AQSELF.buffTime = buffTime
 
 -- 衣服5
 
-local tempBuffTime = {}
-tempBuffTime[14152] = 0				-- 大法师之袍
+-- local tempBuffTime = {}
+-- tempBuffTime[14152] = 0				-- 大法师之袍
 
--- 可使用的胸甲集合
-AQSELF.usable[5] = {}
+-- -- 可使用的胸甲集合
+-- AQSELF.usable[5] = {}
 
-for k,v in pairs(tempBuffTime) do
-	table.insert(AQSELF.usable[5], k)
-end
+-- for k,v in pairs(tempBuffTime) do
+-- 	table.insert(AQSELF.usable[5], k)
+-- end
 
-AQSELF.buffTime = merge(AQSELF.buffTime, tempBuffTime)
-
--- 角色身上和背包中所有饰品
-AQSELF.trinkets = {}
-AQSELF.chests = {}
+-- AQSELF.buffTime = merge(AQSELF.buffTime, tempBuffTime)
 
 -- 联盟、部落各个职业的徽记
 AQSELF.pvpSet = {

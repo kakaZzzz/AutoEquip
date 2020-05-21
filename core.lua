@@ -48,22 +48,33 @@ AQSELF.addItems = function()
         id = tonumber(id)
         time = tonumber(time)
 
-        if not tContains(AQSELF.usable[13], id) and id and time then
-            table.insert(AQSELF.usable[13], id)
-            AQSELF.buffTime[id] = time
+        local slot_id = AQSELF.GetItemSlot(id)
 
-            if AQSV.pvpTrinkets[id] == nil then
-                AQSV.pvpTrinkets[id] = false
+        if slot_id > 0 then
+
+            if AQSELF.usable[slot_id] == nil then
+                AQSELF.usable[slot_id] = {}
             end
-            if AQSV.pveTrinkets[id] == nil then
-                AQSV.pveTrinkets[id] = false
+
+            if not tContains(AQSELF.usable[slot_id], id) and id and time then
+                table.insert(AQSELF.usable[slot_id], id)
+                AQSELF.buffTime[id] = time
+
+                if AQSV.pvpTrinkets[id] == nil then
+                    AQSV.pvpTrinkets[id] = false
+                end
+                if AQSV.pveTrinkets[id] == nil then
+                    AQSV.pveTrinkets[id] = false
+                end
             end
+
+            -- 手动修改buff持续时间
+            if id and time then
+                AQSELF.buffTime[id] = time
+            end
+
         end
 
-        -- 手动修改buff持续时间
-        if id and time then
-            AQSELF.buffTime[id] = time
-        end
     end
 end
 
@@ -126,7 +137,19 @@ AQSELF.checkUsable = function()
 
     end
 
-    debug(AQSELF.needSlots)
+    table.sort(AQSELF.needSlots)
+
+    local new = {}
+
+    for k,v in pairs(AQSELF.needSlots) do
+        if v == 13 then
+            table.insert(new, 1, v)
+        else
+            table.insert(new, v)
+        end
+    end
+
+    AQSELF.needSlots = new
 
 end
 
@@ -149,7 +172,7 @@ AQSELF.checkTrinket = function( )
                     AQSELF.items[i-1] = tableInsert(AQSELF.items[i-1], id)
                 elseif i == 16 or i == 17 then
                     if(GetItemEquipLoc(id) == "INVTYPE_WEAPON") then
-                        AQSELF.items[23-i] = tableInsert(AQSELF.items[23-i], id)
+                        AQSELF.items[33-i] = tableInsert(AQSELF.items[33-i], id)
                     end
                 end
             end
@@ -186,7 +209,6 @@ AQSELF.checkTrinket = function( )
                         table.insert(AQSELF.items[14], id)
                     elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
                         table.insert(AQSELF.items[5], id)
-                        table.insert(AQSELF.chests, id)
                     elseif itemEquipLoc == "INVTYPE_HEAD" then
                         table.insert(AQSELF.items[1], id)
                     elseif itemEquipLoc == "INVTYPE_NECK" then

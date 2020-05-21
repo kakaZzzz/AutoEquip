@@ -51,6 +51,10 @@ if locale == 'zhCN' then
 	L["No. "] = "优先级"
 	L["Slot "] = "饰品栏"
 
+	L["Trinkets"] = "饰品"
+	L["Usable "] = "主动"
+	L["Backup:"] = "备选:"
+
 	L["<There is no suitable trinkets>"] = "<没有适合的饰品>"
 	L["<Select a trinket>"] = "<选择一个饰品>"
 
@@ -83,6 +87,7 @@ if locale == 'zhCN' then
 	L["-- Open settings"] = "-- 打开设置页面"
 	L["-- Enable/disable PVP mode manually"] = "-- 手动启动/禁用PVP模式"
 	L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
+
 
 	L["1. Equip item manually through the Inventory Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
 	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/aq unlock"
@@ -129,4 +134,10 @@ if locale == 'zhCN' then
 	L["Suit "..L[64]] = L[64].."套装"
 	L["Suit "..L[63]] = L[63].."套装"
 	L["Suit "..L[60]] = L[60].."套装"
+
+	L["-- Equip Suit "] = "-- 装备套装"
+	L["-- Set 5 items per column in dropdown list (default 4)"] = "-- 设置物品下拉框每列显示5件物品（默认4）"
+
+	L["Help"] = "帮助"
+	L["#The above selections will take effect after reloading UI"] = "#重载UI后以上的选择生效"
 end

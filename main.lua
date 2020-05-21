@@ -48,7 +48,6 @@ AQSELF.onMainUpdate = function(self, elapsed)
             return
         end
 
-
         -- 插件初始化，包括构建选项菜单
         if not AQSELF.init then
 
@@ -76,7 +75,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
             AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, false)
-            AQSV.carrotBackup = initSV(AQSV.carrotBackup, false)
+            AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
 
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
@@ -139,11 +138,6 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
         end
 
-        -- 插件整体开关，以角色为单位
-        if not AQSV.enable then
-            return
-        end
-
         -- 记录装备栏位置
         if AQSELF.bar then
             local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
@@ -163,6 +157,11 @@ AQSELF.onMainUpdate = function(self, elapsed)
         -- collectgarbage("collect")
         -- UpdateAddOnMemoryUsage()
         -- print(string.format("%.2f mb", (GetAddOnMemoryUsage("AutoEquip") / 1024)))
+
+        -- 插件整体开关，以角色为单位
+        if not AQSV.enable then
+            return
+        end
 
         -- 战场开关
         if UnitInBattleground("player") and not AQSV.enableBattleground then

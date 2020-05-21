@@ -148,7 +148,7 @@ function AQSELF.onBuffChanged(self, elapsed)
 		end
 
 		if find then
-			local buffTime = math.ceil(expire - GetTime())
+			local buffTime = math.floor(expire - GetTime())
 			if buffTime > 60 then
 				buffTime = math.ceil(buffTime / 60).."m"
 			end
