@@ -295,7 +295,7 @@ function AQSELF.settingInit()
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            t:SetText(L["Backup:"] )
+            t:SetText(L["Backup (Be equiped when usable items are all on CD):"] )
             t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 45)
         end
 
@@ -530,7 +530,7 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["#When the items shown below are different from the actual ones"])
+        t:SetText(L["#When the equippable items you carry have changed"])
         t:SetPoint("TOPLEFT", f, 135, -395-10)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
@@ -592,21 +592,27 @@ function AQSELF.settingInit()
     -- 添加主动装备
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Append Usable Items:"])
+        t:SetText(L["Append Usable Items: "])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
+        t:SetText(L["Items that arn't identified need to be added manually by yourself"])
         t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 110)
     end
 
     do
 
         local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
         s:SetSize(350,80)
-        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 135)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
         s:SetBackdropBorderColor(1,1,1,0.7);
         local e = CreateFrame("EditBox", nil, s)
@@ -624,14 +630,14 @@ function AQSELF.settingInit()
         b:SetText(L["Submit & Reload UI"])
         b:SetWidth(160)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
         b:SetScript("OnClick", function(self)
             AQSV.additionItems = e:GetText()
             C_UI.Reload()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 220
+    AQSELF.lastHeight = AQSELF.lastHeight - 245
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

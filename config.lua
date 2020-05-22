@@ -16,7 +16,7 @@ AQSELF.init = false
 -- 获取当前角色名字
 AQSELF.player = UnitName("player")
 
-if AQSELF.player == "卡法" then
+if AQSELF.player == "卡法" or AQSELF.player == "卡卡咔"  then
 	AQSELF.enableDebug = true          -- 调试开关
 end
 

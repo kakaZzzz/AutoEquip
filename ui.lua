@@ -300,8 +300,6 @@ function AQSELF.createItemButton( slot_id, position )
 		local itemId1 = GetInventoryItemID("player", slot_id)
 		local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
 
-		-- debug(AQSELF.items[slot_id])
-
 		for k,v in pairs(AQSELF.items[slot_id]) do
 			if v ~= itemId1 and v ~= itemId2 and v > 0 then
 				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
@@ -360,7 +358,6 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 
 	-- 如果已经创建过物品图层，只修改位置
 	if AQSELF.itemButtons[item_id] then
-
 		AQSELF.itemButtons[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x + newX * 43, 5+43 * newY)
 		AQSELF.itemButtons[item_id]:Show()
 		-- 点击图标是获取正确的slot
@@ -368,7 +365,19 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 		return
 	end
 
-	local button = CreateFrame("Button", nil, AQSELF.bar)
+	local button
+
+	-- if slot_id == 16 or slot_id == 17 or slot_id == 18 then
+	-- 	button = CreateFrame("Button", nil, AQSELF.bar, "SecureActionButtonTemplate")
+	-- 	button:SetAttribute("type", "item")
+	-- 	-- 饰品切换后自动匹配点击功能
+	--     button:SetAttribute("item", item_id)
+	-- else
+		button = CreateFrame("Button", nil, AQSELF.bar)
+	-- end
+	
+	
+
 	button:SetSize(40, 40)
 
 	local itemTexture = GetItemTexture(item_id)

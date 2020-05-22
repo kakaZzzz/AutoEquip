@@ -43,7 +43,7 @@ if locale == 'zhCN' then
 	L["Item queue is displayed above the Inventory Bar"] = "物品队列在装备栏上方显示"
 
 	L["Reload UI"] = "重载UI"
-	L["#When the items shown below are different from the actual ones"] = "#下方罗列的饰品和实际不一致时"
+	L["#When the equippable items you carry have changed"] = "#当已携带装备发生变化"
 
 	L["Usable Trinkets:"] = "主动饰品:"
 	L["Resident Trinkets:"] = "常驻饰品:"
@@ -53,7 +53,7 @@ if locale == 'zhCN' then
 
 	L["Trinkets"] = "饰品"
 	L["Usable "] = "主动"
-	L["Backup:"] = "备选:"
+	L["Backup (Be equiped when usable items are all on CD):"] = "备选（当主动物品都CD时装备）:"
 
 	L["<There is no suitable trinkets>"] = "<没有适合的饰品>"
 	L["<Select a trinket>"] = "<选择一个饰品>"
@@ -75,6 +75,7 @@ if locale == 'zhCN' then
 	L["Custom Buff Alert:"] = "自定义Buff提醒:"
 	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
 	L["Append Usable Items:"] = "追加主动装备"
+	L["Items that arn't identified need to be added manually by yourself"] = "没有被识别出来的物品，需要自己手动添加"
 	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 装备ID/Buff持续时间,装备ID/Buff持续时间"
 	L["Submit"] = "提交"
 	L["Submit & Reload UI"] = "提交并重载UI"
