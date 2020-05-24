@@ -11,8 +11,11 @@ local loopSlots = AQSELF.loopSlots
 
 -- 主函数 --
 
-_G.BINDING_NAME_AUTOEQUIP_BUTTON13 = L['Trinket Slot ']..1
-_G.BINDING_NAME_AUTOEQUIP_BUTTON14 = L['Trinket Slot ']..2
+for k,v in pairs(AQSELF.gearSlots) do
+    _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = AQSELF.slotToName[v]
+end
+
+-- _G.BINDING_NAME_AUTOEQUIP_BUTTON14 = L['Trinket Slot ']..2
 _G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Inventory Bar Button"]
 
 -- 注册事件
@@ -285,8 +288,8 @@ function mainInit( )
             end
 
             -- print(boss,UnitAffectingCombat("player"))
-            -- 目标为空或者是玩家的情况下，不做更换
-            if level ~= 0 and UnitIsEnemy("player", "target") and AQSELF.playerCanEquip() then
+            -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
+            if level ~= 0 and UnitIsEnemy("player", "target") and not UnitIsDead("target") and AQSELF.playerCanEquip() then
                 -- print(boss,UnitAffectingCombat("player"))
                 -- AQSELF.changeSuit(boss)               
                AQSV.needSuit = boss

@@ -1,9 +1,9 @@
 ## Interface: 11304
 ## Title: AutoEquip
 ## Author: kaka
-## Version: 3.6
-## Notes: Swap trinket by the customized priority automatically.
-## Notes-zhCN: 按照自定义的优先级自动更换饰品。
+## Version: 4.1
+## Notes: Swap item by the customized priority automatically.
+## Notes-zhCN: 按照自定义的优先级自动更换装备。
 ## SavedVariablesPerCharacter: AQSV
 
 bindings.xml

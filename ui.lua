@@ -188,6 +188,8 @@ function AQSELF.createItemButton( slot_id, position )
 	local itemTexture = ""
 	if itemId then
 		itemTexture = GetItemTexture(itemId)
+	else
+		_, itemTexture = GetInventorySlotInfo(AQSELF.slotName[slot_id])
 	end
 
 	-- 不然会继承parent的按键设置
@@ -209,12 +211,14 @@ function AQSELF.createItemButton( slot_id, position )
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
  --  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	-- button:SetBackdropBorderColor(0,0,0,1);
+	-- button:SetBackdropBorderColor(0,0,0,0.5);
+	-- button:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	
 
     local t = button:CreateTexture(nil, "BACKGROUND")
     -- 贴上物品的材质
 	t:SetTexture(itemTexture)
+	t:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	t:SetAllPoints(button)
 	button.texture = t
 
@@ -227,7 +231,7 @@ function AQSELF.createItemButton( slot_id, position )
 	text:SetFont(STANDARD_TEXT_FONT, 18, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOPLEFT", button, 2, 8)
+    text:SetPoint("TOPLEFT", button, 1, 8)
     
     button.text = text
 
@@ -390,6 +394,8 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
     local t = button:CreateTexture(nil, "BACKGROUND")
     -- 贴上物品的材质
 	t:SetTexture(itemTexture)
+	-- 取消边框
+	t:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	t:SetAllPoints(button)
 	button.texture = t
 
@@ -456,6 +462,8 @@ function AQSELF.updateItemButton( slot_id )
 	local itemTexture = ""
 	if itemId then
 		itemTexture = GetItemTexture(itemId)
+	else
+		_, itemTexture = GetInventorySlotInfo(AQSELF.slotName[slot_id])
 	end
 
 	if button then
@@ -490,6 +498,8 @@ function AQSELF.createCooldownUnit( item_id, position )
 
 	local t = f:CreateTexture(nil, "BACKGROUND")
 	t:SetTexture(GetItemTexture(item_id))
+	-- 取消边框
+	t:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	t:SetAllPoints(f)
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -560,6 +570,11 @@ function AQSELF.cooldownUpdate( self, elapsed )
 					button.text:SetText()
 					button.cooldown:SetHeight(1)
 			    end
+			else
+				local button = AQSELF.slotFrames[v]
+				-- 装备被换下，清空倒计时
+				button.text:SetText()
+				button.cooldown:SetHeight(1)
     		end
 		end
 

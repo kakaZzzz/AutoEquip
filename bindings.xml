@@ -1,4 +1,19 @@
 <Bindings>
 	<Binding name="AUTOEQUIP_BUTTON13" category="AutoEquip" header="AUTOEQUIP_INVENTORYBAR_BUTTON"/>
 	<Binding name="AUTOEQUIP_BUTTON14" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON1" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON2" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON3" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON5" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON6" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON7" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON8" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON9" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON10" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON11" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON12" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON15" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON16" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON17" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_BUTTON18" category="AutoEquip"/>
 </Bindings>

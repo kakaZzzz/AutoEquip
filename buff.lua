@@ -40,6 +40,8 @@ function AQSELF.createBuffIcon()
     f.count = t2
 
 	local texture = f:CreateTexture(nil, "BACKGROUND")
+	-- 取消边框
+	texture:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	texture:SetAllPoints(f)
 
 	f.texture = texture

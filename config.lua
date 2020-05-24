@@ -6,7 +6,7 @@ local L = AQSELF.L
 
 -- 配置 --
 
-AQSELF.version = "v3.6"
+AQSELF.version = "v4.1"
 
 -- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
@@ -59,6 +59,26 @@ AQSELF.slotToName = {
 	[16] = L["MainHand"],
 	[17] = L["OffHand"],
 	[18] = L["Ranged"],
+}
+
+AQSELF.slotName = {
+	[1] = "HeadSlot",
+	[2] = "NeckSlot",
+	[3] = "ShoulderSlot",
+	[15] = "BackSlot",
+	[5] = "ChestSlot",
+	[9] = "WristSlot",
+	[10] = "HandsSlot",
+	[6] = "WaistSlot",
+	[7] = "LegsSlot",
+	[8] = "FeetSlot",
+	[11] = "Finger0Slot",
+	[12] = "Finger1Slot",
+	[13] = "Trinket0Slot",
+	[14] = "Trinket1Slot",
+	[16] = "MainHandSlot",
+	[17] = "SecondaryHandSlot",
+	[18] = "RangedSlot",
 }
 
 AQSELF.gearSlots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}

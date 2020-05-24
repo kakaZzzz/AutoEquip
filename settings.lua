@@ -158,6 +158,17 @@ function AQSELF.settingInit()
     -- 构建两个饰品组
     function buildDropdownGroup(slot_id)
 
+        local line = CreateFrame("Button", nil, queueFrame)
+
+        line:SetWidth(570)
+        line:SetHeight(1)
+        line:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+
+        line:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+        line:SetBackdropColor(0.8,0.8,0.8,0.8);
+
+        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue - 25
+
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetFont(STANDARD_TEXT_FONT, 20)
@@ -334,17 +345,8 @@ function AQSELF.settingInit()
             height = AQSELF.lastHeightQueue-(45 + k*35)
         end
 
-        local line = CreateFrame("Button", nil, queueFrame)
+        AQSELF.lastHeightQueue = height - 43
 
-        line:SetWidth(570)
-        line:SetHeight(1)
-        line:SetPoint("TOPLEFT", queueFrame, 25, height-43)
-
-        line:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
-        line:SetBackdropColor(0.8,0.8,0.8,0.8);
-
-
-        AQSELF.lastHeightQueue = height - 70
     end
 
     function buildCheckbox(text, key, pos, x)
@@ -543,9 +545,73 @@ function AQSELF.settingInit()
         end)
     end
 
+    do
+        local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Go to 'General' page and add the unidentified usable items manually"])
+        t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+    end
+    do
+        local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Not only trinkets, any equippable usable item is acceptable"])
+        t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 25)
+    end
+
+    AQSELF.lastHeightQueue = AQSELF.lastHeightQueue - 70
+
     AQSELF.loopSlots(buildDropdownGroup)
 
-    -- 自定义buff
+
+    -- 添加主动装备
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Append Usable Items (not only trinket):"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Unidentified usable items need to be added manually by yourself"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 110)
+    end
+
+    do
+
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        s:SetSize(350,80)
+        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 135)
+        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+        s:SetBackdropBorderColor(1,1,1,0.7);
+        local e = CreateFrame("EditBox", nil, s)
+        e:SetMultiLine(true)
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(300)
+        -- AQSV.buffNames = nil
+        e:SetText(AQSV.additionItems)
+        e:SetTextInsets(8,8,8,8)
+        e:SetAutoFocus(false)
+
+        s:SetScrollChild(e)
+
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Submit & Reload UI"])
+        b:SetWidth(160)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
+        b:SetScript("OnClick", function(self)
+            AQSV.additionItems = e:GetText()
+            C_UI.Reload()
+        end)
+    end
+
+    AQSELF.lastHeight = AQSELF.lastHeight - 185
+
+        -- 自定义buff
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Custom Buff Alert:"])
@@ -587,57 +653,7 @@ function AQSELF.settingInit()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 160
-
-    -- 添加主动装备
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Append Usable Items: "])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
-    end
-
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["Items that arn't identified need to be added manually by yourself"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
-    end
-
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 110)
-    end
-
-    do
-
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
-        s:SetSize(350,80)
-        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 135)
-        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-        s:SetBackdropBorderColor(1,1,1,0.7);
-        local e = CreateFrame("EditBox", nil, s)
-        e:SetMultiLine(true)
-        e:SetFontObject("GameFontHighlight")
-        e:SetWidth(300)
-        -- AQSV.buffNames = nil
-        e:SetText(AQSV.additionItems)
-        e:SetTextInsets(8,8,8,8)
-        e:SetAutoFocus(false)
-
-        s:SetScrollChild(e)
-
-        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
-        b:SetText(L["Submit & Reload UI"])
-        b:SetWidth(160)
-        b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
-        b:SetScript("OnClick", function(self)
-            AQSV.additionItems = e:GetText()
-            C_UI.Reload()
-        end)
-    end
-
-    AQSELF.lastHeight = AQSELF.lastHeight - 245
+    AQSELF.lastHeight = AQSELF.lastHeight - 220
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

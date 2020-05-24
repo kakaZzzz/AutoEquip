@@ -31,7 +31,7 @@ L[63] = color("FF4500", "Lv.63 Elite")
 
 L["prefix"] = "|cFFFFFF00<AutoEquip>|r"
 
-if locale == 'zhCN' then
+if locale == 'zhCN' or locale == 'zhTW' then
 
 	L[" Loaded"] = " 加载完毕"
 	L["Enable"] = "启用"
@@ -53,7 +53,7 @@ if locale == 'zhCN' then
 
 	L["Trinkets"] = "饰品"
 	L["Usable "] = "主动"
-	L["Backup (Be equiped when usable items are all on CD):"] = "备选（当主动物品都CD时装备）:"
+	L["Backup (Be equiped when usable items are all on CD):"] = "备选（当主动装备都CD时装备）:"
 
 	L["<There is no suitable trinkets>"] = "<没有适合的饰品>"
 	L["<Select a trinket>"] = "<选择一个饰品>"
@@ -74,8 +74,8 @@ if locale == 'zhCN' then
 
 	L["Custom Buff Alert:"] = "自定义Buff提醒:"
 	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
-	L["Append Usable Items:"] = "追加主动装备"
-	L["Items that arn't identified need to be added manually by yourself"] = "没有被识别出来的物品，需要自己手动添加"
+	L["Append Usable Items (not only trinket):"] = "追加主动装备（不只是饰品）:"
+	L["Unidentified usable items need to be added manually by yourself"] = "未被识别的主动装备，需要自己手动添加"
 	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 装备ID/Buff持续时间,装备ID/Buff持续时间"
 	L["Submit"] = "提交"
 	L["Submit & Reload UI"] = "提交并重载UI"
@@ -141,4 +141,7 @@ if locale == 'zhCN' then
 
 	L["Help"] = "帮助"
 	L["#The above selections will take effect after reloading UI"] = "#重载UI后以上的选择生效"
+
+	L["Go to 'General' page and add the unidentified usable items manually"] = "前往“常规设置”页面手动添加未被识别的主动装备"
+	L["Not only trinkets, any equippable usable item is acceptable"] = "任何主动装备都能添加，不只是饰品"
 end

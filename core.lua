@@ -429,9 +429,9 @@ function AQSELF.changeTrinket()
     local slot14 = AQSELF.getTrinketStatusBySlotId(14, queue)
 
     -- 如果没有主动饰品，则停止更换饰品
-    if #queue == 0 then
-        return
-    end
+    -- if #queue == 0 then
+    --     return
+    -- end
 
     -- 强制优先级处理
     if AQSV.forcePriority then
@@ -528,9 +528,9 @@ function AQSELF.changeItem(slot_id)
     local slot13 = AQSELF.getTrinketStatusBySlotId(slot_id, queue)
 
     -- 如果没有主动饰品，则停止更换饰品
-    if #queue == 0 then
-        return
-    end
+    -- if #queue == 0 then
+    --     return
+    -- end
 
     -- 强制优先级处理
     if AQSV.forcePriority then
