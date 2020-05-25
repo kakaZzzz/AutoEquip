@@ -42,6 +42,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Inventory Bar"] = "物品队列在装备栏上方显示"
 
+	L["Expand Settings"] = "展开设置列表"
+
 	L["Reload UI"] = "重载UI"
 	L["#When the equippable items you carry have changed"] = "#当已携带装备发生变化"
 

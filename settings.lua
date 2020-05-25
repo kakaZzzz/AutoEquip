@@ -63,6 +63,47 @@ function AQSELF.settingInit()
         t:SetPoint("TOPLEFT", f, 25, -20)
     end
 
+    do
+        local t = top:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+        t:SetText(L["AutoEquip "]..AQSELF.version)
+        t:SetPoint("TOPLEFT", top, 25, -20)
+    end
+
+    local 
+        b = CreateFrame("Button", nil, top, "GameMenuButtonTemplate")
+        b:SetText(L["Expand Settings"])
+        b:SetWidth(140)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", top, 23, -60)
+        b:SetScript("OnClick", function(self)
+            InterfaceOptionsFrame_OpenToCategory(p);
+            InterfaceOptionsFrame_OpenToCategory(p);
+    end)
+
+    do
+        local t = top:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+        t:SetText(L["Feedback and Bug report:"])
+        t:SetPoint("TOPLEFT", top, 25, -115)
+    end
+
+    do
+        local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["NGA: https://bbs.nga.cn/read.php?tid=21494303"])
+        t:SetPoint("TOPLEFT", top, 25, -140)
+    end
+
+    do
+        local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Github: https://github.com/lanyu7/AutoEquip"])
+        t:SetPoint("TOPLEFT", top, 25, -165)
+    end
+
+    do
+        local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["CurseForge:  https://curseforge.com/wow/addons/autoequip-classic"])
+        t:SetPoint("TOPLEFT", top, 25, -190)
+    end
+
     -- 构建主动饰品组
     function DropDown_Initialize(self,level)
         level = level or 1;
@@ -784,10 +825,10 @@ function AQSELF.settingInit()
     InterfaceOptions_AddCategory(p)
     InterfaceOptions_AddCategory(queueOption)
 
-     top:SetScript('OnShow', function(self)
-        InterfaceOptionsFrame_OpenToCategory(p);
-        InterfaceOptionsFrame_OpenToCategory(p);
-    end)
+    -- top:SetScript('OnShow', function(self)
+    --     InterfaceOptionsFrame_OpenToCategory(p);
+    --     InterfaceOptionsFrame_OpenToCategory(p);
+    -- end)
 
     -- 运行两遍才行
     -- InterfaceOptionsFrame_OpenToCategory("AutoEquip");

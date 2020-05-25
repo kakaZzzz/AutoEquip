@@ -231,7 +231,7 @@ function AQSELF.createItemButton( slot_id, position )
 	text:SetFont(STANDARD_TEXT_FONT, 18, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOPLEFT", button, 1, 8)
+    text:SetPoint("TOPLEFT", button, 2, 8)
     
     button.text = text
 
@@ -408,7 +408,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	text:SetFont(STANDARD_TEXT_FONT, 16, "OUTLINE")
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-    text:SetPoint("TOPLEFT", button, 0,-1)
+    text:SetPoint("TOPLEFT", button, 1,-1)
     text:SetJustifyH("LEFT")
     
     button.text = text

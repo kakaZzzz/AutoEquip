@@ -48,29 +48,34 @@ AQSELF.addItems = function()
         id = tonumber(id)
         time = tonumber(time)
 
-        local slot_id = AQSELF.GetItemSlot(id)
+        -- 避免nil的情况
+        if id then
 
-        if slot_id > 0 then
+            local slot_id = AQSELF.GetItemSlot(id)
 
-            if AQSELF.usable[slot_id] == nil then
-                AQSELF.usable[slot_id] = {}
-            end
+            if slot_id > 0 then
 
-            if not tContains(AQSELF.usable[slot_id], id) and id and time then
-                table.insert(AQSELF.usable[slot_id], id)
-                AQSELF.buffTime[id] = time
-
-                if AQSV.pvpTrinkets[id] == nil then
-                    AQSV.pvpTrinkets[id] = false
+                if AQSELF.usable[slot_id] == nil then
+                    AQSELF.usable[slot_id] = {}
                 end
-                if AQSV.pveTrinkets[id] == nil then
-                    AQSV.pveTrinkets[id] = false
-                end
-            end
 
-            -- 手动修改buff持续时间
-            if id and time then
-                AQSELF.buffTime[id] = time
+                if not tContains(AQSELF.usable[slot_id], id) and id and time then
+                    table.insert(AQSELF.usable[slot_id], id)
+                    AQSELF.buffTime[id] = time
+
+                    if AQSV.pvpTrinkets[id] == nil then
+                        AQSV.pvpTrinkets[id] = false
+                    end
+                    if AQSV.pveTrinkets[id] == nil then
+                        AQSV.pveTrinkets[id] = false
+                    end
+                end
+
+                -- 手动修改buff持续时间
+                if id and time then
+                    AQSELF.buffTime[id] = time
+                end
+
             end
 
         end
@@ -157,6 +162,7 @@ end
 AQSELF.checkTrinket = function( )
 
     AQSELF.items = {}
+    AQSELF.multiItems = {}
 
     for i=1,18 do
         if i ~= 4 then
