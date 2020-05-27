@@ -120,6 +120,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.customSlots = initSV(AQSV.customSlots, {})
             AQSV.hideItemQueue = initSV(AQSV.hideItemQueue, false)
             AQSV.hideTooltip = initSV(AQSV.hideTooltip, false)
+            AQSV.shiftLeftShowDropdown = initSV(AQSV.shiftLeftShowDropdown, false)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
