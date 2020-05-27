@@ -42,7 +42,7 @@ function AQSELF.settingInit()
     helpOption.name = L["Help"]
     helpOption.parent = "AutoEquip"
 
-    AQSELF.lastHeight = -400
+    AQSELF.lastHeight = -475
     AQSELF.lastHeightQueue = -30
     AQSELF.lastHeightHelp = 30
 
@@ -462,15 +462,23 @@ function AQSELF.settingInit()
 
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
-    buildCheckbox(L["Enable Inventory Bar"], "enableItemBar", -85)
+    buildCheckbox(L["Enable Equipment Bar"], "enableItemBar", -85)
     buildCheckbox(L["Lock frame"], "locked", -85, 190)
-    buildCheckbox(L["Hide backdrop"], "hideBackdrop", -85, 440)
+    buildCheckbox(L["Hide black translucent background"], "hideBackdrop", -110, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
         t:SetPoint("TOPLEFT", f, 320, -93)
+    end
 
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Effective after ENTER"])
+        t:SetPoint("TOPLEFT", f, 430, -93)
+    end
+
+    do
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(50)
@@ -499,7 +507,7 @@ function AQSELF.settingInit()
         end)
     end
 
-    local slotCheckbosHeight = -115
+    local slotCheckbosHeight = -115-25
 
     buildSlotCheckbox(L["MainHand"], 16, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["OffHand"], 17, slotCheckbosHeight, 155)
@@ -507,7 +515,7 @@ function AQSELF.settingInit()
     buildSlotCheckbox(L["Head"], 1, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Neck"], 2, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -140
+    slotCheckbosHeight = -140-25
 
     buildSlotCheckbox(L["Shoulder"], 3, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Chest"], 5, slotCheckbosHeight, 155)
@@ -515,7 +523,7 @@ function AQSELF.settingInit()
     buildSlotCheckbox(L["Legs"], 7, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Feet"], 8, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -165
+    slotCheckbosHeight = -165-25
 
     buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
@@ -526,23 +534,32 @@ function AQSELF.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#The above selections will take effect after reloading UI"])
-        t:SetPoint("TOPLEFT", f, 53, -200)
+        t:SetPoint("TOPLEFT", f, 53, -200-25)
     end
 
-    buildCheckbox(L["Enable Buff Alert"], "enableBuff", -220)
-    buildCheckbox(L["Lock frame"], "buffLocked", -220, 190)
+    local otherHight = -245
+    buildCheckbox(L["Enable Buff Alert"], "enableBuff", otherHight)
+    buildCheckbox(L["Lock frame"], "buffLocked", otherHight, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 320, -228)
+        t:SetPoint("TOPLEFT", f, 320, otherHight-8)
+    end
 
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Effective after ENTER"])
+        t:SetPoint("TOPLEFT", f, 430, otherHight-8)
+    end
+
+    do
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
         e:SetFontObject("GameFontHighlight")
         e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 370,  -215)
+        e:SetPoint("TOPLEFT", f, 370,  otherHight+5)
         e:SetAutoFocus(false)
         e:SetText(AQSV.buffZoom)
         e:SetCursorPosition(0)
@@ -565,22 +582,26 @@ function AQSELF.settingInit()
         end)
     end
 
-    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", -250-10)
-    buildCheckbox(L["enable_carrot"], "enableCarrot", -275-10)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", -300-10)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", -325-10)
-    buildCheckbox(L["Item queue is displayed above the Inventory Bar"], "reverseCooldownUnit", -350-10)
+    otherHight = -285
+
+    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", otherHight)
+    buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight-25)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-50)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-75)
+    buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-100)
+    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-125)
+    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-150)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#When the equippable items you carry have changed"])
-        t:SetPoint("TOPLEFT", f, 135, -395-10)
+        t:SetPoint("TOPLEFT", f, 135, otherHight-195)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
         b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 23, -385-10)
+        b:SetPoint("TOPLEFT", f, 23, otherHight-185)
         b:SetScript("OnClick", function(self)
             C_UI.Reload()
         end)
@@ -746,13 +767,13 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"])
+        t:SetText(L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"])
         t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 145)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq 60/63/64"])
+        t:SetText("/aq 60|63|64")
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 165)
     end
 
@@ -763,18 +784,48 @@ function AQSELF.settingInit()
     end
 
     do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Advanced Settings:"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 205)
+    end
+
+    do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/aq ips 5"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 185)
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 230)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set 5 items per column in dropdown list (default 4)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 185)
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 230)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 170
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq ceb 5,13,16"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 250)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Customize equipment bar (enter 0 to disable)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 250)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq hiq 1|0"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 270)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Hide the usable items queue (hide 1, show 0)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 270)
+    end
+
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 255
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -784,7 +835,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["1. Equip item manually through the Inventory Bar will temporarily lock the button."])
+        t:SetText(L["1. Equip item manually through the Equipment Bar will temporarily lock the button."])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
     end
 
@@ -802,7 +853,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."])
+        t:SetText(L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
     end
 

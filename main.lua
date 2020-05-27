@@ -16,7 +16,7 @@ for k,v in pairs(AQSELF.gearSlots) do
 end
 
 -- _G.BINDING_NAME_AUTOEQUIP_BUTTON14 = L['Trinket Slot ']..2
-_G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Inventory Bar Button"]
+_G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Equipment Bar Button"]
 
 -- 注册事件
 AQSELF.main = CreateFrame("Frame")
@@ -117,6 +117,9 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.enableTargetSuit60 = initSV(AQSV.enableTargetSuit60, false)
 
             AQSV.itemsPerColumn = initSV(AQSV.itemsPerColumn, 4)
+            AQSV.customSlots = initSV(AQSV.customSlots, {})
+            AQSV.hideItemQueue = initSV(AQSV.hideItemQueue, false)
+            AQSV.hideTooltip = initSV(AQSV.hideTooltip, false)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -228,7 +231,7 @@ function mainInit( )
                 AQSV.needSuit = tonumber(msg)
                 AQSELF.needSuitTimestamp = GetTime()
             else
-                print(L["AutoEquip: |cFF00FF00In combat|r"])
+                print(L["prefix"]..L[" |cFF00FF00In combat|r"])
             end
 
         elseif strfind(msg, "ipc") then
@@ -238,6 +241,44 @@ function mainInit( )
 
             if n > 0 then
                 AQSV.itemsPerColumn = n
+            end
+
+        elseif strfind(msg, "ceb") then
+
+            local _, str = strsplit(" ", msg)
+
+            if tonumber(str) == 0 then
+                print(L["prefix"]..L[" Custom equipment bar was |cFFFF0000CANCELED|r."]..L[" Please reload UI manually (/reload)."])
+                AQSV.customSlots = {}
+                return
+            end
+
+            str = string.gsub(str,"，", ",")
+
+            local t = {strsplit(",", strtrim(str))}
+
+            local new = {}
+
+            for k,v in pairs(t) do
+                v = tonumber(v)
+                if v and v >= 1 and v <= 18 and v~= 4 and not tContains(new, v) then
+                    table.insert(new, v)
+                end
+            end
+
+            if #new > 0 then
+                print(L["prefix"]..L[" Custom equipment bar |cFF00FF00SUCCESS|r."]..L[" Please reload UI manually (/reload)."])
+                AQSV.customSlots = new
+            end
+
+        elseif strfind(msg, "hiq") then
+
+            if strfind(msg, "1") then
+                AQSV.hideItemQueue = true
+                print(L["prefix"]..L[" |cFFFF0000Hide|r item queue"])
+            elseif strfind(msg, "0") then
+                AQSV.hideItemQueue = false
+                print(L["prefix"]..L[" |cFF00FF00Show|r item queue"])
             end
 
         end

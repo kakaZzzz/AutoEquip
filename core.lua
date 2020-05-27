@@ -35,6 +35,13 @@ function AQSELF.addonInit()
 
 end
 
+function aq_test( )
+    print("test test")
+    local bag = AQSELF.itemInBags[18392]
+    PickupContainerItem(bag[1], bag[2])
+    EquipCursorItem(17)
+end
+
 AQSELF.addItems = function()
     -- 兼容全角逗号
     AQSV.additionItems = string.gsub(AQSV.additionItems,"，", ",")

@@ -9,6 +9,24 @@ local player = AQSELF.player
 local GetItemTexture = AQSELF.GetItemTexture
 local otherSlot = AQSELF.otherSlot
 
+function AQSELF.customSlots()
+	if #AQSV.customSlots > 0 then
+		AQSELF.slots = AQSV.customSlots
+	else
+		-- 从设置页面读取
+		local new = {}
+		-- 确定装备栏个数
+		for k,v in pairs(AQSV.enableItemBarSlot) do
+			if v then
+				table.insert(new, k)
+			end
+		end
+
+		table.sort( new )
+		AQSELF.slots = AQSELF.merge(AQSELF.slots, new)
+	end 
+end
+
 function AQSELF.createItemBar()
 
 	-- 选择BUTTON类似，才能触发鼠标事件
@@ -17,16 +35,7 @@ function AQSELF.createItemBar()
 	AQSELF.list = {}
 	AQSELF.itemButtons = {}
 
-	local new = {}
-	-- 确定装备栏个数
-	for k,v in pairs(AQSV.enableItemBarSlot) do
-		if v then
-			table.insert(new, k)
-		end
-	end
-
-	table.sort( new )
-	AQSELF.slots = AQSELF.merge(AQSELF.slots, new)
+	AQSELF.customSlots()
 
 	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
@@ -87,6 +96,7 @@ function AQSELF.createItemBar()
 
 	local pvpTexture = pvpIcon:CreateTexture(nil, "BACKGROUND")
 	pvpTexture:SetTexture(132147)
+	pvpTexture:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	pvpTexture:SetAllPoints(pvpIcon)
 
 	if AQSV.pvpMode then
@@ -206,6 +216,14 @@ function AQSELF.createItemButton( slot_id, position )
     	AQSELF.cancelLocker(slot_id)
     end
 
+    -- 右键解锁
+    button:SetAttribute("shift-type1", "showDropdown")
+    button.showDropdown = function( ... )
+    	if AQSV.shiftLeftShowDropdown  then
+    		AQSELF.showDropdown(slot_id, position)
+    	end
+    end
+
   	button:SetFrameLevel(2)
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
@@ -294,30 +312,12 @@ function AQSELF.createItemButton( slot_id, position )
    	button:SetScript("OnEnter", function(self)
 		AQSELF.showTooltip("inventory", slot_id)
 
-		-- 更新物品在背包里的位置
-		AQSELF.updateItemInBags()
-
-		-- 显示可用饰品的下拉框
-		AQSELF.itemDropdownTimestamp = nil
-
-		local index = 1
-		local itemId1 = GetInventoryItemID("player", slot_id)
-		local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
-
-		for k,v in pairs(AQSELF.items[slot_id]) do
-			if v ~= itemId1 and v ~= itemId2 and v > 0 then
-				AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
-				index = index + 1
-			elseif AQSELF.itemButtons[v] then
-				AQSELF.itemButtons[v]:Hide()
-			end
+		if UnitAffectingCombat("player") and AQSV.shiftLeftShowDropdown then
+			return
 		end
 
-		for k,v in pairs(AQSELF.itemButtons) do
-			if v.inSlot ~= slot_id then
-				v:Hide()
-			end
-		end
+		AQSELF.showDropdown(slot_id, position)
+
 	end)
    	button:SetScript("OnLeave", function( self )
    		AQSELF.hideTooltip()
@@ -328,6 +328,32 @@ function AQSELF.createItemButton( slot_id, position )
    	AQSELF.slotFrames[slot_id] = button
 end
 
+function AQSELF.showDropdown(slot_id, position)
+	-- 更新物品在背包里的位置
+	AQSELF.updateItemInBags()
+
+	-- 显示可用饰品的下拉框
+	AQSELF.itemDropdownTimestamp = nil
+
+	local index = 1
+	local itemId1 = GetInventoryItemID("player", slot_id)
+	local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
+
+	for k,v in pairs(AQSELF.items[slot_id]) do
+		if v ~= itemId1 and v ~= itemId2 and v > 0 then
+			AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+			index = index + 1
+		elseif AQSELF.itemButtons[v] then
+			AQSELF.itemButtons[v]:Hide()
+		end
+	end
+
+	for k,v in pairs(AQSELF.itemButtons) do
+		if v.inSlot ~= slot_id then
+			v:Hide()
+		end
+	end
+end
 
 function AQSELF.hideItemDropdown( delay )
 	-- 设置计时
@@ -511,24 +537,28 @@ function AQSELF.createCooldownUnit( item_id, position )
 
     f.text = text
 
-	f:Show()
+	-- f:Show()
 
 	return f
 end
 
 function AQSELF.showTooltip( t, arg1, arg2 )
-	local tooltip = _G["GameTooltip"]
-    tooltip:ClearLines()
-	tooltip:SetOwner(UIParent)
-	GameTooltip_SetDefaultAnchor(tooltip, UIParent)
 
-	if t == "inventory" then
-		tooltip:SetInventoryItem("player", arg1)
-	elseif t == "bag" then
-		tooltip:SetBagItem(arg1, arg2)
+	if not AQSV.hideTooltip then
+		local tooltip = _G["GameTooltip"]
+	    tooltip:ClearLines()
+		tooltip:SetOwner(UIParent)
+		GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+
+		if t == "inventory" then
+			tooltip:SetInventoryItem("player", arg1)
+		elseif t == "bag" then
+			tooltip:SetBagItem(arg1, arg2)
+		end
+		
+	    tooltip:Show()
 	end
-	
-    tooltip:Show()
+
 end
 
 function AQSELF.hideTooltip()
@@ -544,39 +574,6 @@ function AQSELF.cooldownUpdate( self, elapsed )
         self.TimeSinceLastUpdate = 0
 
         AQSELF.doHideItemDropdown()
-
-        -- 计算图标上的冷却时间
-    	for k,v in pairs(AQSELF.slots) do
-    		local itemId = GetInventoryItemID("player", v)
-
-    		if itemId then
-    			-- 获取饰品的冷却状态
-			    local start, duration, enable = GetItemCooldown(itemId)
-			    -- 剩余冷却时间
-			    local rest = duration - GetTime() + start
-
-			    local button = AQSELF.slotFrames[v]
-
-			    if duration > 0 and rest > 0 then
-			    	local text = math.floor(rest)
-			    	if rest > 60 then
-			    		text = math.ceil(rest/60).."m"
-			    	end
-
-			    	button.text:SetText(text)
-			    	local height = (rest/duration)*40
-			    	button.cooldown:SetHeight(height)
-			    else
-					button.text:SetText()
-					button.cooldown:SetHeight(1)
-			    end
-			else
-				local button = AQSELF.slotFrames[v]
-				-- 装备被换下，清空倒计时
-				button.text:SetText()
-				button.cooldown:SetHeight(1)
-    		end
-		end
 
 		-- 计算饰品下拉框的冷却时间
 		for k,v in pairs(AQSELF.itemButtons) do
@@ -600,78 +597,128 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			-- end
 		end
 
-		AQSELF.loopSlots(function(slot_id)
+		-- 计算图标上的冷却时间
+    	for key,value in pairs(AQSELF.slots) do
+    		local itemId = GetInventoryItemID("player", value)
 
-			-- 计算冷却队列
-			local queue = AQSELF.buildQueueRealtime(slot_id)
+    		if itemId then
+    			-- 获取饰品的冷却状态
+			    local start, duration, enable = GetItemCooldown(itemId)
+			    -- 剩余冷却时间
+			    local rest = duration - GetTime() + start
 
-			-- print(queue)
+			    local button = AQSELF.slotFrames[value]
 
-			wipe(AQSELF.empty2)
+			    if duration > 0 and rest > 0 then
+			    	local text = math.floor(rest)
+			    	if rest > 60 then
+			    		text = math.ceil(rest/60).."m"
+			    	end
 
-			local slotIds = AQSELF.empty2
+			    	button.text:SetText(text)
+			    	local height = (rest/duration)*40
+			    	button.cooldown:SetHeight(height)
+			    else
+					button.text:SetText()
+					button.cooldown:SetHeight(1)
+			    end
+			else
+				local button = AQSELF.slotFrames[value]
+				-- 装备被换下，清空倒计时
+				button.text:SetText()
+				button.cooldown:SetHeight(1)
+    		end
 
-		    slotIds[1] = GetInventoryItemID("player", slot_id)
 
-		    if slot_id == 13 then
-		    	slotIds[2] = GetInventoryItemID("player", 14)
-		    end
+    		-- 判断是否是需要更换的slot
+    		if tContains(AQSELF.needSlots, value)  then
 
-		    -- local slotIds = {slot13Id, slot14Id}
+    			-- print(value)
 
-		    -- -- 算出等待换上的饰品
-		    local wait = diff(queue, slotIds)
+    			local slot_id = value
 
-		    if AQSELF.list[slot_id] == nil then
-		    	AQSELF.list[slot_id] = {}
-		    end
+	    		-- 计算冷却队列
+				local queue = AQSELF.buildQueueRealtime(slot_id)
 
-		    -- 根据顺序创建图标，或者使其显示
-		    for k,v in pairs(wait) do
-		    	if not AQSELF.list[slot_id][v] then
-		    		AQSELF.list[slot_id][v] = AQSELF.createCooldownUnit(v, k)
-		    	else
-		    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
-		    		AQSELF.list[slot_id][v]:Show()
-		    	end
-		    	
-		    	local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.slotFrames[slot_id]:GetPoint()
+				-- print(queue)
 
-		    	if AQSV.reverseCooldownUnit then
-		    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , 30 + (k - 1) * 23)
-		    	else
-		    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -43 - (k - 1) * 23)
-		    	end
-		    	
-		    end
+				wipe(AQSELF.empty2)
 
-		    for k,v in pairs(AQSELF.list[slot_id]) do
-		    	-- 如果已经换上了，隐藏
-		    	if not tContains(wait, k) then
-		    		v:Hide()
-		    	else
-		    		-- 获取饰品的冷却状态
-				    local start, duration, enable = GetItemCooldown(k)
-				    -- 剩余冷却时间
-				    local rest = math.floor(duration - GetTime() + start)
+				local slotIds = AQSELF.empty2
 
-				    -- 在队列中的显示冷却时间
-				    if duration > 0 and rest > 0 then
-				    	local text = rest
-				    	if rest > 60 then
-				    		text = math.ceil(rest/60).."m"
+			    slotIds[1] = GetInventoryItemID("player", slot_id)
+
+			    if slot_id == 13 then
+			    	slotIds[2] = GetInventoryItemID("player", 14)
+			    end
+
+			    -- local slotIds = {slot13Id, slot14Id}
+
+			    -- -- 算出等待换上的饰品
+			    local wait = diff(queue, slotIds)
+
+			    if AQSELF.list[slot_id] == nil then
+			    	AQSELF.list[slot_id] = {}
+			    end
+
+			    -- 根据顺序创建图标，或者使其显示
+			    for k,v in pairs(wait) do
+
+			    	-- if tContains(AQSELF.slots, v) then
+
+				    	if not AQSELF.list[slot_id][v] then
+				    		AQSELF.list[slot_id][v] = AQSELF.createCooldownUnit(v, k)
+				    	end
+				    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
+
+				    	if not AQSV.hideItemQueue then
+				    		AQSELF.list[slot_id][v]:Show()
+
+				    		local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.slotFrames[slot_id]:GetPoint()
+
+					    	if AQSV.reverseCooldownUnit then
+					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , 30 + (k - 1) * 23)
+					    	else
+					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -43 - (k - 1) * 23)
+					    	end
+				    	else
+				    		AQSELF.list[slot_id][v]:Hide()
 				    	end
 
-				    	v.text:SetText(text)
-				    else
-						v.text:SetText()
+				    -- end
+			    	
+			    end
+
+			    if not AQSV.hideItemQueue then
+				    -- 计算队列冷却时间
+				    for k,v in pairs(AQSELF.list[slot_id]) do
+				    	-- 如果已经换上了，隐藏
+				    	if not tContains(wait, k) then
+				    		v:Hide()
+				    	else
+				    		-- 获取饰品的冷却状态
+						    local start, duration, enable = GetItemCooldown(k)
+						    -- 剩余冷却时间
+						    local rest = math.floor(duration - GetTime() + start)
+
+						    -- 在队列中的显示冷却时间
+						    if duration > 0 and rest > 0 then
+						    	local text = rest
+						    	if rest > 60 then
+						    		text = math.ceil(rest/60).."m"
+						    	end
+
+						    	v.text:SetText(text)
+						    else
+								v.text:SetText()
+						    end
+				    	end
 				    end
-		    	end
-		    end
+				end
 
-		end)
+    		end
 
-		
+		end
 
     end
 end

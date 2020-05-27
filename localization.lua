@@ -40,7 +40,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["enable_carrot"] = "骑乘时装备\124cff1eff00\124Hitem:11122:0:0:0:0:0:0:0\124h[棍子上的胡萝卜]\124h\124r（饰品栏2/战场中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
-	L["Item queue is displayed above the Inventory Bar"] = "物品队列在装备栏上方显示"
+	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
+	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
 
 	L["Expand Settings"] = "展开设置列表"
 
@@ -67,7 +68,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Lock frame"] = "锁定框架"
 	L[" Settings"] = " 打开设置"
 	L[" Close"] = " 关闭菜单"
-	L["Enable Inventory Bar"] = "启用装备栏"
+	L["Enable Equipment Bar"] = "启用装备栏"
 	L["Enable Buff Alert"] = "启用Buff提醒"
 
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
@@ -83,29 +84,34 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Submit & Reload UI"] = "提交并重载UI"
 
 	L["Command:"] = "命令行:"
+	L["Advanced Settings:"] = "进阶设置:"
 	L["DRAG"] = "拖拽"
 	L[" Enable PVP mode"] = " 启用PVP模式"
 
 	L["-- Enable/disable AutoEquip function"] = "-- 启用/禁用自动更换装备功能"
 	L["-- Open settings"] = "-- 打开设置页面"
 	L["-- Enable/disable PVP mode manually"] = "-- 手动启动/禁用PVP模式"
-	L["-- Unlock Inventory Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
+	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
+	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
+	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
 
 
-	L["1. Equip item manually through the Inventory Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
+	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
 	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/aq unlock"
 	L["3. Before using item, the button will be unlocked automatically."] = "3. 使用物品后，对应装备栏按钮将会自动解锁"
-	L["4. AutoEquip/Inventory Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
+	L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
 
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
 
 	L["Zoom"] = "缩放"
 	L["Mode:"] = "模式:"
 	L["Slot:"] = "装备栏:"
-	L["Hide backdrop"] = "隐藏背景"
+	L["Hide black translucent background"] = "隐藏黑色半透明背景"
+	L["#Effective after ENTER"] = "#回车后生效"
+	L["Hide tooltip when the mouse moves over the button"] = "鼠标在按钮上停留时不显示提示框"
 	L["[Empty]"] = "[空]"
 	L['Trinket Slot '] = "饰品栏"
-	L["Inventory Bar Button"] = "装备栏按钮"
+	L["Equipment Bar Button"] = "装备栏按钮"
 
 	L["Head"] = "头部"
 	L["Neck"] = "颈部"
@@ -146,4 +152,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Go to 'General' page and add the unidentified usable items manually"] = "前往“常规设置”页面手动添加未被识别的主动装备"
 	L["Not only trinkets, any equippable usable item is acceptable"] = "任何主动装备都能添加，不只是饰品"
+
+	L[" Custom equipment bar was |cFFFF0000CANCELED|r."] = " 自定义装备|cFFFF0000已取消|r。"
+	L[" Please reload UI manually (/reload)."] = "请手动重载UI（/reload）。"
+	L[" Custom equipment bar |cFF00FF00SUCCESS|r."] = " 自定义装备栏|cFF00FF00成功|r。"
 end
