@@ -137,9 +137,9 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSELF.addonInit()
             AQSELF.createItemBar()
             AQSELF.createBuffIcon()
-            print(L["prefix"]..L[" Loaded"])
+            AQSELF.mainInit( )
 
-            mainInit( )
+            print(L["prefix"]..L[" Loaded"])
 
             AQSELF.init = true
 
@@ -204,7 +204,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 end
 
 
-function mainInit( )
+function AQSELF.mainInit()
 
     SLASH_AQCMD1 = "/aq";
     function SlashCmdList.AQCMD(msg)

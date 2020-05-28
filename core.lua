@@ -662,6 +662,7 @@ end
 function AQSELF.setWait(item_id, slot_id)
     local texture = GetItemTexture(item_id)
     AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
+    AQSELF.slotFrames[slot_id].waitFrame:Show()
 
     AQSV["slot"..slot_id.."Wait"] = {
         item_id,
@@ -684,6 +685,7 @@ function AQSELF.equipWait(item_id, slot_id)
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil
     AQSELF.slotFrames[slot_id].wait:SetTexture()
+    AQSELF.slotFrames[slot_id].waitFrame:Hide()
     AQSELF.slotFrames[slot_id].locker:Show()
 
     AQSELF.setCDLock( item_id, slot_id )

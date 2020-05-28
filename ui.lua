@@ -37,7 +37,7 @@ function AQSELF.createItemBar()
 
 	AQSELF.customSlots()
 
-	f:SetFrameStrata("MEDIUM")
+	f:SetFrameStrata("HIGH")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
 	f:SetHeight(40)
 	f:SetScale(AQSV.barZoom)
@@ -228,8 +228,8 @@ function AQSELF.createItemButton( slot_id, position )
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
- --  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	-- button:SetBackdropBorderColor(0,0,0,0.5);
+  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	button:SetBackdropBorderColor(0,0,0,0.9);
 	-- button:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	
 
@@ -272,11 +272,15 @@ function AQSELF.createItemButton( slot_id, position )
     -- 设0不成功
     wait:SetSize(20, 20)
     wait:SetPoint("BOTTOMRIGHT", button, 0, 0)
-    wait:SetFrameLevel(4)
+    wait:SetFrameLevel(5)
+    wait:Hide()
+    wait:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	wait:SetBackdropBorderColor(0,0,0,0.9);
 
    	local t2 = wait:CreateTexture(nil, "BACKGROUND")
 	t2:SetAllPoints(wait)
 	
+	button.waitFrame = wait
 	button.wait = t2
 
 	-- 锁定层
@@ -415,6 +419,9 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
   	button:SetFrameLevel(100)
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
+
+  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	button:SetBackdropBorderColor(0,0,0,0.9);
 	
 
     local t = button:CreateTexture(nil, "BACKGROUND")
@@ -521,6 +528,9 @@ function AQSELF.createCooldownUnit( item_id, position )
 	local f = CreateFrame("Frame", nil, AQSELF.bar)
 	-- f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 43 - (position - 1) * 23)
 	f:SetSize(20, 20)
+
+	f:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	f:SetBackdropBorderColor(0,0,0,0.9);
 
 	local t = f:CreateTexture(nil, "BACKGROUND")
 	t:SetTexture(GetItemTexture(item_id))

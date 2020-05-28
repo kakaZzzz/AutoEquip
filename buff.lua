@@ -13,13 +13,13 @@ function AQSELF.createBuffIcon()
 	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent)
 	AQSELF.buff = f
 
-	f:SetFrameStrata("MEDIUM")
+	f:SetFrameStrata("HIGH")
 	f:SetWidth(40)
 	f:SetHeight(40)
 	f:SetScale(AQSV.buffZoom)
 
-	f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
-	f:SetBackdropColor(0,0,0,1);
+	f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+	f:SetBackdropBorderColor(0,0,0,0.9);
 
 	-- buff时间倒计时
 	local t1 = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
