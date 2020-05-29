@@ -289,6 +289,7 @@ function AQSELF.mainInit()
     AQSELF.main:RegisterEvent("UPDATE_BINDINGS")
     AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
     AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
+    AQSELF.main:RegisterEvent("BAG_UPDATE") 
 
     AQSELF.main:SetScript("OnEvent", function( self, event, arg1 )
         if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
@@ -306,6 +307,10 @@ function AQSELF.mainInit()
                 AQSV.needSuit = 60
                 AQSELF.needSuitTimestamp = GetTime()
             end
+        end
+
+        if event == "BAG_UPDATE" then
+            debug("bage_update")
         end
 
         if event == "PLAYER_TARGET_CHANGED" then

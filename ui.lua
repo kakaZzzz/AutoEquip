@@ -37,7 +37,7 @@ function AQSELF.createItemBar()
 
 	AQSELF.customSlots()
 
-	f:SetFrameStrata("HIGH")
+	f:SetFrameStrata("MEDIUM")
 	f:SetWidth(#AQSELF.slots * (43) + 10)
 	f:SetHeight(40)
 	f:SetScale(AQSV.barZoom)
@@ -410,7 +410,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 		button = CreateFrame("Button", nil, AQSELF.bar)
 	-- end
 	
-	
+	button:SetFrameStrata("HIGH")
 
 	button:SetSize(40, 40)
 
