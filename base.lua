@@ -1,7 +1,5 @@
 local _, AQSELF = ...
 
-_G.AQSELF = AQSELF
-
 local L = AQSELF.L
 
 -- 复制table的数据，而不是引用
