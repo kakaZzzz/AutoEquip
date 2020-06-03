@@ -187,10 +187,12 @@ AQSELF.checkItems = function( )
 
             local id = GetInventoryItemID("player", i)
 
-             -- 保存身上的装备
-            AQSELF.itemInBags[id] = 1000*i
+            
 
             if id then
+                -- 保存身上的装备
+                AQSELF.itemInBags[id] = 1000*i
+
                 tableInsert(AQSELF.items[i], id)
                 if i == 11 or i == 13 then
                     AQSELF.items[i+1] = tableInsert(AQSELF.items[i+1], id)
@@ -679,8 +681,12 @@ function AQSELF.setWait(item_id, slot_id)
     local rid = AQSELF.reverseId(item_id)
 
     local texture = GetItemTexture(rid)
-    AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
-    AQSELF.slotFrames[slot_id].waitFrame:Show()
+
+    -- 所有slot都可能出现队列，没显示装备栏的这里会报错
+    if AQSELF.slotFrames[slot_id] then
+        AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
+        AQSELF.slotFrames[slot_id].waitFrame:Show()
+    end
 
     AQSV["slot"..slot_id.."Wait"] = {
         item_id,
@@ -690,7 +696,10 @@ end
 
 function AQSELF.cancelLocker( slot_id )
     AQSV.slotStatus[slot_id].locked = false
-    AQSELF.slotFrames[slot_id].locker:Hide()
+
+    if  AQSELF.slotFrames[slot_id] then
+        AQSELF.slotFrames[slot_id].locker:Hide()
+    end
 
     -- 解开CD锁
     AQSV.slotStatus[slot_id].lockedCD = false
@@ -705,9 +714,12 @@ function AQSELF.equipWait(item_id, slot_id)
 
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil
-    AQSELF.slotFrames[slot_id].wait:SetTexture()
-    AQSELF.slotFrames[slot_id].waitFrame:Hide()
-    AQSELF.slotFrames[slot_id].locker:Show()
+
+    if AQSELF.slotFrames[slot_id] then
+        AQSELF.slotFrames[slot_id].wait:SetTexture()
+        AQSELF.slotFrames[slot_id].waitFrame:Hide()
+        AQSELF.slotFrames[slot_id].locker:Show()
+    end
 
     AQSELF.setCDLock( rid, slot_id )
 end
