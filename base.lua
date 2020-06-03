@@ -193,6 +193,10 @@ AQSELF.getCooldownText = function(rest)
     return text
 end
 
+AQSELF.addonInfo = function(s)
+    print(L["prefix"]..s)
+end
+
 AQSELF.initSV = function( v, init )
     if v == nil then
 
@@ -207,10 +211,18 @@ AQSELF.initSV = function( v, init )
 end
 
 AQSELF.GetItemLink = function( id )
+
+    local id, order = AQSELF.reverseId(id)
+
     if id == 0 then
         return L["[Empty]"]
     end
     local _, link = GetItemInfo(id)
+
+    if order >0 then
+        link = link.." - "..order
+    end
+
     return link
 end
 
@@ -261,6 +273,8 @@ AQSELF.GetItemSlot = function( id )
 end
 
 AQSELF.GetItemTexture = function( id )
+    id = AQSELF.reverseId(id)
+
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemTexture
 end
@@ -275,4 +289,19 @@ AQSELF.GetSlotID = function(slot_id)
     return id
 end
 
-    
+AQSELF.equipByID = function(item_id, slot_id)
+
+    if item_id > 100000 then
+        local bag,slot = AQSELF.reverseBagSlot(item_id)
+
+        ClearCursor()
+        PickupContainerItem(bag,slot)
+
+        if CursorHasItem() then
+            EquipCursorItem(slot_id)
+        end
+    else
+        EquipItemByName(item_id, slot_id)
+    end
+
+end    

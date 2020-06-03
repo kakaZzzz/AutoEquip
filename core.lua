@@ -701,20 +701,7 @@ function AQSELF.equipWait(item_id, slot_id)
 
     local rid = AQSELF.reverseId(item_id)
 
-    if item_id > 100000 then
-        local bag,slot = AQSELF.reverseBagSlot(item_id)
-
-        ClearCursor()
-        PickupContainerItem(bag,slot)
-
-        -- print(bag,slot)
-
-        if CursorHasItem() then
-            EquipCursorItem(slot_id)
-        end
-    else
-        EquipItemByName(item_id, slot_id)
-    end
+    AQSELF.equipByID(item_id, slot_id)
 
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil

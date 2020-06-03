@@ -6,6 +6,7 @@ local diff = AQSELF.diff
 local L = AQSELF.L
 local initSV = AQSELF.initSV
 local loopSlots = AQSELF.loopSlots
+local addonInfo = AQSELF.addonInfo
 
 
 
@@ -225,6 +226,7 @@ function AQSELF.mainInit()
              for k,v in pairs(AQSELF.slots) do
                  AQSELF.cancelLocker(v)
              end
+             addonInfo(L[" |cFF00FF00Unlocked|r equipment bar"])
 
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)

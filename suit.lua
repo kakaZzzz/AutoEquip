@@ -73,12 +73,12 @@ function AQSELF.suitInit()
                     -- 跟当前装备的id不同时
                     if slotId ~= waitId[boss] then
 
-                        if v ==13 or v == 14 then
+                        -- if v ==13 or v == 14 then
                             -- 避免被马上换下
                             AQSELF.equipWait(waitId[boss], v)
-                        else
-                            EquipItemByName(waitId[boss], v)
-                        end
+                        -- else
+                        --     EquipItemByName(waitId[boss], v)
+                        -- end
                     end
                 else
                     -- 需要换回普通装备
@@ -88,7 +88,19 @@ function AQSELF.suitInit()
                         if v == 17 and GetItemEquipLoc(AQSV.suit[boss][16]) == "INVTYPE_2HWEAPON" then
 
                         else
-                            EquipItemByName(AQSV.suit[60][v], v)
+
+                            local order = 0
+
+                            if v == 12 or v == 14 or v == 17 then
+                                -- 保存60装备，只能取到item id，因此判断多槽位，如果id一样，则取到第二个
+                                if AQSV.suit[60][v] == AQSV.suit[60][v-1] then
+                                    order = 100000
+                                end
+
+                            end
+
+                            AQSELF.equipByID(AQSV.suit[60][v] + order, v)
+
                         end
 
                         if AQSELF.slotFrames[v] then
@@ -99,7 +111,7 @@ function AQSELF.suitInit()
 
             elseif boss == 60 then
                  if v == 17 and GetItemEquipLoc(GetSlotID(16)) == "INVTYPE_2HWEAPON" then
-                    EquipItemByName(AQSV.suit[boss][v], v)
+                    AQSELF.equipByID(AQSV.suit[boss][v], v)
                 else
                     -- AQSV.suit[boss][v] = 0
                 end
