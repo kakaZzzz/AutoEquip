@@ -81,7 +81,7 @@ function AQSELF.createItemBar()
 	-- 绘制冷却时间
 	f.TimeSinceLastUpdate = 0
 	-- 函数执行间隔时间
-	f.Interval = 0.2
+	f.Interval = 0.1
 	f:SetScript("OnUpdate", AQSELF.cooldownUpdate)
 
 	-- 创建按钮
@@ -334,7 +334,7 @@ end
 
 function AQSELF.showDropdown(slot_id, position)
 	-- 更新物品在背包里的位置
-	AQSELF.updateItemInBags()
+	-- AQSELF.updateItemInBags()
 
 	-- 显示可用饰品的下拉框
 	AQSELF.itemDropdownTimestamp = nil
@@ -344,6 +344,8 @@ function AQSELF.showDropdown(slot_id, position)
 	local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
 
 	for k,v in pairs(AQSELF.items[slot_id]) do
+		-- 推算出真实id
+		local rid = AQSELF.reverseId(v)
 		if v ~= itemId1 and v ~= itemId2 and v > 0 then
 			AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
 			index = index + 1
@@ -384,6 +386,9 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 		return
 	end
 
+	local rid = AQSELF.reverseId(item_id)
+	-- print(rid)
+
 	-- 分列，计算位置
 	position = position - 1
 		
@@ -414,7 +419,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 
 	button:SetSize(40, 40)
 
-	local itemTexture = GetItemTexture(item_id)
+	local itemTexture = GetItemTexture(rid)
 
   	button:SetFrameLevel(100)
   	-- 高亮材质
@@ -454,7 +459,11 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
    		-- 停掉隐藏下拉框的计时器
 		AQSELF.itemDropdownTimestamp = nil
 
-		AQSELF.showTooltip("bag", AQSELF.itemInBags[item_id][1], AQSELF.itemInBags[item_id][2])
+		local bag,slot = AQSELF.reverseBagSlot(item_id)
+
+		-- print(item_id, bag, slot)
+
+		AQSELF.showTooltip("bag", bag, slot)
 	end)
    	button:SetScript("OnLeave", function( self )
    		-- 开启隐藏计时
@@ -591,14 +600,11 @@ function AQSELF.cooldownUpdate( self, elapsed )
 				-- 获取饰品的冷却状态
 			    local start, duration, enable = GetItemCooldown(k)
 			    -- 剩余冷却时间
-			    local rest = math.floor(duration - GetTime() + start)
+			    local rest =(duration - GetTime() + start)
 
 			    -- 在队列中的显示冷却时间
 			    if duration > 0 and rest > 0 then
-			    	local text = rest
-			    	if rest > 60 then
-			    		text = math.ceil(rest/60).."m"
-			    	end
+			    	local text = AQSELF.getCooldownText(rest)
 
 			    	v.text:SetText(text)
 			    else
@@ -620,10 +626,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    local button = AQSELF.slotFrames[value]
 
 			    if duration > 0 and rest > 0 then
-			    	local text = math.floor(rest)
-			    	if rest > 60 then
-			    		text = math.ceil(rest/60).."m"
-			    	end
+			    	local text = AQSELF.getCooldownText(rest)
 
 			    	button.text:SetText(text)
 			    	local height = (rest/duration)*40
@@ -709,14 +712,11 @@ function AQSELF.cooldownUpdate( self, elapsed )
 				    		-- 获取饰品的冷却状态
 						    local start, duration, enable = GetItemCooldown(k)
 						    -- 剩余冷却时间
-						    local rest = math.floor(duration - GetTime() + start)
+						    local rest = (duration - GetTime() + start)
 
 						    -- 在队列中的显示冷却时间
 						    if duration > 0 and rest > 0 then
-						    	local text = rest
-						    	if rest > 60 then
-						    		text = math.ceil(rest/60).."m"
-						    	end
+						    	local text = AQSELF.getCooldownText(rest)
 
 						    	v.text:SetText(text)
 						    else

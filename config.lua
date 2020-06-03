@@ -16,7 +16,7 @@ AQSELF.init = false
 -- 获取当前角色名字
 AQSELF.player = UnitName("player")
 
-if AQSELF.player == "卡法" or AQSELF.player == "卡卡咔"  then
+if AQSELF.player == "卡法" or AQSELF.player == "卡卡咔" or AQSELF.player == "水猎"  then
 	AQSELF.enableDebug = true          -- 调试开关
 end
 
@@ -38,6 +38,10 @@ AQSELF.empty2 = {}			-- slotIds/ui
 AQSELF.empty3 = {}			-- diff/base
 AQSELF.empty4 = {}			-- diff2/base
 AQSELF.empty5 = {}			-- waitId/chance2hit
+AQSELF.empty6 = {}			-- 
+AQSELF.empty7 = {}			-- 
+AQSELF.empty8 = {}			-- 
+
 AQSELF.e0 = {}		-- slot13/core
 AQSELF.e1 = {}		-- slot14/core
 

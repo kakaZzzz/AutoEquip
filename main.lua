@@ -310,7 +310,7 @@ function AQSELF.mainInit()
         end
 
         if event == "BAG_UPDATE" then
-            debug("bage_update")
+            AQSELF.updateAllItems( )
         end
 
         if event == "PLAYER_TARGET_CHANGED" then

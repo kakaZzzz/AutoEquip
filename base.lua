@@ -89,6 +89,56 @@ AQSELF.empty = function( t )
 
 end
 
+AQSELF.findItemsOrder = function( id )
+    
+    local count = GetItemCount(id)
+    local order = 1
+    local find = false
+
+    if count == 1 then
+
+    elseif count > 1 then
+
+        for index=1,count do
+
+            if not find then
+                local fid = (index-1)*100000 + id
+                -- print(AQSELF.itemInBags[fid])
+
+                if AQSELF.itemInBags[fid] == nil then
+                    order = index
+                    find = true
+                end
+            end
+
+        end
+
+    end
+
+    return 100000*(order-1) + id
+
+end
+
+AQSELF.reverseId = function( id )
+    
+    local order = math.floor(id/100000)
+    local rid = id%100000
+
+    return rid, order
+
+end
+
+AQSELF.reverseBagSlot = function( id )
+
+    local num = AQSELF.itemInBags[id]
+    
+    local bag = math.floor(num/100)
+    local slot = num%100
+
+    return bag, slot
+
+end
+
 AQSELF.otherSlot = function(slot_id)
     
     local other = 0
@@ -118,11 +168,29 @@ AQSELF.debug = function( t )
 
     if type(t) == "table" then
         for k,v in pairs(t) do
-            print("@DEBUG: ",k.." =>"..tostring(v))
+            
+            if type(v) == "table" then
+                print("@DEBUG: ",k)
+                AQSELF.debug(v)
+            else
+                print("@KV: ",k.." =>"..tostring(v))
+            end
         end
     else
         print("@DEBUG: ",t)
     end
+end
+
+AQSELF.getCooldownText = function(rest)
+    local text = math.floor(rest)
+    
+    if rest > 3600 then
+        text = "|cFFFFFFFF"..math.ceil(rest/3600).."|rh"
+    elseif rest > 60 then
+        text = "|cFFFFFFFF"..math.ceil(rest/60).."|rm"
+    end
+    
+    return text
 end
 
 AQSELF.initSV = function( v, init )

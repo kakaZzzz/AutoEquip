@@ -18,21 +18,25 @@ function AQSELF.addonInit()
 
         AQSELF.addItems()
 
-        for k,v in pairs(AQSELF.pvpSet) do
-            if GetItemCount(v) > 0 then
-                table.insert(AQSELF.pvp, v)
-            end
-        end
-        
-        AQSELF.checkUsable()
-
-        loopSlots(AQSELF.initGroupCheckbox)
-
-        AQSELF.checkTrinket()
+        AQSELF.updateAllItems( )
 
         AQSELF.settingInit()
         AQSELF.suitInit()
 
+end
+
+function AQSELF.updateAllItems( )
+    for k,v in pairs(AQSELF.pvpSet) do
+        if GetItemCount(v) > 0 then
+            table.insert(AQSELF.pvp, v)
+        end
+    end
+    
+    AQSELF.checkUsable()
+
+    loopSlots(AQSELF.initGroupCheckbox)
+
+    AQSELF.checkItems()
 end
 
 function aq_test( )
@@ -166,16 +170,25 @@ AQSELF.checkUsable = function()
 end
 
 -- 检查角色身上所有的饰品
-AQSELF.checkTrinket = function( )
+AQSELF.checkItems = function( )
+    
+    wipe(AQSELF.empty6)
 
-    AQSELF.items = {}
-    AQSELF.multiItems = {}
+    AQSELF.items = AQSELF.empty6
+
+    wipe(AQSELF.empty7)
+
+    -- 保存饰品在背包中的位置
+    AQSELF.itemInBags = AQSELF.empty7
 
     for i=1,18 do
         if i ~= 4 then
             AQSELF.items[i] = tableInsert(AQSELF.items[i], 0)
 
             local id = GetInventoryItemID("player", i)
+
+             -- 保存身上的装备
+            AQSELF.itemInBags[id] = 1000*i
 
             if id then
                 tableInsert(AQSELF.items[i], id)
@@ -192,8 +205,7 @@ AQSELF.checkTrinket = function( )
         end
     end
 
-    -- 保存饰品在背包中的位置
-    AQSELF.itemInBags = {}
+    
 
     for i=0,NUM_BAG_SLOTS do
         local count = GetContainerNumSlots(i)
@@ -213,8 +225,11 @@ AQSELF.checkTrinket = function( )
                      --    print(itemEquipLoc)
                      -- end
 
-                    if itemEquipLoc ~= "" then
-                        AQSELF.itemInBags[id] = {i,s}
+                    if itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" then
+                        -- 拥有物品的个数
+                        id = AQSELF.findItemsOrder(id)
+                        AQSELF.itemInBags[id] = i*100 + s
+                        
                     end
 
                     if itemEquipLoc == "INVTYPE_TRINKET" then
@@ -272,7 +287,7 @@ AQSELF.checkTrinket = function( )
 
     end)
 
-    
+    -- debug(AQSELF.itemInBags)
 
 end
 
@@ -660,7 +675,10 @@ function AQSELF.setCDLock( item_id, slot_id )
 end
 
 function AQSELF.setWait(item_id, slot_id)
-    local texture = GetItemTexture(item_id)
+
+    local rid = AQSELF.reverseId(item_id)
+
+    local texture = GetItemTexture(rid)
     AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
     AQSELF.slotFrames[slot_id].waitFrame:Show()
 
@@ -681,14 +699,30 @@ end
 
 function AQSELF.equipWait(item_id, slot_id)
 
-    EquipItemByName(item_id, slot_id)
+    local rid = AQSELF.reverseId(item_id)
+
+    if item_id > 100000 then
+        local bag,slot = AQSELF.reverseBagSlot(item_id)
+
+        ClearCursor()
+        PickupContainerItem(bag,slot)
+
+        -- print(bag,slot)
+
+        if CursorHasItem() then
+            EquipCursorItem(slot_id)
+        end
+    else
+        EquipItemByName(item_id, slot_id)
+    end
+
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil
     AQSELF.slotFrames[slot_id].wait:SetTexture()
     AQSELF.slotFrames[slot_id].waitFrame:Hide()
     AQSELF.slotFrames[slot_id].locker:Show()
 
-    AQSELF.setCDLock( item_id, slot_id )
+    AQSELF.setCDLock( rid, slot_id )
 end
 
 function AQSELF.checkAllWait()
