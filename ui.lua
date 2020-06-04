@@ -598,7 +598,9 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		for k,v in pairs(AQSELF.itemButtons) do
 			-- if AQSELF.itemButtons[v] then
 				-- 获取饰品的冷却状态
-			    local start, duration, enable = GetItemCooldown(k)
+				local rid = AQSELF.reverseId(k)
+
+			    local start, duration, enable = GetItemCooldown(rid)
 			    -- 剩余冷却时间
 			    local rest =(duration - GetTime() + start)
 

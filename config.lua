@@ -6,7 +6,7 @@ local L = AQSELF.L
 
 -- 配置 --
 
-AQSELF.version = "v4.7"
+AQSELF.version = "v4.8"
 
 -- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
