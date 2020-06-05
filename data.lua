@@ -4,8 +4,10 @@ local merge = AQSELF.merge
 local initSV = AQSELF.initSV
 
 
--- 棍子上的胡萝卜
-AQSELF.carrot = 11122
+-- 棍子上的胡萝卜、骑乘手套、马刺鞋
+AQSELF.carrot = 0
+AQSELF.ride10 = 0
+AQSELF.ride8 = 0
 
 -- 缓存胡萝卜换下的饰品
 -- AQSELF.carrotBackup = 0

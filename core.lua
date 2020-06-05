@@ -11,6 +11,9 @@ local GetItemTexture = AQSELF.GetItemTexture
 local GetItemEquipLoc = AQSELF.GetItemEquipLoc
 local tableInsert = AQSELF.tableInsert
 local loopSlots = AQSELF.loopSlots
+local GetItemLink = AQSELF.GetItemLink
+local GetEnchanitID = AQSELF.GetEnchanitID
+local findCarrot = AQSELF.findCarrot
 
 
 -- 初始化插件
@@ -187,8 +190,6 @@ AQSELF.checkItems = function( )
 
             local id = GetInventoryItemID("player", i)
 
-            
-
             if id then
                 -- 保存身上的装备
                 AQSELF.itemInBags[id] = 1000*i
@@ -203,6 +204,14 @@ AQSELF.checkItems = function( )
                         AQSELF.items[33-i] = tableInsert(AQSELF.items[33-i], id)
                     end
                 end
+
+                if i == 8 or i == 10 then
+                    local link = GetInventoryItemLink("player",i)
+                    findCarrot(id, i, link)
+                elseif i == 13 or i == 14 then
+                    findCarrot(id, 13)
+                end
+
             end
         end
     end
@@ -228,7 +237,7 @@ AQSELF.checkItems = function( )
                      -- end
 
                     if itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" then
-                        -- 拥有物品的个数
+                        -- 拥有物品的个数，计算出内部id
                         id = AQSELF.findItemsOrder(id)
                         AQSELF.itemInBags[id] = i*100 + s
                         
@@ -237,6 +246,10 @@ AQSELF.checkItems = function( )
                     if itemEquipLoc == "INVTYPE_TRINKET" then
                         table.insert(AQSELF.items[13], id)
                         table.insert(AQSELF.items[14], id)
+
+                        findCarrot(id, 13)
+                        
+
                     elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
                         table.insert(AQSELF.items[5], id)
                     elseif itemEquipLoc == "INVTYPE_HEAD" then
@@ -251,10 +264,18 @@ AQSELF.checkItems = function( )
                         table.insert(AQSELF.items[7], id)
                     elseif itemEquipLoc == "INVTYPE_FEET" then
                         table.insert(AQSELF.items[8], id)
+
+                        local link = GetContainerItemLink(i, s)
+                        findCarrot(id, 8, link)
+
                     elseif itemEquipLoc == "INVTYPE_WRIST" then
                         table.insert(AQSELF.items[9], id)
                     elseif itemEquipLoc == "INVTYPE_HAND" then
                         table.insert(AQSELF.items[10], id)
+
+                        local link = GetContainerItemLink(i, s)
+                        findCarrot(id, 10, link)
+
                     elseif itemEquipLoc == "INVTYPE_FINGER" then
                         table.insert(AQSELF.items[11], id)
                         table.insert(AQSELF.items[12], id)
@@ -388,7 +409,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换萝卜
-    if slot_id == 14 and not AQSV.slotStatus[14].locked and AQSV.enableCarrot then
+    if slot_id == 14 and not AQSV.slotStatus[14].locked and AQSV.enableCarrot and AQSELF.carrot > 0 then
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if(IsMounted() and not UnitOnTaxi("player")) then
 
@@ -411,9 +432,60 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             if AQSV.carrotBackup == AQSELF.carrot then
                 AQSV.carrotBackup = 0
             end
+
+            if AQSV.carrotBackup == slot["id"] then
+                AQSV.carrotBackup = 0
+            end
             
             if AQSV.carrotBackup > 0 then
                 EquipItemByName(AQSV.carrotBackup, 14)
+            end
+        end
+    end
+
+    -- 自动换手套或靴子
+    -- debug(slot_id)
+    -- debug(AQSV.slotStatus[slot_id].locked)
+    if tContains({8,10}, slot_id) and AQSELF["ride"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableCarrot  then
+
+        local link = GetInventoryItemLink("player",slot_id)
+        local enchantId = GetEnchanitID(link)
+
+        -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
+        if(IsMounted() and not UnitOnTaxi("player")) then
+
+            -- 战场判断放这里，不然进战场不会换下
+            -- 副本里也不使用
+            if not AQSELF.inInstance() then
+
+                if enchantId ~= "930" and enchantId ~= "464" and AQSELF["ride"..slot_id] > 0 then
+
+                    AQSV["backup"..slot_id] = slot["id"]
+
+                    -- 存在两个相同物品的可能
+                    AQSELF.equipByID(AQSELF["ride"..slot_id], slot_id)
+
+                    -- collectgarbage("collect")
+                end
+                -- 骑马时一直busy，中断更换主动饰品的逻辑
+                slot["busy"] = true
+                slot["priority"] = 0
+            end
+
+        elseif AQSV["backup"..slot_id] > 0 then
+            -- print( AQSV["backup"..slot_id], AQSELF["ride"..slot_id])
+            -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
+            -- 避免不停更换萝卜
+            if AQSV["backup"..slot_id] == AQSELF["ride"..slot_id] then
+                AQSV["backup"..slot_id] = 0
+            end
+
+            if AQSV["backup"..slot_id] == slot["id"] then
+                AQSV["backup"..slot_id] = 0
+            end
+            
+            if AQSV["backup"..slot_id] > 0 then
+                EquipItemByName(AQSV["backup"..slot_id], slot_id)
             end
         end
     end
@@ -431,6 +503,10 @@ function AQSELF.buildQueueRealtime(slot_id)
 
     local queue = AQSELF.empty1
     local inBattleground = UnitInBattleground("player")
+
+    if not AQSV.usableItems[slot_id] then
+        return queue
+    end
 
     for k,v in pairs(AQSV.usableItems[slot_id]) do
         if inBattleground or AQSV.pvpMode then
@@ -551,7 +627,7 @@ end
 
 function AQSELF.changeItem(slot_id)
     -- 主要代码部分 --
-    
+    -- debug(slot_id)
     local queue = AQSELF.buildQueueRealtime(slot_id)
 
     -- 获取当前饰品的状态

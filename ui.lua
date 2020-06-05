@@ -89,6 +89,13 @@ function AQSELF.createItemBar()
 		AQSELF.createItemButton( v, k )
 	end
 
+	-- 装备栏不显示的槽都解锁
+	for k,v in pairs(AQSV.slotStatus) do
+    	if not tContains(AQSELF.slots, k) then
+    		AQSELF.cancelLocker(k)
+    	end
+    end
+
 	-- 创建PVP标识
 	local pvpIcon = CreateFrame("Frame", nil, f)
 	pvpIcon:SetSize(20,20)

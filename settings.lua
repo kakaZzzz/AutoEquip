@@ -199,6 +199,10 @@ function AQSELF.settingInit()
     -- 构建两个饰品组
     function buildDropdownGroup(slot_id)
 
+        if not AQSV.usableItems[slot_id] then
+            return
+        end
+
         local line = CreateFrame("Button", nil, queueFrame)
 
         line:SetWidth(570)
@@ -336,9 +340,9 @@ function AQSELF.settingInit()
 
         -- 没有主动饰品的情况
         if #AQSV.usableItems[slot_id] == 0 then
-            local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+            local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
-            l:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeightQueue - 35)
+            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 35)
 
             height = AQSELF.lastHeightQueue - 35
         end

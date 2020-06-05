@@ -79,7 +79,10 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
             AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, false)
+
             AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
+            AQSV.backup8 = initSV(AQSV.backup8, 0)
+            AQSV.backup10 = initSV(AQSV.backup10, 0)
 
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
@@ -223,8 +226,8 @@ function AQSELF.mainInit()
             AQSELF. enablePvpMode()
 
         elseif msg == "unlock" then
-             for k,v in pairs(AQSELF.slots) do
-                 AQSELF.cancelLocker(v)
+             for k,v in pairs(AQSV.slotStatus) do
+                 AQSELF.cancelLocker(k)
              end
              addonInfo(L[" |cFF00FF00Unlocked|r equipment bar"])
 

@@ -226,6 +226,13 @@ AQSELF.GetItemLink = function( id )
     return link
 end
 
+AQSELF.GetEnchanitID = function(link)
+    
+    local _, enchantId = link:match("item:(%d+):(%d+)")
+
+    return enchantId
+end
+
 AQSELF.GetItemEquipLoc = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
@@ -287,6 +294,33 @@ AQSELF.GetSlotID = function(slot_id)
     end
 
     return id
+end
+
+AQSELF.findCarrot = function( id, slot_id, link )
+
+    if slot_id == 13 then
+
+        if id == 11122 then
+            AQSELF.carrot = id
+        end
+
+        if not tContains(AQSELF.needSlots, 13) and AQSELF.carrot > 0 then
+            table.insert(AQSELF.needSlots, 13)
+        end
+
+        return
+    end
+
+    local enchantId = AQSELF.GetEnchanitID(link)
+
+    -- 找到带有秘银马刺的鞋子，保存起来
+    if enchantId == "464" or enchantId == "930" then
+        AQSELF["ride"..slot_id] = id
+    end
+
+    if not tContains(AQSELF.needSlots, slot_id) and AQSELF["ride"..slot_id]>0 then
+        table.insert(AQSELF.needSlots, slot_id)
+    end
 end
 
 AQSELF.equipByID = function(item_id, slot_id)
