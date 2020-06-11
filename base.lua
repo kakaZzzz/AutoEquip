@@ -193,8 +193,8 @@ AQSELF.getCooldownText = function(rest)
     return text
 end
 
-AQSELF.addonInfo = function(s)
-    print(L["prefix"]..s)
+AQSELF.chatInfo = function(s)
+    print(L["prefix"].." "..s)
 end
 
 AQSELF.initSV = function( v, init )
@@ -296,6 +296,15 @@ AQSELF.GetSlotID = function(slot_id)
     return id
 end
 
+AQSELF.AddonEquipItemByName = function( item_id, slot_id )
+
+    EquipItemByName(item_id, slot_id)
+
+    local link = AQSELF.GetItemLink(item_id)
+    
+    AQSELF.popupInfo(L["Equip "]..link)
+end
+
 AQSELF.findCarrot = function( id, slot_id, link )
 
     if slot_id == 13 then
@@ -338,4 +347,90 @@ AQSELF.equipByID = function(item_id, slot_id)
         EquipItemByName(item_id, slot_id)
     end
 
+    local rid = AQSELF.reverseId(item_id)
+
+    local link = AQSELF.GetItemLink(rid)
+    
+    AQSELF.popupInfo(L["Equip "]..link)
+
 end    
+
+
+AQSELF.infoFrameIndex = 0
+
+AQSELF.popupInfo = function(text)
+    
+    -- 最多显示5条
+    if AQSELF.infoFrameIndex >= 5 then
+        return
+    end
+    
+    AQSELF.infoFrameIndex = AQSELF.infoFrameIndex + 1
+
+    if _G["AutoEquip_Popup"..AQSELF.infoFrameIndex] == nil then
+        CreateFrame( "GameTooltip", "AutoEquip_Popup"..AQSELF.infoFrameIndex, UIParent, "GameTooltipTemplate" )
+    end
+
+    local f = _G["AutoEquip_Popup"..AQSELF.infoFrameIndex]
+
+    -- if AQSELF.infoFrame == nil then
+    --  AQSELF.infoFrame = CreateFrame( "GameTooltip", "AutoEquip_Popup", UIParent, "GameTooltipTemplate" )
+    -- end
+
+    -- local f= AQSELF.infoFrame
+
+    if f.moveOut then
+        f.fadeOut:Stop()
+        f.moveOut:Stop()
+    end
+    
+    f:Hide()
+
+    f:SetOwner(UIParent, "ANCHOR_NONE")
+    f:SetPoint("CENTER", UIParent,  0, -40*(AQSELF.infoFrameIndex - 1) + 320 )
+
+    f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+    f:SetBackdropColor(0,0,0,0.8);
+
+    if AQSELF.infoFrameIndex == 5 then
+        f:SetText("...")
+    else
+        f:SetText(text)
+    end
+
+    _G["AutoEquip_Popup"..AQSELF.infoFrameIndex.."TextLeft1"]:SetFont(STANDARD_TEXT_FONT, 14)
+    _G["AutoEquip_Popup"..AQSELF.infoFrameIndex.."TextLeft1"]:SetTextColor(255,255,255)
+
+    f:Show()
+
+    if not f.moveOut then -- Upgrade to 39
+        f.moveOut = f:CreateAnimationGroup()
+
+        local animOut = f.moveOut:CreateAnimation("Translation")
+        animOut:SetOrder(1)
+        animOut:SetDuration(0.3)
+        -- animOut:SetFromAlpha(1)
+        -- animOut:SetToAlpha(0)
+        animOut:SetOffset(0, 20)
+        animOut:SetStartDelay(2)
+        f.moveOut:SetScript("OnFinished",function() 
+            f:Hide()
+            AQSELF.infoFrameIndex = AQSELF.infoFrameIndex - 1
+        end)
+    end
+
+    if not f.fadeOut then -- Upgrade to 39
+        f.fadeOut = f:CreateAnimationGroup()
+        local animOut = f.fadeOut:CreateAnimation("Alpha")
+        animOut:SetOrder(1)
+        animOut:SetDuration(0.3)
+        animOut:SetFromAlpha(1)
+        animOut:SetToAlpha(0)
+        animOut:SetStartDelay(2)
+        f.fadeOut:SetToFinalAlpha(true)
+    end
+
+    f.fadeOut:Play()
+    f.moveOut:Play()
+
+end

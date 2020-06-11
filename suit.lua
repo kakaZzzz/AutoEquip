@@ -44,7 +44,8 @@ function AQSELF.suitInit()
             return
         end
 
-        print(L["prefix"].." "..L["Suit "..L[boss]])
+        AQSELF.popupInfo(L["Equip "]..L["Suit "..L[boss]])
+        AQSELF.chatInfo(L["Equip "]..L["Suit "..L[boss]])
 
         --如果之前是60，缓存起来
         if AQSV.currentSuit == 60 then

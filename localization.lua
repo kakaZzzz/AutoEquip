@@ -33,7 +33,7 @@ L["prefix"] = "|cFFFFFF00<AutoEquip>|r"
 
 if locale == 'zhCN' or locale == 'zhTW' then
 
-	L[" Loaded"] = " 加载完毕"
+	L["Loaded"] = " 加载完毕"
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动装备功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
@@ -42,6 +42,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
 	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
+	L["Show simple tooltip (only item name)"] = "显示精简提示（只有物品名）"
 
 	L["Expand Settings"] = "展开设置列表"
 
@@ -73,7 +74,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
 	L["|cFFFF0000Disabled|r"] = "|cFFFF0000停用|r"
-	L[" PVP mode "] = " PVP模式"
+	L["PVP mode "] = " PVP模式"
 
 	L["Custom Buff Alert:"] = "自定义Buff提醒:"
 	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
@@ -94,6 +95,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
 	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
 	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
+	L["-- Set equipment button spacing to 1 (default 3)"] = "-- 将装备栏按钮间距设置为1（默认是3）"
 
 
 	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
@@ -108,7 +110,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Slot:"] = "装备栏:"
 	L["Hide black translucent background"] = "隐藏黑色半透明背景"
 	L["#Effective after ENTER"] = "#回车后生效"
-	L["Hide tooltip when the mouse moves over the button"] = "鼠标在按钮上停留时不显示提示框"
+	L["Hide tooltip when the mouse moves over the button"] = "鼠标在装备栏按钮上停留时不显示提示框"
 	L["[Empty]"] = "[空]"
 	L['Trinket Slot '] = "饰品栏"
 	L["Equipment Bar Button"] = "装备栏按钮"
@@ -153,7 +155,12 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Go to 'General' page and add the unidentified usable items manually"] = "前往“常规设置”页面手动添加未被识别的主动装备"
 	L["Not only trinkets, any equippable usable item is acceptable"] = "任何主动装备都能添加，不只是饰品"
 
-	L[" Custom equipment bar was |cFFFF0000CANCELED|r."] = " 自定义装备|cFFFF0000已取消|r。"
+	L["Custom equipment bar was |cFFFF0000CANCELED|r."] = " 自定义装备|cFFFF0000已取消|r。"
 	L[" Please reload UI manually (/reload)."] = "请手动重载UI（/reload）。"
-	L[" Custom equipment bar |cFF00FF00SUCCESS|r."] = " 自定义装备栏|cFF00FF00成功|r。"
+	L["Custom equipment bar |cFF00FF00SUCCESS|r."] = " 自定义装备栏|cFF00FF00成功|r。"
+
+	L["Equip "] = "装备"
+
+	L["AutoEquip function |cFF00FF00Enabled|r"] = "自动装备功能|cFF00FF00启用|r"
+	L["AutoEquip function |cFFFF0000Disabled|r"] = "自动装备功能|cFFFF0000停用|r"
 end

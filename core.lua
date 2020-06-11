@@ -14,6 +14,9 @@ local loopSlots = AQSELF.loopSlots
 local GetItemLink = AQSELF.GetItemLink
 local GetEnchanitID = AQSELF.GetEnchanitID
 local findCarrot = AQSELF.findCarrot
+local chatInfo = AQSELF.chatInfo
+local popupInfo = AQSELF.popupInfo
+local AddonEquipItemByName = AQSELF.AddonEquipItemByName
 
 
 -- 初始化插件
@@ -43,10 +46,8 @@ function AQSELF.updateAllItems( )
 end
 
 function aq_test( )
-    print("test test")
-    local bag = AQSELF.itemInBags[18392]
-    PickupContainerItem(bag[1], bag[2])
-    EquipCursorItem(17)
+    local s = string.format("%d", (GetUnitSpeed("Player") / 7) * 100)
+    debug(s)
 end
 
 AQSELF.addItems = function()
@@ -418,7 +419,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             if not AQSELF.inInstance() then
                 if slot["id"] ~= AQSELF.carrot then
                     AQSV.carrotBackup = slot["id"]
-                    EquipItemByName(AQSELF.carrot, 14)
+                    AddonEquipItemByName(AQSELF.carrot, 14)
                     -- collectgarbage("collect")
                 end
                 -- 骑马时一直busy，中断更换主动饰品的逻辑
@@ -426,7 +427,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif slot["id"] == AQSELF.carrot and (AQSV.disableSlot14 or #queue== 0 or AQSV.slot14 == 0) then
+        elseif slot["id"] == AQSELF.carrot and (AQSV.disableSlot14 or (#queue== 0 and AQSV.slotStatus[14].backup == 0)) then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
             if AQSV.carrotBackup == AQSELF.carrot then
@@ -436,9 +437,12 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             if AQSV.carrotBackup == slot["id"] then
                 AQSV.carrotBackup = 0
             end
+
+            -- print(AQSV.disableSlot14, #queue)
             
             if AQSV.carrotBackup > 0 then
-                EquipItemByName(AQSV.carrotBackup, 14)
+                debug("carrot")
+                AddonEquipItemByName(AQSV.carrotBackup, 14)
             end
         end
     end
@@ -472,7 +476,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif AQSV["backup"..slot_id] > 0 then
+        elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
             -- print( AQSV["backup"..slot_id], AQSELF["ride"..slot_id])
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
@@ -485,7 +489,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             end
             
             if AQSV["backup"..slot_id] > 0 then
-                EquipItemByName(AQSV["backup"..slot_id], slot_id)
+                AddonEquipItemByName(AQSV["backup"..slot_id], slot_id)
             end
         end
     end
@@ -563,12 +567,12 @@ function AQSELF.changeTrinket()
             -- 饰品是可用状态，或者剩余时间30秒之内
             if (duration == 0 or rest < 30) and v ~= slot13["id"] and v ~= slot14["id"]  then
                 if k <  slot13["priority"] and not AQSV.slotStatus[13].locked and AQSV.queue13[v] then
-                    EquipItemByName(v, 13)
+                    AddonEquipItemByName(v, 13)
                     slot13["busy"] = true
                     slot13["priority"] = k
                     -- AQSELF.cancelLocker( 13 )
                 elseif k <  slot14["priority"] and not AQSV.slotStatus[14].locked and not AQSV.disableSlot14 and AQSV.queue14[v] then
-                    EquipItemByName(v, 14)
+                    AddonEquipItemByName(v, 14)
                     slot14["busy"] = true
                     slot14["priority"] = k
                     -- AQSELF.cancelLocker( 14 )
@@ -598,11 +602,11 @@ function AQSELF.changeTrinket()
             if v ~= slot13["id"] and v ~= slot14["id"] then
                 -- 优先13
                 if not slot13["busy"] and AQSV.queue13[v] then
-                    EquipItemByName(v, 13)
+                    AddonEquipItemByName(v, 13)
                     slot13["busy"] = true
                     
                 elseif not slot14["busy"] and AQSV.queue14[v] then
-                    EquipItemByName(v, 14)
+                    AddonEquipItemByName(v, 14)
                     slot14["busy"] = true
                     
                 end
@@ -617,11 +621,12 @@ function AQSELF.changeTrinket()
 
     -- 遍历发现没有可用的主动饰品，则更换被动饰品
     if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
-        EquipItemByName(AQSV.slotStatus[13].backup, 13)
+        AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
     end
 
     if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
-        EquipItemByName(AQSV.slotStatus[14].backup, 14)
+        debug("last")
+        AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
     end
 end
 
@@ -656,7 +661,7 @@ function AQSELF.changeItem(slot_id)
             -- 饰品是可用状态，或者剩余时间30秒之内
             if (duration == 0 or rest < 30) and v ~= slot13["id"] then
                 if k <  slot13["priority"] and not AQSV.slotStatus[slot_id].locked then
-                    EquipItemByName(v, slot_id)
+                    AddonEquipItemByName(v, slot_id)
                     slot13["busy"] = true
                     slot13["priority"] = k
                 end
@@ -685,7 +690,7 @@ function AQSELF.changeItem(slot_id)
             if v ~= slot13["id"] then
                 -- 优先13
                 if not slot13["busy"] then
-                    EquipItemByName(v, slot_id)
+                    AddonEquipItemByName(v, slot_id)
                     slot13["busy"] = true
                     
                 end
@@ -700,7 +705,7 @@ function AQSELF.changeItem(slot_id)
 
     -- 遍历发现没有可用的主动饰品，则更换被动饰品
     if not slot13["busy"] and AQSV.slotStatus[slot_id].backup ~= slot13["id"] and AQSV.slotStatus[slot_id].backup >0 then
-        EquipItemByName(AQSV.slotStatus[slot_id].backup, slot_id)
+        AddonEquipItemByName(AQSV.slotStatus[slot_id].backup, slot_id)
     end
 
 end
@@ -722,7 +727,8 @@ function AQSELF.enablePvpMode()
     else
         AQSELF.pvpIcon:Hide()
     end
-    print(L["prefix"]..L[" PVP mode "]..on)
+    chatInfo(L["PVP mode "]..on)
+    popupInfo(L["PVP mode "]..on)
 end
 
 function AQSELF.enableAutoEuquip()
@@ -732,9 +738,11 @@ function AQSELF.enableAutoEuquip()
     AQSELF.menuList[1]["checked"] = AQSV.enable
 
     if AQSV.enable then
-        print(L["AutoEquip: |cFF00FF00Enabled|r"])
+        chatInfo(L["AutoEquip function |cFF00FF00Enabled|r"])
+        popupInfo(L["AutoEquip function |cFF00FF00Enabled|r"])
     else
-        print(L["AutoEquip: |cFFFF0000Disabled|r"])
+        chatInfo(L["AutoEquip function |cFFFF0000Disabled|r"])
+        popupInfo(L["AutoEquip function |cFFFF0000Disabled|r"])
     end
 end
 
@@ -837,4 +845,29 @@ function AQSELF.slotsCanEquip()
     end
 
     return slots
+end
+
+AQSELF.equipOnyxiaCloak = function()
+    
+    local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
+
+    if zonetext == "奈法利安的巢穴" then
+        
+        if GetInventoryItemID("player", 15) == 15138 then
+            return
+        end
+
+        if GetItemCount(15138) > 0 then
+            AQSV.cloakBackup = GetInventoryItemID("player", 15)
+            AQSELF.equipWait(15138, 15)
+            chatInfo(L[" Equip "]..GetItemLink(15138))
+        end
+
+    elseif GetInventoryItemID("player", 15) == 15138 and AQSV.cloakBackup > 0 then
+        AddonEquipItemByName(AQSV.cloakBackup, 15)
+        chatInfo(L[" Equip "]..GetItemLink(AQSV.cloakBackup))
+        AQSELF.cancelLocker( 15 )
+        AQSV.cloakBackup = 0
+    end
+
 end

@@ -6,8 +6,7 @@ local diff = AQSELF.diff
 local L = AQSELF.L
 local initSV = AQSELF.initSV
 local loopSlots = AQSELF.loopSlots
-local addonInfo = AQSELF.addonInfo
-
+local chatInfo = AQSELF.chatInfo
 
 
 -- 主函数 --
@@ -125,6 +124,11 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.hideItemQueue = initSV(AQSV.hideItemQueue, false)
             AQSV.hideTooltip = initSV(AQSV.hideTooltip, false)
             AQSV.shiftLeftShowDropdown = initSV(AQSV.shiftLeftShowDropdown, false)
+            AQSV.buttonSpacing = initSV(AQSV.buttonSpacing, 3)
+
+            AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
+
+            AQSV.simpleTooltip = initSV(AQSV.simpleTooltip, false)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -143,7 +147,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSELF.createBuffIcon()
             AQSELF.mainInit( )
 
-            print(L["prefix"]..L[" Loaded"])
+            chatInfo(L["Loaded"])
 
             AQSELF.init = true
 
@@ -183,6 +187,9 @@ AQSELF.onMainUpdate = function(self, elapsed)
         if not AQSELF.playerCanEquip() then
             return 
         end
+
+        -- 自动换奥妮克希亚披风
+        -- AQSELF.equipOnyxiaCloak()
 
         AQSELF.checkAllWait()
 
@@ -229,7 +236,7 @@ function AQSELF.mainInit()
              for k,v in pairs(AQSV.slotStatus) do
                  AQSELF.cancelLocker(k)
              end
-             addonInfo(L[" |cFF00FF00Unlocked|r equipment bar"])
+             chatInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
 
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
@@ -237,7 +244,7 @@ function AQSELF.mainInit()
                 AQSV.needSuit = tonumber(msg)
                 AQSELF.needSuitTimestamp = GetTime()
             else
-                print(L["prefix"]..L[" |cFF00FF00In combat|r"])
+                chatInfo(L["|cFF00FF00In combat|r"])
             end
 
         elseif strfind(msg, "ipc") then
@@ -249,12 +256,22 @@ function AQSELF.mainInit()
                 AQSV.itemsPerColumn = n
             end
 
+        elseif strfind(msg, "bs") then
+
+            -- equipment button spacing
+            local n = tonumber(strmatch(msg, "%d+"))
+
+            if n > 0 then
+                AQSV.buttonSpacing = n
+                chatInfo(L["Set Equipment button spacing to "]..AQSELF.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
+            end
+
         elseif strfind(msg, "ceb") then
 
             local _, str = strsplit(" ", msg)
 
             if tonumber(str) == 0 then
-                print(L["prefix"]..L[" Custom equipment bar was |cFFFF0000CANCELED|r."]..L[" Please reload UI manually (/reload)."])
+                chatInfo(L["Custom equipment bar was |cFFFF0000CANCELED|r."]..L[" Please reload UI manually (/reload)."])
                 AQSV.customSlots = {}
                 return
             end
@@ -273,7 +290,7 @@ function AQSELF.mainInit()
             end
 
             if #new > 0 then
-                print(L["prefix"]..L[" Custom equipment bar |cFF00FF00SUCCESS|r."]..L[" Please reload UI manually (/reload)."])
+                chatInfo(L["Custom equipment bar |cFF00FF00SUCCESS|r."]..L[" Please reload UI manually (/reload)."])
                 AQSV.customSlots = new
             end
 
@@ -281,10 +298,10 @@ function AQSELF.mainInit()
 
             if strfind(msg, "1") then
                 AQSV.hideItemQueue = true
-                print(L["prefix"]..L[" |cFFFF0000Hide|r item queue"])
+                chatInfo(L["|cFFFF0000Hide|r item queue"])
             elseif strfind(msg, "0") then
                 AQSV.hideItemQueue = false
-                print(L["prefix"]..L[" |cFF00FF00Show|r item queue"])
+                chatInfo(L["|cFF00FF00Show|r item queue"])
             end
 
         end
@@ -295,6 +312,9 @@ function AQSELF.mainInit()
     AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
     AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
     AQSELF.main:RegisterEvent("BAG_UPDATE") 
+    -- AQSELF.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
+    -- AQSELF.main:RegisterEvent("ZONE_CHANGED_INDOORS") 
+    -- AQSELF.main:RegisterEvent("ZONE_CHANGED") 
 
     AQSELF.main:SetScript("OnEvent", function( self, event, arg1 )
         if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
@@ -305,6 +325,15 @@ function AQSELF.mainInit()
 
         if event == "UPDATE_BINDINGS" then
             AQSELF.bindingSlot()
+        end
+
+        if event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED" then
+            local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
+            debug(zonetext)
+            -- local uiMapID = C_Map.GetBestMapForUnit("player")
+            -- debug(uiMapID)
+            -- print(UnitPosition("player"))
+            
         end
 
         if event == "PLAYER_REGEN_ENABLED" then

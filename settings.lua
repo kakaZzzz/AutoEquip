@@ -595,17 +595,20 @@ function AQSELF.settingInit()
     buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-100)
     buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-125)
     buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-150)
+    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-175)
+
+    otherHight = otherHight - 175
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#When the equippable items you carry have changed"])
-        t:SetPoint("TOPLEFT", f, 135, otherHight-195)
+        t:SetPoint("TOPLEFT", f, 135, otherHight-45)
 
         local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
         b:SetText(L["Reload UI"])
         b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 23, otherHight-185)
+        b:SetPoint("TOPLEFT", f, 23, otherHight-35)
         b:SetScript("OnClick", function(self)
             C_UI.Reload()
         end)
@@ -626,6 +629,7 @@ function AQSELF.settingInit()
 
     AQSELF.loopSlots(buildDropdownGroup)
 
+    AQSELF.lastHeight = otherHight - 40
 
     -- 添加主动装备
     do
@@ -777,7 +781,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText("/aq 60|63|64")
+        t:SetText("/aq 60(63/64)")
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 165)
     end
 
@@ -819,7 +823,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq hiq 1|0"])
+        t:SetText(L["/aq hiq 1(0)"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 270)
     end
 
@@ -829,7 +833,19 @@ function AQSELF.settingInit()
         t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 270)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 255
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq bs 1"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 290)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Set equipment button spacing to 1 (default 3)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 290)
+    end
+
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 275
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

@@ -38,7 +38,7 @@ function AQSELF.createItemBar()
 	AQSELF.customSlots()
 
 	f:SetFrameStrata("MEDIUM")
-	f:SetWidth(#AQSELF.slots * (43) + 10)
+	f:SetWidth(#AQSELF.slots * (40 + AQSV.buttonSpacing) + 10)
 	f:SetHeight(40)
 	f:SetScale(AQSV.barZoom)
 
@@ -209,6 +209,8 @@ function AQSELF.createItemButton( slot_id, position )
 		_, itemTexture = GetInventorySlotInfo(AQSELF.slotName[slot_id])
 	end
 
+	button.itemId = itemId
+
 	-- 不然会继承parent的按键设置
 	button:RegisterForClicks("AnyDown")
 
@@ -316,12 +318,12 @@ function AQSELF.createItemButton( slot_id, position )
 	-- end)
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 +3), 0)
+   	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 + AQSV.buttonSpacing), 0)
    	button:Show()
 
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
-		AQSELF.showTooltip("inventory", slot_id)
+		AQSELF.showTooltip(self, "inventory", button.itemId, slot_id)
 
 		if UnitAffectingCombat("player") and AQSV.shiftLeftShowDropdown then
 			return
@@ -354,7 +356,7 @@ function AQSELF.showDropdown(slot_id, position)
 		-- 推算出真实id
 		local rid = AQSELF.reverseId(v)
 		if v ~= itemId1 and v ~= itemId2 and v > 0 then
-			AQSELF.createItemDropdown(v, 43 * (position - 1), index, slot_id)
+			AQSELF.createItemDropdown(v, (40 + AQSV.buttonSpacing) * (position - 1), index, slot_id)
 			index = index + 1
 		elseif AQSELF.itemButtons[v] then
 			AQSELF.itemButtons[v]:Hide()
@@ -404,7 +406,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 
 	-- 如果已经创建过物品图层，只修改位置
 	if AQSELF.itemButtons[item_id] then
-		AQSELF.itemButtons[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x + newX * 43, 5+43 * newY)
+		AQSELF.itemButtons[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
 		AQSELF.itemButtons[item_id]:Show()
 		-- 点击图标是获取正确的slot
 		AQSELF.itemButtons[item_id].inSlot = slot_id
@@ -459,7 +461,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", AQSELF.bar, x + newX * 43, 5+43 * newY)
+   	button:SetPoint("TOPLEFT", AQSELF.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
    	button:Show()
 
    	button:SetScript("OnEnter", function(self)
@@ -470,7 +472,7 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 
 		-- print(item_id, bag, slot)
 
-		AQSELF.showTooltip("bag", bag, slot)
+		AQSELF.showTooltip( self, "bag", item_id, bag, slot)
 	end)
    	button:SetScript("OnLeave", function( self )
    		-- 开启隐藏计时
@@ -508,6 +510,9 @@ end
 function AQSELF.updateItemButton( slot_id )
 	local itemId = GetInventoryItemID("player", slot_id)
 	local button = AQSELF.slotFrames[slot_id]
+
+	button.itemId = itemId
+
 	local itemTexture = ""
 	if itemId then
 		itemTexture = GetItemTexture(itemId)
@@ -542,7 +547,7 @@ end
 -- 绘制下方的饰品队列
 function AQSELF.createCooldownUnit( item_id, position )
 	local f = CreateFrame("Frame", nil, AQSELF.bar)
-	-- f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - 43 - (position - 1) * 23)
+	-- f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - (40 + AQSV.buttonSpacing) - (position - 1) * 23)
 	f:SetSize(20, 20)
 
 	f:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -568,19 +573,31 @@ function AQSELF.createCooldownUnit( item_id, position )
 	return f
 end
 
-function AQSELF.showTooltip( t, arg1, arg2 )
+function AQSELF.showTooltip( button, t, item_id, arg1, arg2 )
 
 	if not AQSV.hideTooltip then
 		local tooltip = _G["GameTooltip"]
 	    tooltip:ClearLines()
-		tooltip:SetOwner(UIParent)
-		GameTooltip_SetDefaultAnchor(tooltip, UIParent)
 
-		if t == "inventory" then
-			tooltip:SetInventoryItem("player", arg1)
-		elseif t == "bag" then
-			tooltip:SetBagItem(arg1, arg2)
-		end
+	    -- AQSV.simpleTooltip = true
+
+	    if AQSV.simpleTooltip then
+	    	tooltip:SetOwner(button, ANCHOR_LEFT, 0, -35)
+	    	-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
+
+    		local link = AQSELF.GetItemLink(item_id)
+			tooltip:SetText(link)
+
+	    else
+	    	tooltip:SetOwner(UIParent)
+			GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+
+			if t == "inventory" then
+				tooltip:SetInventoryItem("player", arg1)
+			elseif t == "bag" then
+				tooltip:SetBagItem(arg1, arg2)
+			end
+	    end
 		
 	    tooltip:Show()
 	end
@@ -691,7 +708,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 				    	if not AQSELF.list[slot_id][v] then
 				    		AQSELF.list[slot_id][v] = AQSELF.createCooldownUnit(v, k)
 				    	end
-				    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -43 - (k - 1) * 23)
+				    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -(40 + AQSV.buttonSpacing) - (k - 1) * 23)
 
 				    	if not AQSV.hideItemQueue then
 				    		AQSELF.list[slot_id][v]:Show()
@@ -701,7 +718,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 					    	if AQSV.reverseCooldownUnit then
 					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , 30 + (k - 1) * 23)
 					    	else
-					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -43 - (k - 1) * 23)
+					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -(43) - (k - 1) * 23)
 					    	end
 				    	else
 				    		AQSELF.list[slot_id][v]:Hide()
@@ -741,3 +758,5 @@ function AQSELF.cooldownUpdate( self, elapsed )
 
     end
 end
+
+
