@@ -23,6 +23,7 @@ local locale = GetLocale()
 
 L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Alliance]\124h\124r \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Horde]\124h\124r."
 L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff1eff00[Mithril Spurs]|r|cffffffff[Riding Skill]|r when riding (Not in Instance). "
+L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r when swiming."
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
 L[60] = color("00FF00", "General")
@@ -38,6 +39,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Enable AutoEquip function"] = "启用自动装备功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
+	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
@@ -124,9 +126,9 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Feet"] = "脚"
 	L["Wrist"] = "手腕"
 	L["Hands"] = "手"
-	L["Fingers "] = "手指"
-	L["Trinkets "] = "饰品"
-	L["Cloaks"] = "背部"
+	L["Finger "] = "手指"
+	L["Trinket "] = "饰品"
+	L["Back"] = "背部"
 	L["MainHand"] = "主手"
 	L["OffHand"] = "副手"
 	L["Ranged"] = "远程"
@@ -163,4 +165,10 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["AutoEquip function |cFF00FF00Enabled|r"] = "自动装备功能|cFF00FF00启用|r"
 	L["AutoEquip function |cFFFF0000Disabled|r"] = "自动装备功能|cFFFF0000停用|r"
+
+	L["|cFFFF0000Disable|r  the display of item list when moseover"] = "|cFFFF0000停用|r鼠标经过时显示装备列表"
+	L["|cFF00FF00Enable|r the display of item list when moseover"] = "|cFF00FF00启用e|r鼠标经过时显示装备列表"
+	L["-- Disable the display of item list when moseover (enable 0)"] = "-- 鼠标经过时不显示装备列表（显示0）"
+	L["Hide popup addon info at the top of screen"] = "隐藏屏幕上方的插件提示"
+	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
 end

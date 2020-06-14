@@ -228,7 +228,7 @@ function AQSELF.createItemButton( slot_id, position )
     -- 右键解锁
     button:SetAttribute("shift-type1", "showDropdown")
     button.showDropdown = function( ... )
-    	if AQSV.shiftLeftShowDropdown  then
+    	if AQSV.shiftLeftShowDropdown or AQSV.disableMouseover  then
     		AQSELF.showDropdown(slot_id, position)
     	end
     end
@@ -324,6 +324,10 @@ function AQSELF.createItemButton( slot_id, position )
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
 		AQSELF.showTooltip(self, "inventory", button.itemId, slot_id)
+
+		if AQSV.disableMouseover then
+			return
+		end
 
 		if UnitAffectingCombat("player") and AQSV.shiftLeftShowDropdown then
 			return

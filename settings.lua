@@ -531,9 +531,9 @@ function AQSELF.settingInit()
 
     buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
-    buildSlotCheckbox(L["Fingers "]..1, 11, slotCheckbosHeight, 265)
-    buildSlotCheckbox(L["Fingers "]..2, 12, slotCheckbosHeight, 375)
-    buildSlotCheckbox(L["Cloaks"], 15, slotCheckbosHeight, 485)
+    buildSlotCheckbox(L["Finger "]..1, 11, slotCheckbosHeight, 265)
+    buildSlotCheckbox(L["Finger "]..2, 12, slotCheckbosHeight, 375)
+    buildSlotCheckbox(L["Back"], 15, slotCheckbosHeight, 485)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -590,14 +590,16 @@ function AQSELF.settingInit()
 
     buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", otherHight)
     buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight-25)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-50)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-75)
-    buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-100)
-    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-125)
-    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-150)
-    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-175)
+    buildCheckbox(L["enable_swim"], "enableSwim", otherHight-50)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-75)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-100)
+    buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-125)
+    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-150)
+    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-175)
+    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-200)
+    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-225)
 
-    otherHight = otherHight - 175
+    otherHight = otherHight - 225
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -845,7 +847,31 @@ function AQSELF.settingInit()
         t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 290)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 275
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq dm 1"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 310)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Disable the display of item list when moseover (enable 0)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 310)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/aq pp 0,0"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 330)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Set popup info to the center of screen (default 0,320)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 330)
+    end
+
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 295
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

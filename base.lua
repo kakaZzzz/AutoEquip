@@ -332,6 +332,18 @@ AQSELF.findCarrot = function( id, slot_id, link )
     end
 end
 
+AQSELF.findSwim = function( id, slot_id )
+
+    -- 找到水藤或者碧蓝腰带，保存起来
+    if id == 7052 or id == 9452 then
+        AQSELF["swim"..slot_id] = id
+    end
+
+    if not tContains(AQSELF.needSlots, slot_id) and AQSELF["swim"..slot_id]>0 then
+        table.insert(AQSELF.needSlots, slot_id)
+    end
+end
+
 AQSELF.equipByID = function(item_id, slot_id)
 
     if item_id > 100000 then
@@ -359,6 +371,10 @@ end
 AQSELF.infoFrameIndex = 0
 
 AQSELF.popupInfo = function(text)
+
+    if AQSV.hidePopupInfo then
+        return
+    end
     
     -- 最多显示5条
     if AQSELF.infoFrameIndex >= 5 then
@@ -387,7 +403,7 @@ AQSELF.popupInfo = function(text)
     f:Hide()
 
     f:SetOwner(UIParent, "ANCHOR_NONE")
-    f:SetPoint("CENTER", UIParent,  0, -40*(AQSELF.infoFrameIndex - 1) + 320 )
+    f:SetPoint("CENTER", UIParent,  AQSV.popupX, -40*(AQSELF.infoFrameIndex - 1) + AQSV.popupY )
 
     f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
     f:SetBackdropColor(0,0,0,0.8);
@@ -415,7 +431,8 @@ AQSELF.popupInfo = function(text)
         animOut:SetStartDelay(2)
         f.moveOut:SetScript("OnFinished",function() 
             f:Hide()
-            AQSELF.infoFrameIndex = AQSELF.infoFrameIndex - 1
+            AQSELF.infoFrameIndex = 0
+            -- AQSELF.debug(AQSELF.infoFrameIndex)
         end)
     end
 

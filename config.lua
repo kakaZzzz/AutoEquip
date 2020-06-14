@@ -6,7 +6,7 @@ local L = AQSELF.L
 
 -- 配置 --
 
-AQSELF.version = "v4.10"
+AQSELF.version = "v4.11"
 
 -- AQSELF.enableDebug = true          -- 调试开关
 AQSELF.enableDebug = false          -- 调试开关
@@ -55,11 +55,11 @@ AQSELF.slotToName = {
 	[8] = L["Feet"],
 	[9] = L["Wrist"],
 	[10] = L["Hands"],
-	[11] = L["Fingers "]..1,
-	[12] = L["Fingers "]..2,
-	[13] = L["Trinkets "]..1,
-	[14] = L["Trinkets "]..2,
-	[15] = L["Cloaks"],
+	[11] = L["Finger "]..1,
+	[12] = L["Finger "]..2,
+	[13] = L["Trinket "]..1,
+	[14] = L["Trinket "]..2,
+	[15] = L["Back"],
 	[16] = L["MainHand"],
 	[17] = L["OffHand"],
 	[18] = L["Ranged"],

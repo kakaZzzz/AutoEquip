@@ -7,6 +7,8 @@ local L = AQSELF.L
 local initSV = AQSELF.initSV
 local loopSlots = AQSELF.loopSlots
 local chatInfo = AQSELF.chatInfo
+local chatInfo = AQSELF.chatInfo
+local popupInfo = AQSELF.popupInfo
 
 
 -- 主函数 --
@@ -62,6 +64,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
             AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
             AQSV.enableCarrot = initSV(AQSV.enableCarrot, true)
+            AQSV.enableSwim = initSV(AQSV.enableSwim, true)
             AQSV.slot13 = initSV(AQSV.slot13, 0)
             AQSV.slot14 = initSV(AQSV.slot14, 0)
             AQSV.queue13 = initSV(AQSV.queue13, {})
@@ -82,6 +85,9 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
             AQSV.backup8 = initSV(AQSV.backup8, 0)
             AQSV.backup10 = initSV(AQSV.backup10, 0)
+            AQSV.backup6 = initSV(AQSV.backup6, 0)
+            AQSV.backup16 = initSV(AQSV.backup16, 0)
+            AQSV.backup17 = initSV(AQSV.backup17, 0)
 
             AQSV.slot13Locked = initSV(AQSV.slot13Locked, false)
             AQSV.slot14Locked = initSV(AQSV.slot14Locked, false)
@@ -127,8 +133,13 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.buttonSpacing = initSV(AQSV.buttonSpacing, 3)
 
             AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
-
             AQSV.simpleTooltip = initSV(AQSV.simpleTooltip, false)
+
+            AQSV.disableMouseover = initSV(AQSV.disableMouseover, false)
+            AQSV.hidePopupInfo = initSV(AQSV.hidePopupInfo, false)
+
+            AQSV.popupX = initSV(AQSV.popupX, 0)
+            AQSV.popupY = initSV(AQSV.popupY, 320)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -266,6 +277,16 @@ function AQSELF.mainInit()
                 chatInfo(L["Set Equipment button spacing to "]..AQSELF.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
             end
 
+        elseif strfind(msg, "dm") then
+
+            if strfind(msg, "1") then
+                AQSV.disableMouseover = true
+                chatInfo(L["|cFFFF0000Disable|r  the display of item list when moseover"])
+            elseif strfind(msg, "0") then
+                AQSV.disableMouseover = false
+                chatInfo(L["|cFF00FF00Enable|r the display of item list when moseover"])
+            end
+
         elseif strfind(msg, "ceb") then
 
             local _, str = strsplit(" ", msg)
@@ -293,6 +314,25 @@ function AQSELF.mainInit()
                 chatInfo(L["Custom equipment bar |cFF00FF00SUCCESS|r."]..L[" Please reload UI manually (/reload)."])
                 AQSV.customSlots = new
             end
+
+        elseif strfind(msg, "pp") then
+
+            local _, str = strsplit(" ", msg)
+
+            str = string.gsub(str,"，", ",")
+
+            local x,y = strsplit(",", strtrim(str))
+
+            x = tonumber(x)
+            y = tonumber(y)
+
+            if x and y then
+                AQSV.popupX = x
+                AQSV.popupY = y
+                chatInfo(L["Set popup info to a new position"])
+                popupInfo(L["Set popup info to a new position"])
+            end
+
 
         elseif strfind(msg, "hiq") then
 
@@ -329,7 +369,8 @@ function AQSELF.mainInit()
 
         if event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED" then
             local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
-            debug(zonetext)
+            debug(GetSubZoneText())
+            debug(GetZoneText())
             -- local uiMapID = C_Map.GetBestMapForUnit("player")
             -- debug(uiMapID)
             -- print(UnitPosition("player"))

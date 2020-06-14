@@ -9,6 +9,9 @@ AQSELF.carrot = 0
 AQSELF.ride10 = 0
 AQSELF.ride8 = 0
 
+AQSELF.swim6 = 0
+AQSELF.swim16 = 0
+
 -- 缓存胡萝卜换下的饰品
 -- AQSELF.carrotBackup = 0
 
