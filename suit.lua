@@ -33,6 +33,128 @@ function AQSELF.suitInit()
         end
     end
 
+    function AQSELF.updateMembersTarget()
+
+        if not UnitInRaid("player") and not UnitInParty("player") then
+            return
+        end
+
+        local count = 0
+        local level63 = 0
+        local level64 = 0
+        
+        if UnitInRaid("player") then
+
+            for i=1,MAX_RAID_MEMBERS  do
+                
+                local name = GetRaidRosterInfo(i)
+                local target = "raid"..i.."target"
+
+                -- 如果有成员
+                if name and UnitIsEnemy("player", target) and not UnitIsDead(target) then
+
+                    count = count + 1
+
+                    local level = UnitLevel(target)
+
+                    if level == 63 then
+                    -- if level == 60 or level == 62 or level == 61 then
+                       level63 = level63 + 1
+                    elseif level == -1 then
+                    -- elseif level == 61 then
+                        level64 = level64 + 1
+                    end
+
+                end
+
+            end
+
+        elseif UnitInParty("player") then
+
+            for i=1,MAX_PARTY_MEMBERS  do
+                
+                local name = GetPartyMember(i)
+                local target = "party"..i.."target"
+
+                if name and UnitIsEnemy("player", target) and not UnitIsDead(target) then
+
+                    local level = UnitLevel(target)
+
+                    if level == 63 then
+                    -- if level == 60 or level == 62 or level == 61 then
+                       level63 = level63 + 1
+                    elseif level == -1 then
+                    -- elseif level == 61 then
+                        level64 = level64 + 1
+                    end
+
+                end
+
+            end
+
+        end
+
+
+        local ratio63 = level63 / count
+        local ratio64 = level64 / count
+
+        if ratio63 > 0.2 and ratio63 > ratio64 then
+            debug(ratio63)
+            debug(ratio64)
+            AQSV.needSuit = 63
+            AQSELF.needSuitTimestamp = GetTime()
+        end
+
+        if ratio64 > 0.2 and ratio64 > ratio63 then
+            debug(ratio63)
+            debug(ratio64)
+            AQSV.needSuit = 64
+            AQSELF.needSuitTimestamp = GetTime()
+        end
+
+
+    end
+
+    function AQSELF.checkAndFireChangeSuit(target)
+
+        local level = UnitLevel(target)
+
+        if level == 0 then
+            return false
+        end
+
+        local boss = 60
+
+        -- debug(GetUnitName(target))
+
+        if level == 63 then
+        -- if level == 60 or level == 62 or level == 61 then
+            boss = 63
+        elseif level == -1 then
+        -- elseif level == 61 then
+            boss = 64
+        end
+
+        if (target ~= "target" and boss == 60) or (boss == 60 and not AQSV.enableTargetSuit60) then
+            return
+        end
+
+        -- print(boss,UnitAffectingCombat("player"))
+        -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
+        if level ~= 0 and UnitIsEnemy("player", target) and not UnitIsDead(target) and AQSELF.playerCanEquip() then
+            -- print(boss,UnitAffectingCombat("player"))
+            -- AQSELF.changeSuit(boss)               
+           AQSV.needSuit = boss
+           AQSELF.needSuitTimestamp = GetTime()
+
+           return true
+
+        else
+            return false
+        end
+
+    end
+
     function AQSELF.changeSuit(boss)
 
         if not AQSV.enableSuit then

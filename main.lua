@@ -111,6 +111,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             AQSV.buffNames = initSV(AQSV.buffNames, L["Unstable Power, Mind Quickening"])
             AQSV.additionItems = initSV(AQSV.additionItems, "14023/0")
+            AQSV.blockItems = initSV(AQSV.blockItems, "6219,5956")
 
             AQSV.barZoom = initSV(AQSV.barZoom, 1)
             AQSV.buffZoom = initSV(AQSV.buffZoom, 1)
@@ -202,6 +203,8 @@ AQSELF.onMainUpdate = function(self, elapsed)
         -- 自动换奥妮克希亚披风
         -- AQSELF.equipOnyxiaCloak()
 
+        AQSELF.updateMembersTarget()
+
         AQSELF.checkAllWait()
 
         if AQSV.needSuit then
@@ -248,6 +251,7 @@ function AQSELF.mainInit()
                  AQSELF.cancelLocker(k)
              end
              chatInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
+             popupInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
 
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
@@ -351,6 +355,8 @@ function AQSELF.mainInit()
     AQSELF.main:RegisterEvent("UPDATE_BINDINGS")
     AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
     AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
+    AQSELF.main:RegisterEvent("UNIT_TARGET") 
+
     AQSELF.main:RegisterEvent("BAG_UPDATE") 
     -- AQSELF.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
     -- AQSELF.main:RegisterEvent("ZONE_CHANGED_INDOORS") 
@@ -377,11 +383,52 @@ function AQSELF.mainInit()
             
         end
 
+        -- 脱离战斗的事件
         if event == "PLAYER_REGEN_ENABLED" then
             if AQSV.enableSuit and AQSV.enableAutoSuit60 then
                 AQSV.needSuit = 60
                 AQSELF.needSuitTimestamp = GetTime()
             end
+
+            -- 执行一系列更换逻辑
+            AQSELF.checkAllWait()
+
+            if AQSV.needSuit then
+                if GetTime() - AQSELF.needSuitTimestamp > 1 then
+                    AQSELF.changeSuit(AQSV.needSuit)
+                    AQSV.needSuit = false
+                    AQSELF.needSuitTimestamp = 0
+                end
+            end
+
+            -- 自动更换饰品
+            loopSlots(function(slot_id)
+                if slot_id == 13 then
+                    AQSELF.changeTrinket()
+                else
+                    AQSELF.changeItem(slot_id)
+                end
+            end)
+        end
+
+
+        if event == "UNIT_TARGET" then
+            -- debug(arg1)
+
+            if not AQSELF.playerCanEquip() then
+                return 
+            end
+
+            if not AQSV.enableSuit then
+                return
+            end
+
+            if arg1 == "player" then
+
+            else
+                AQSELF.checkAndFireChangeSuit(arg1.."target")
+            end
+  
         end
 
         if event == "BAG_UPDATE" then
@@ -390,33 +437,15 @@ function AQSELF.mainInit()
 
         if event == "PLAYER_TARGET_CHANGED" then
 
+            if not AQSELF.playerCanEquip() then
+                return 
+            end
+
             if not AQSV.enableSuit then
                 return
             end
 
-            local level = UnitLevel("target")
-            local boss = 60
-
-            if level == 63 then
-            -- if level == 6 then
-                boss = 63
-            elseif level == -1 then
-            -- elseif level == 7 then
-                boss = 64
-            end
-
-            if boss == 60 and not AQSV.enableTargetSuit60 then
-                return
-            end
-
-            -- print(boss,UnitAffectingCombat("player"))
-            -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
-            if level ~= 0 and UnitIsEnemy("player", "target") and not UnitIsDead("target") and AQSELF.playerCanEquip() then
-                -- print(boss,UnitAffectingCombat("player"))
-                -- AQSELF.changeSuit(boss)               
-               AQSV.needSuit = boss
-               AQSELF.needSuitTimestamp = GetTime()
-            end
+            AQSELF.checkAndFireChangeSuit("target")
         end
 
     end)

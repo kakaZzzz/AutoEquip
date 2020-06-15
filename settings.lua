@@ -683,7 +683,7 @@ function AQSELF.settingInit()
 
     AQSELF.lastHeight = AQSELF.lastHeight - 185
 
-        -- 自定义buff
+    -- 自定义buff
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Custom Buff Alert:"])
@@ -722,6 +722,51 @@ function AQSELF.settingInit()
         b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
         b:SetScript("OnClick", function(self)
             AQSV.buffNames = e:GetText()
+        end)
+    end
+
+    AQSELF.lastHeight = AQSELF.lastHeight - 160
+
+    -- 自定义buff
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Block Items:"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - ItemID,ItemID,ItemID"])
+        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+    end
+
+    do
+
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        s:SetSize(350,80)
+        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+        s:SetBackdropBorderColor(1,1,1,0.7);
+        local e = CreateFrame("EditBox", nil, s)
+        e:SetMultiLine(true)
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(300)
+        -- AQSV.buffNames = nil
+        -- print(AQSV.buffNames[2])
+        e:SetText(AQSV.blockItems)
+        e:SetTextInsets(8,8,8,8)
+        e:SetAutoFocus(false)
+
+        s:SetScrollChild(e)
+
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Submit & Reload UI"])
+        b:SetWidth(160)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
+        b:SetScript("OnClick", function(self)
+            AQSV.blockItems = e:GetText()
+            C_UI.Reload()
         end)
     end
 

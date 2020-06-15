@@ -23,6 +23,7 @@ local AddonEquipItemByName = AQSELF.AddonEquipItemByName
 -- 初始化插件
 function AQSELF.addonInit()
 
+        AQSELF.buildBlockTable()
         AQSELF.addItems()
 
         AQSELF.updateAllItems( )
@@ -95,7 +96,23 @@ function aq_test( )
         print(info)
     end
 
+end
+
+AQSELF.buildBlockTable =function()
     
+    AQSELF.blockTable = {}
+
+    local str = string.gsub(AQSV.blockItems,"，", ",")
+
+    local t = {strsplit(",", strtrim(str))}
+
+    for k,v in pairs(t) do
+        v = tonumber(v)
+
+        if v then
+            table.insert(AQSELF.blockTable, v)
+        end
+    end
 
 end
 
@@ -279,7 +296,8 @@ AQSELF.checkItems = function( )
                 -- fix：背包槽位是空的时候，会中断循环
                 local id = GetContainerItemID(i,s)
 
-                -- if id ~= "" then
+                -- 不在屏蔽列表里
+                if not tContains(AQSELF.blockTable, id) then
                      local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
 
                      -- debug(itemEquipLoc)
@@ -347,7 +365,7 @@ AQSELF.checkItems = function( )
                         table.insert(AQSELF.items[18], id)
                     end
                     
-                -- end
+                end
             end  
         end
     end
