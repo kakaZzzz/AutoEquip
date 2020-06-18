@@ -26,7 +26,7 @@ AQSELF.main = CreateFrame("Frame")
 -- 计数器
 AQSELF.main.TimeSinceLastUpdate = 0
 -- 函数执行间隔时间
-AQSELF.main.Interval = 1
+AQSELF.main.Interval = 0.5
 AQSELF.main.garbageCount = 0
 
 AQSELF.onMainUpdate = function(self, elapsed)
@@ -142,6 +142,9 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.popupX = initSV(AQSV.popupX, 0)
             AQSV.popupY = initSV(AQSV.popupY, 320)
 
+            AQSV.enableMembersTarget = initSV(AQSV.enableMembersTarget, false)
+            AQSV.raidTargetThreshold = initSV(AQSV.raidTargetThreshold, 1)
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(AQSELF.slotToName) do
@@ -207,13 +210,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
         AQSELF.checkAllWait()
 
-        if AQSV.needSuit then
-            if GetTime() - AQSELF.needSuitTimestamp > 1 then
-                AQSELF.changeSuit(AQSV.needSuit)
-                AQSV.needSuit = false
-                AQSELF.needSuitTimestamp = 0
-            end
-        end
+        AQSELF.changeSuit()
 
         -- 自动更换饰品
 
@@ -232,6 +229,7 @@ end
 function AQSELF.mainInit()
 
     SLASH_AQCMD1 = "/aq";
+    SLASH_AQCMD2 = "/autoequip";
     function SlashCmdList.AQCMD(msg)
 
         debug(msg)
@@ -256,8 +254,8 @@ function AQSELF.mainInit()
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
             if AQSELF.playerCanEquip()  then
-                AQSV.needSuit = tonumber(msg)
-                AQSELF.needSuitTimestamp = GetTime()
+                print(tonumber(msg))
+                AQSELF.needSuit = tonumber(msg)
             else
                 chatInfo(L["|cFF00FF00In combat|r"])
             end
@@ -279,6 +277,16 @@ function AQSELF.mainInit()
             if n > 0 then
                 AQSV.buttonSpacing = n
                 chatInfo(L["Set Equipment button spacing to "]..AQSELF.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
+            end
+
+        elseif strfind(msg, "rm") then
+
+            -- equipment button spacing
+            local n = tonumber(strmatch(msg, "%d+"))
+
+            if n > 0 then
+                AQSV.raidTargetThreshold = n
+                chatInfo(L["Set threshold of member's target to "]..AQSV.raidTargetThreshold)
             end
 
         elseif strfind(msg, "dm") then
@@ -355,7 +363,7 @@ function AQSELF.mainInit()
     AQSELF.main:RegisterEvent("UPDATE_BINDINGS")
     AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
     AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
-    AQSELF.main:RegisterEvent("UNIT_TARGET") 
+    -- AQSELF.main:RegisterEvent("UNIT_TARGET") 
 
     AQSELF.main:RegisterEvent("BAG_UPDATE") 
     -- AQSELF.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
@@ -385,21 +393,21 @@ function AQSELF.mainInit()
 
         -- 脱离战斗的事件
         if event == "PLAYER_REGEN_ENABLED" then
+
+            -- 脱战也要判断一下其他状态
+            if not AQSELF.playerCanEquip() then
+                return 
+            end
+
             if AQSV.enableSuit and AQSV.enableAutoSuit60 then
-                AQSV.needSuit = 60
-                AQSELF.needSuitTimestamp = GetTime()
+                AQSELF.needSuit = 60
             end
 
             -- 执行一系列更换逻辑
             AQSELF.checkAllWait()
 
-            if AQSV.needSuit then
-                if GetTime() - AQSELF.needSuitTimestamp > 1 then
-                    AQSELF.changeSuit(AQSV.needSuit)
-                    AQSV.needSuit = false
-                    AQSELF.needSuitTimestamp = 0
-                end
-            end
+
+            AQSELF.changeSuit()
 
             -- 自动更换饰品
             loopSlots(function(slot_id)
@@ -412,24 +420,24 @@ function AQSELF.mainInit()
         end
 
 
-        if event == "UNIT_TARGET" then
-            -- debug(arg1)
+        -- if event == "UNIT_TARGET" then
+        --     -- debug(arg1)
 
-            if not AQSELF.playerCanEquip() then
-                return 
-            end
+        --     if not AQSELF.playerCanEquip() then
+        --         return 
+        --     end
 
-            if not AQSV.enableSuit then
-                return
-            end
+        --     if not AQSV.enableSuit then
+        --         return
+        --     end
 
-            if arg1 == "player" then
+        --     if arg1 == "player" then
 
-            else
-                AQSELF.checkAndFireChangeSuit(arg1.."target")
-            end
+        --     else
+        --         AQSELF.checkAndFireChangeSuit(arg1.."target")
+        --     end
   
-        end
+        -- end
 
         if event == "BAG_UPDATE" then
             AQSELF.updateAllItems( )

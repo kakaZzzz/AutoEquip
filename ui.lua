@@ -262,6 +262,19 @@ function AQSELF.createItemButton( slot_id, position )
     
     button.text = text
 
+    -- 显示快捷键
+
+	local stext = tf:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+	stext:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
+	-- stext:SetTextColor(255,255,255)
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
+	stext:SetText("ASJ")
+    stext:SetPoint("BOTTOMLEFT", button, 1, 1)
+    stext:Hide()
+    
+    button.shortcut = stext
+
     -- 冷却动画层
     local cooldown = CreateFrame("Frame", nil, button)
     -- 设0不成功
@@ -281,7 +294,7 @@ function AQSELF.createItemButton( slot_id, position )
     -- 设0不成功
     wait:SetSize(20, 20)
     wait:SetPoint("BOTTOMRIGHT", button, 0, 0)
-    wait:SetFrameLevel(5)
+    wait:SetFrameLevel(6)
     wait:Hide()
     wait:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
 	wait:SetBackdropBorderColor(0,0,0,0.9);
@@ -297,7 +310,7 @@ function AQSELF.createItemButton( slot_id, position )
     -- 设0不成功
     locker:SetSize(16, 16)
     locker:SetPoint("BOTTOMRIGHT", button, 0, 2)
-    locker:SetFrameLevel(4)
+    locker:SetFrameLevel(5)
 
    	local t3 = locker:CreateTexture(nil, "BACKGROUND")
 	t3:SetAllPoints(locker)
@@ -535,12 +548,18 @@ function AQSELF.bindingSlot( )
 	for k,v in pairs(AQSELF.slotFrames) do
 		ClearOverrideBindings(v)
 
+		v.shortcut:SetText("")
+		v.shortcut:Hide()
+
 		local keys = {GetBindingKey("AUTOEQUIP_BUTTON"..k)}
 
 		for k1,v1 in pairs(keys) do
 
 			if v1 and v1 ~= "" then
 				SetOverrideBindingClick(v, false, v1, "AQBTN"..k)
+				local s = AQSELF.shortKey(v1)
+				v.shortcut:SetText(s)
+				v.shortcut:Show()
 			end
 		end
 	end

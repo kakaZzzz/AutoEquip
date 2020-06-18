@@ -36,7 +36,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Loaded"] = " 加载完毕"
 	L["Enable"] = "启用"
-	L["Enable AutoEquip function"] = "启用自动装备功能"
+	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
 	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r"
@@ -93,8 +93,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["-- Enable/disable AutoEquip function"] = "-- 启用/禁用自动更换装备功能"
 	L["-- Open settings"] = "-- 打开设置页面"
-	L["-- Enable/disable PVP mode manually"] = "-- 手动启动/禁用PVP模式"
-	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动装备功能不生效）"
+	L["-- Enable/disable PVP mode manually"] = "-- 手动启用/禁用PVP模式"
+	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动换装功能不生效）"
 	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
 	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
 	L["-- Set equipment button spacing to 1 (default 3)"] = "-- 将装备栏按钮间距设置为1（默认是3）"
@@ -103,14 +103,14 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
 	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/aq unlock"
 	L["3. Before using item, the button will be unlocked automatically."] = "3. 使用物品后，对应装备栏按钮将会自动解锁"
-	L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动装备、装备栏、Buff提醒，三个功能可以独立启用/禁用"
+	L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动换装、装备栏、Buff提醒，三个功能可以独立启用/禁用"
 
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
 
 	L["Zoom"] = "缩放"
 	L["Mode:"] = "模式:"
 	L["Slot:"] = "装备栏:"
-	L["Hide black translucent background"] = "隐藏黑色半透明背景"
+	L["Hide black translucent border"] = "隐藏黑色半透明边框"
 	L["#Effective after ENTER"] = "#回车后生效"
 	L["Hide tooltip when the mouse moves over the button"] = "鼠标在装备栏按钮上停留时不显示提示框"
 	L["[Empty]"] = "[空]"
@@ -140,7 +140,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Suit for 63+"] = "63+套装"
 	L["Usable Queue"] = "主动队列"
 
-	L["Equip customized suit when you target lv.63 elite and lv.?? boss"] = "当目标为63级精英或??级Boss时，装备自定义的套装"
+	L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"] = "[启用]当目标为63级精英或??级Boss时，装备自定义的套装"
+	L["Equip suit when more than 3 raid members target lv.63 elite or boss"] = "当团队中超过3人目标是63级精英或者Boss时，装备套装"
 	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
 	L["#Autosave current inventories to Suit "..L[60]] = "#自动将当前装备保存成"..L[60].."套装"
 	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "当目标为63级以下的敌方单位，装备"..L[60].."套装"
@@ -163,12 +164,13 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Equip "] = "装备"
 
-	L["AutoEquip function |cFF00FF00Enabled|r"] = "自动装备功能|cFF00FF00启用|r"
-	L["AutoEquip function |cFFFF0000Disabled|r"] = "自动装备功能|cFFFF0000停用|r"
+	L["AutoEquip function |cFF00FF00Enabled|r"] = "自动换装功能|cFF00FF00启用|r"
+	L["AutoEquip function |cFFFF0000Disabled|r"] = "自动换装功能|cFFFF0000停用|r"
 
 	L["|cFFFF0000Disable|r  the display of item list when moseover"] = "|cFFFF0000停用|r鼠标经过时显示装备列表"
 	L["|cFF00FF00Enable|r the display of item list when moseover"] = "|cFF00FF00启用e|r鼠标经过时显示装备列表"
 	L["-- Disable the display of item list when moseover (enable 0)"] = "-- 鼠标经过时不显示装备列表（显示0）"
 	L["Hide popup addon info at the top of screen"] = "隐藏屏幕上方的插件提示"
 	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
+	L["|cFF00FF00Unlocked|r all equipment buttons"] = "|cFF00FF00解锁|r全部装备栏按钮"
 end

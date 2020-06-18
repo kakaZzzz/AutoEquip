@@ -29,8 +29,8 @@ AQSELF.slotFrames = {}
 
 AQSELF.realtimeQueue = {}
 
-AQSELF.needSuit = false
-AQSELF.needSuitTimestamp = 0
+AQSELF.needSuit = 0
+AQSELF.currentSuit = 0
 
 -- 避免数组内容泄露，全程缓存数组
 AQSELF.empty1 = {}			-- realtimeQueue/core

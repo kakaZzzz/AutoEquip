@@ -160,6 +160,24 @@ AQSELF.loopSlots = function( func )
     end
 end
 
+AQSELF.shortKey = function(v)
+    
+    local t = {strsplit("-", v)}
+    local s = ""
+
+    for i=1,#t-1 do
+        s = s..strsub(t[i],1,1)
+    end
+
+    s = s..t[#t]
+
+    if strlen(s) > 3 then
+        s = strsub(s, 1, 3).."..."
+    end
+
+    return s
+end
+
 -- 调试函数
 AQSELF.debug = function( t )
     if not AQSELF.enableDebug then
@@ -344,7 +362,11 @@ AQSELF.findSwim = function( id, slot_id )
     end
 end
 
-AQSELF.equipByID = function(item_id, slot_id)
+AQSELF.equipByID = function(item_id, slot_id, popup)
+
+    if popup == nil then
+        popup = true
+    end
 
     if item_id > 100000 then
         local bag,slot = AQSELF.reverseBagSlot(item_id)
@@ -362,17 +384,26 @@ AQSELF.equipByID = function(item_id, slot_id)
     local rid = AQSELF.reverseId(item_id)
 
     local link = AQSELF.GetItemLink(rid)
-    
-    AQSELF.popupInfo(L["Equip "]..link)
 
-end    
+    if popup then
+        AQSELF.popupInfo(L["Equip "]..link)
+    end
+
+end
 
 
 AQSELF.infoFrameIndex = 0
+AQSELF.infoTexts = {}
 
 AQSELF.popupInfo = function(text)
 
     if AQSV.hidePopupInfo then
+        return
+    end
+
+    -- 避免短时的多次显示
+    -- print(AQSELF.infoTexts, tostring(text), tContains(AQSELF.infoTexts, text))
+    if tContains(AQSELF.infoTexts, text) then
         return
     end
     
@@ -412,6 +443,7 @@ AQSELF.popupInfo = function(text)
         f:SetText("...")
     else
         f:SetText(text)
+        table.insert(AQSELF.infoTexts, text)
     end
 
     _G["AutoEquip_Popup"..AQSELF.infoFrameIndex.."TextLeft1"]:SetFont(STANDARD_TEXT_FONT, 14)
@@ -432,6 +464,7 @@ AQSELF.popupInfo = function(text)
         f.moveOut:SetScript("OnFinished",function() 
             f:Hide()
             AQSELF.infoFrameIndex = 0
+            wipe(AQSELF.infoTexts)
             -- AQSELF.debug(AQSELF.infoFrameIndex)
         end)
     end

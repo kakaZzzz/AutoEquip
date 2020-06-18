@@ -469,7 +469,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     -- 饰品已经使用，并且超过了buff时间
     -- 剩余时间要大于30，避免饰品使用后，但是cd快到了，还被换下
     -- 主动CD锁判断
-    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] + 1 and slot["rest"] > 30 and not AQSV.slotStatus[slot_id].lockedCD then
+    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] and slot["rest"] > 30 and not AQSV.slotStatus[slot_id].lockedCD then
         slot["busy"] = false
         -- 饰品使用后，取消锁定
         AQSELF.cancelLocker( slot_id )
@@ -757,7 +757,6 @@ function AQSELF.changeTrinket()
     end
 
     if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
-        debug("last")
         AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
     end
 end
@@ -922,11 +921,15 @@ function AQSELF.cancelLocker( slot_id )
     AQSV.slotStatus[slot_id].lockedTime = 0
 end
 
-function AQSELF.equipWait(item_id, slot_id)
+function AQSELF.equipWait(item_id, slot_id, popup)
+
+    if popup == nil then
+        popup = true
+    end
 
     local rid = AQSELF.reverseId(item_id)
 
-    AQSELF.equipByID(item_id, slot_id)
+    AQSELF.equipByID(item_id, slot_id, popup)
 
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil

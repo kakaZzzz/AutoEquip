@@ -468,7 +468,7 @@ function AQSELF.settingInit()
 
     buildCheckbox(L["Enable Equipment Bar"], "enableItemBar", -85)
     buildCheckbox(L["Lock frame"], "locked", -85, 190)
-    buildCheckbox(L["Hide black translucent background"], "hideBackdrop", -110, 190)
+    buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
