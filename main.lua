@@ -85,6 +85,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
             AQSV.backup8 = initSV(AQSV.backup8, 0)
             AQSV.backup10 = initSV(AQSV.backup10, 0)
+            AQSV.backup1 = initSV(AQSV.backup1, 0)
             AQSV.backup6 = initSV(AQSV.backup6, 0)
             AQSV.backup16 = initSV(AQSV.backup16, 0)
             AQSV.backup17 = initSV(AQSV.backup17, 0)
@@ -121,7 +122,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
             AQSV.suit[63] = initSV(AQSV.suit[63], {})
             AQSV.suit[64] = initSV(AQSV.suit[64], {})
             AQSV.suit[60] = initSV(AQSV.suit[60], {})
-            AQSV.currentSuit = initSV(AQSV.currentSuit, 60)
+            AQSV.currentSuit = initSV(AQSV.currentSuit, 0)
             AQSV.enableSuit = initSV(AQSV.enableSuit, false)
             AQSV.enableAutoSuit60 = initSV(AQSV.enableAutoSuit60, false)
             AQSV.enableTargetSuit60 = initSV(AQSV.enableTargetSuit60, false)
@@ -399,7 +400,8 @@ function AQSELF.mainInit()
                 return 
             end
 
-            if AQSV.enableSuit and AQSV.enableAutoSuit60 then
+            -- 避免每次脱离战斗都触发
+            if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and AQSELF.inInstance() then
                 AQSELF.needSuit = 60
             end
 
@@ -450,6 +452,10 @@ function AQSELF.mainInit()
             end
 
             if not AQSV.enableSuit then
+                return
+            end
+
+            if not AQSELF.inInstance() then
                 return
             end
 

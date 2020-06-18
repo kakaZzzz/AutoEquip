@@ -39,6 +39,10 @@ function AQSELF.suitInit()
             return
         end
 
+        if not AQSELF.inInstance() then
+            return
+        end
+
         if not UnitInRaid("player") then
             return
         end
@@ -147,7 +151,7 @@ function AQSELF.suitInit()
 
         local boss = AQSELF.needSuit
 
-        if boss == 0 or boss == AQSELF.currentSuit then
+        if boss == 0 or boss == AQSV.currentSuit then
             return
         end
 
@@ -231,13 +235,13 @@ function AQSELF.suitInit()
 
         if res then
 
-            if AQSELF.currentSuit ~= boss then
+            if AQSV.currentSuit ~= boss then
                 AQSELF.popupInfo(L["Equip "]..L["Suit "..L[boss]])
                 AQSELF.chatInfo(L["Equip "]..L["Suit "..L[boss]])
             end
 
             AQSELF.needSuit = 0
-            AQSELF.currentSuit = boss
+            AQSV.currentSuit = boss
         end
 
         debug(res)
@@ -301,12 +305,12 @@ function AQSELF.suitInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["#Autosave current inventories to Suit "..L[60]])
+        t:SetText(L["#The following options only take effect in instance"])
         t:SetPoint("TOPLEFT", f, 52, -58)
     end
 
     buildCheckbox(L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"], "enableSuit", -25)
-    buildCheckbox(L["Equip suit when more than 3 raid members target lv.63 elite or boss"], "enableMembersTarget", -75)
+    buildCheckbox(L["Equip suit when more than 1 raid members target lv.63 elite or boss"], "enableMembersTarget", -75)
     buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -100)
     buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -125)
 

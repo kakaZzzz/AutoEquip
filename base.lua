@@ -353,7 +353,7 @@ end
 AQSELF.findSwim = function( id, slot_id )
 
     -- 找到水藤或者碧蓝腰带，保存起来
-    if id == 7052 or id == 9452 then
+    if id == 7052 or id == 9452 or id == 10506 then
         AQSELF["swim"..slot_id] = id
     end
 

@@ -277,7 +277,7 @@ AQSELF.checkItems = function( )
                     findCarrot(id, i, link)
                 elseif i == 13 or i == 14 then
                     findCarrot(id, 13)
-                elseif i == 6 or i == 16 then
+                elseif i == 1 and i == 6 or i == 16 then
                     findSwim(id, i)
                 end
 
@@ -324,6 +324,7 @@ AQSELF.checkItems = function( )
                         table.insert(AQSELF.items[5], id)
                     elseif itemEquipLoc == "INVTYPE_HEAD" then
                         table.insert(AQSELF.items[1], id)
+                        findSwim(id, 1)
                     elseif itemEquipLoc == "INVTYPE_NECK" then
                         table.insert(AQSELF.items[2], id)
                     elseif itemEquipLoc == "INVTYPE_SHOULDER" then
@@ -565,7 +566,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换水藤
-    if tContains({6,16}, slot_id) and AQSELF["swim"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableSwim  then
+    if tContains({1,6,16}, slot_id) and AQSELF["swim"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableSwim  then
 
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if IsSwimming() then
@@ -574,23 +575,9 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
                 AQSV["backup"..slot_id] = slot["id"]
 
-                if slot_id == 16 then
-
-                    local slot17 = GetInventoryItemID("player", 17)
-
-                    -- 修正slot为空时出现的问题
-                    if slot17 == nil then
-                        slot17 = 0
-                    end
-
-                    AQSV["backup17"] = slot17
-
-                end
-
                 -- 存在两个相同物品的可能
                 AQSELF.equipByID(AQSELF["swim"..slot_id], slot_id)
-
-                
+  
             end
             -- 骑马时一直busy，中断更换主动饰品的逻辑
             slot["busy"] = true
@@ -600,26 +587,14 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
             if AQSV["backup"..slot_id] == AQSELF["swim"..slot_id] then
                 AQSV["backup"..slot_id] = 0
-
-                if slot_id == 16 then
-                     AQSV["backup17"] = 0
-                end
             end
 
             if AQSV["backup"..slot_id] == slot["id"] then
                 AQSV["backup"..slot_id] = 0
-
-                if slot_id == 16 then
-                     AQSV["backup17"] = 0
-                end
             end
             
             if AQSV["backup"..slot_id] > 0 then
                 AddonEquipItemByName(AQSV["backup"..slot_id], slot_id)
-
-                if slot_id == 16 and AQSV["backup17"] > 0 then
-                     AddonEquipItemByName(AQSV["backup17"], 17)
-                end
             end
         end
     end

@@ -23,7 +23,7 @@ local locale = GetLocale()
 
 L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Alliance]\124h\124r \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Horde]\124h\124r."
 L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff1eff00[Mithril Spurs]|r|cffffffff[Riding Skill]|r when riding (Not in Instance). "
-L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r when swiming."
+L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r|cff1eff00[Deepdive Helmet]|r when swiming."
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
 L[60] = color("00FF00", "General")
@@ -39,7 +39,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
-	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r"
+	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
@@ -141,9 +141,9 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Usable Queue"] = "主动队列"
 
 	L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"] = "[启用]当目标为63级精英或??级Boss时，装备自定义的套装"
-	L["Equip suit when more than 3 raid members target lv.63 elite or boss"] = "当团队中超过3人目标是63级精英或者Boss时，装备套装"
+	L["Equip suit when more than 1 raid members target lv.63 elite or boss"] = "当团队中超过1人目标是63级精英或者Boss时，装备套装"
 	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
-	L["#Autosave current inventories to Suit "..L[60]] = "#自动将当前装备保存成"..L[60].."套装"
+	L["#The following options only take effect in instance"] = "#以下选项只在副本中生效"
 	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "当目标为63级以下的敌方单位，装备"..L[60].."套装"
 	L["Suit "..L[64]] = L[64].."套装"
 	L["Suit "..L[63]] = L[63].."套装"

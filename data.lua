@@ -9,6 +9,7 @@ AQSELF.carrot = 0
 AQSELF.ride10 = 0
 AQSELF.ride8 = 0
 
+AQSELF.swim1 = 0
 AQSELF.swim6 = 0
 AQSELF.swim16 = 0
 
