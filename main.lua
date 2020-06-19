@@ -231,6 +231,7 @@ function AQSELF.mainInit()
 
     SLASH_AQCMD1 = "/aq";
     SLASH_AQCMD2 = "/autoequip";
+    SLASH_AQCMD2 = "/ae";
     function SlashCmdList.AQCMD(msg)
 
         debug(msg)

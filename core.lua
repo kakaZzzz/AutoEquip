@@ -173,10 +173,10 @@ AQSELF.initGroupCheckbox = function(slot_id)
 
     for k,v in pairs(AQSV.usableItems[slot_id]) do
         if AQSV.pvpTrinkets[v] == nil then
-            AQSV.pvpTrinkets[v] = true
+            AQSV.pvpTrinkets[v] = false
         end
         if AQSV.pveTrinkets[v] == nil then
-            AQSV.pveTrinkets[v] = true
+            AQSV.pveTrinkets[v] = false
         end
         if AQSV.queue13[v] == nil then
             AQSV.queue13[v] = true
@@ -575,6 +575,19 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
                 AQSV["backup"..slot_id] = slot["id"]
 
+                if slot_id == 16 then
+
+                    local slot17 = GetInventoryItemID("player", 17)
+
+                    -- 修正slot为空时出现的问题
+                    if slot17 == nil then
+                        slot17 = 0
+                    end
+
+                    AQSV["backup17"] = slot17
+
+                end
+
                 -- 存在两个相同物品的可能
                 AQSELF.equipByID(AQSELF["swim"..slot_id], slot_id)
   
@@ -586,15 +599,28 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
         elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
 
             if AQSV["backup"..slot_id] == AQSELF["swim"..slot_id] then
+
+                if slot_id == 16 then
+                     AQSV["backup17"] = 0
+                end
+
                 AQSV["backup"..slot_id] = 0
             end
 
             if AQSV["backup"..slot_id] == slot["id"] then
                 AQSV["backup"..slot_id] = 0
+
+                if slot_id == 16 then
+                     AQSV["backup17"] = 0
+                end
             end
             
             if AQSV["backup"..slot_id] > 0 then
                 AddonEquipItemByName(AQSV["backup"..slot_id], slot_id)
+
+                if slot_id == 16 and AQSV["backup17"] > 0 then
+                     AddonEquipItemByName(AQSV["backup17"], 17)
+                end
             end
         end
     end

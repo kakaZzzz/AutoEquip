@@ -86,7 +86,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Submit"] = "提交"
 	L["Submit & Reload UI"] = "提交并重载UI"
 
-	L["Command:"] = "命令行:"
+	L["Command (/aq /autoequip are valid):"] = "命令行（也可用 /aq /autoequip）:"
 	L["Advanced Settings:"] = "进阶设置:"
 	L["DRAG"] = "拖拽"
 	L[" Enable PVP mode"] = " 启用PVP模式"
@@ -98,6 +98,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
 	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
 	L["-- Set equipment button spacing to 1 (default 3)"] = "-- 将装备栏按钮间距设置为1（默认是3）"
+	L["-- Set threshold of member's target to 3 (default 1)"] = "-- 将团员目标阈值设置为3（默认是1）"
 
 
 	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
@@ -173,4 +174,5 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Hide popup addon info at the top of screen"] = "隐藏屏幕上方的插件提示"
 	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
 	L["|cFF00FF00Unlocked|r all equipment buttons"] = "|cFF00FF00解锁|r全部装备栏按钮"
+	L["Set threshold of member's target to "] = "将团员目标阈值设置为"
 end

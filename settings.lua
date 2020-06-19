@@ -774,13 +774,13 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Command:"])
+        t:SetText(L["Command (/aq /autoequip are valid):"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 60)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq"])
+        t:SetText(L["/ae"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
     end
 
@@ -792,7 +792,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq settings"])
+        t:SetText(L["/ae settings"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
     end
 
@@ -804,7 +804,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq pvp"])
+        t:SetText(L["/ae pvp"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 125)
     end
 
@@ -816,7 +816,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq unlock"])
+        t:SetText(L["/ae unlock"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
     end
 
@@ -828,7 +828,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText("/aq 60(63/64)")
+        t:SetText("/ae 60(63/64)")
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 165)
     end
 
@@ -846,7 +846,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq ips 5"])
+        t:SetText(L["/ae ips 5"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 230)
     end
 
@@ -858,7 +858,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq ceb 5,13,16"])
+        t:SetText(L["/ae ceb 5,13,16"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 250)
     end
 
@@ -870,7 +870,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq hiq 1(0)"])
+        t:SetText(L["/ae hiq 1(0)"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 270)
     end
 
@@ -882,7 +882,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq bs 1"])
+        t:SetText(L["/ae bs 1"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 290)
     end
 
@@ -894,7 +894,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq dm 1"])
+        t:SetText(L["/ae dm 1"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 310)
     end
 
@@ -906,7 +906,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/aq pp 0,0"])
+        t:SetText(L["/ae pp 0,0"])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 330)
     end
 
@@ -916,7 +916,19 @@ function AQSELF.settingInit()
         t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 330)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 295
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/ae rm 3"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 350)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Set threshold of member's target to 3 (default 1)"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 350)
+    end
+
+    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 335
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -932,7 +944,7 @@ function AQSELF.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["2. Right click or use the '/aq unlock' command will unlock the button."])
+        t:SetText(L["2. Right click or use the '/ae unlock' command will unlock the button."])
         t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
     end
 

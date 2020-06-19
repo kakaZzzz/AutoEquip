@@ -246,9 +246,12 @@ end
 
 AQSELF.GetEnchanitID = function(link)
     
-    local _, enchantId = link:match("item:(%d+):(%d+)")
-
-    return enchantId
+    if link then
+        local _, enchantId = link:match("item:(%d+):(%d+)")
+        return enchantId
+    else
+        return 0
+    end
 end
 
 AQSELF.GetItemEquipLoc = function( id )

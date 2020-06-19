@@ -1,7 +1,7 @@
 ## Interface: 11304
 ## Title: AutoEquip
 ## Author: kaka
-## Version: 4.11
+## Version: 4.12
 ## Notes: Swap item by the customized priority automatically.
 ## Notes-zhCN: 按照自定义的优先级自动更换装备。
 ## SavedVariablesPerCharacter: AQSV
