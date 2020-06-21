@@ -598,6 +598,15 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
         elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
 
+                     
+            if AQSV["backup"..slot_id] > 0 then
+                AddonEquipItemByName(AQSV["backup"..slot_id], slot_id)
+
+                if slot_id == 16 and AQSV["backup17"] > 0 then
+                     AddonEquipItemByName(AQSV["backup17"], 17)
+                end
+            end
+
             if AQSV["backup"..slot_id] == AQSELF["swim"..slot_id] then
 
                 if slot_id == 16 then
@@ -615,13 +624,6 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 end
             end
             
-            if AQSV["backup"..slot_id] > 0 then
-                AddonEquipItemByName(AQSV["backup"..slot_id], slot_id)
-
-                if slot_id == 16 and AQSV["backup17"] > 0 then
-                     AddonEquipItemByName(AQSV["backup17"], 17)
-                end
-            end
         end
     end
 
