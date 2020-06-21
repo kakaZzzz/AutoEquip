@@ -1,20 +1,20 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local merge = AQSELF.merge
-local initSV = AQSELF.initSV
+local merge = SELFAQ.merge
+local initSV = SELFAQ.initSV
 
 
 -- 棍子上的胡萝卜、骑乘手套、马刺鞋
-AQSELF.carrot = 0
-AQSELF.ride10 = 0
-AQSELF.ride8 = 0
+SELFAQ.carrot = 0
+SELFAQ.ride10 = 0
+SELFAQ.ride8 = 0
 
-AQSELF.swim1 = 0
-AQSELF.swim6 = 0
-AQSELF.swim16 = 0
+SELFAQ.swim1 = 0
+SELFAQ.swim6 = 0
+SELFAQ.swim16 = 0
 
 -- 缓存胡萝卜换下的饰品
--- AQSELF.carrotBackup = 0
+-- SELFAQ.carrotBackup = 0
 
 -- 常见的主动饰品id和buff持续时间数据
 local buffTime = {}	
@@ -110,17 +110,17 @@ buffTime[17744] = 0						-- 诺克赛恩之心
 
 
 -- 主动饰品集合
-AQSELF.usable = {}
-AQSELF.pveSet = {}
+SELFAQ.usable = {}
+SELFAQ.pveSet = {}
 
-AQSELF.usable[13] = {}
-AQSELF.pveSet[13] = {}
+SELFAQ.usable[13] = {}
+SELFAQ.pveSet[13] = {}
 
 for k,v in pairs(buffTime) do
-	table.insert(AQSELF.pveSet[13], k)
+	table.insert(SELFAQ.pveSet[13], k)
 end
 
-AQSELF.buffTime = buffTime
+SELFAQ.buffTime = buffTime
 
 -- 衣服5
 
@@ -128,28 +128,28 @@ AQSELF.buffTime = buffTime
 -- tempBuffTime[14152] = 0				-- 大法师之袍
 
 -- -- 可使用的胸甲集合
--- AQSELF.usable[5] = {}
+-- SELFAQ.usable[5] = {}
 
 -- for k,v in pairs(tempBuffTime) do
--- 	table.insert(AQSELF.usable[5], k)
+-- 	table.insert(SELFAQ.usable[5], k)
 -- end
 
--- AQSELF.buffTime = merge(AQSELF.buffTime, tempBuffTime)
+-- SELFAQ.buffTime = merge(SELFAQ.buffTime, tempBuffTime)
 
 -- 联盟、部落各个职业的徽记
-AQSELF.pvpSet = {
+SELFAQ.pvpSet = {
 	18854,18856,18857,18858,18859,18862,18863,18864,
 	18834,18845,18846,18849,18850,18851,18852,18853
 }
 
-AQSELF.usable[13] = merge(AQSELF.pveSet[13], AQSELF.pvpSet)
+SELFAQ.usable[13] = merge(SELFAQ.pveSet[13], SELFAQ.pvpSet)
 
 -- 徽记的buff时间都是0
-for k,v in pairs(AQSELF.pvpSet) do
-	AQSELF.buffTime[v] = 0
+for k,v in pairs(SELFAQ.pvpSet) do
+	SELFAQ.buffTime[v] = 0
 end
 
 -- 记录当前角色的徽记
-AQSELF.pvp = {}
+SELFAQ.pvp = {}
 
 -- 配置结束 --

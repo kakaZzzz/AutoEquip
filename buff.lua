@@ -1,17 +1,17 @@
 
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local player = AQSELF.player
-local GetItemTexture = AQSELF.GetItemTexture
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local L = SELFAQ.L
+local player = SELFAQ.player
+local GetItemTexture = SELFAQ.GetItemTexture
 
-function AQSELF.createBuffIcon()
+function SELFAQ.createBuffIcon()
 		-- 选择BUTTON类似，才能触发鼠标事件
 	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent)
-	AQSELF.buff = f
+	SELFAQ.buff = f
 
 	f:SetFrameStrata("HIGH")
 	f:SetWidth(40)
@@ -64,7 +64,7 @@ function AQSELF.createBuffIcon()
 	menu[1]["checked"] = AQSV.buffLocked
 	menu[1]["func"] = function()
 		AQSV.buffLocked = not AQSV.buffLocked
-		AQSELF.lockBuff()
+		SELFAQ.lockBuff()
 		menu[1]["checked"] = AQSV.locked
 	end
 
@@ -83,7 +83,7 @@ function AQSELF.createBuffIcon()
 	end)
 
 	-- 定位判断
-	AQSELF.lockBuff()
+	SELFAQ.lockBuff()
 
 	-- 实现拖动
 	f:SetScript("OnDragStart", f.StartMoving)
@@ -97,7 +97,7 @@ function AQSELF.createBuffIcon()
 	f.TimeSinceLastUpdate = 0
 	-- 函数执行间隔时间
 	f.Interval = 0.2
-	f:SetScript("OnUpdate", AQSELF.onBuffChanged)
+	f:SetScript("OnUpdate", SELFAQ.onBuffChanged)
 
 	if AQSV.enableBuff then
 		f:Show()
@@ -107,28 +107,28 @@ function AQSELF.createBuffIcon()
 
 end
 
-function AQSELF.lockBuff()
+function SELFAQ.lockBuff()
 
-	AQSELF.buff.menuList[1]["checked"] = AQSV.buffLocked
+	SELFAQ.buff.menuList[1]["checked"] = AQSV.buffLocked
 	
-	AQSELF.buff:EnableMouse(not AQSV.buffLocked)
-	AQSELF.buff:SetMovable(not AQSV.buffLocked)
-	AQSELF.buff:RegisterForDrag("LeftButton")
+	SELFAQ.buff:EnableMouse(not AQSV.buffLocked)
+	SELFAQ.buff:SetMovable(not AQSV.buffLocked)
+	SELFAQ.buff:RegisterForDrag("LeftButton")
 
-	AQSELF.f.checkbox["buffLocked"]:SetChecked(AQSV.buffLocked)
+	SELFAQ.f.checkbox["buffLocked"]:SetChecked(AQSV.buffLocked)
 
 	if AQSV.buffLocked then
-		AQSELF.buff.drag:Hide()
-		AQSELF.buff:SetAlpha(0)
-		AQSELF.buff:SetBackdropColor(0,0,0,0)
+		SELFAQ.buff.drag:Hide()
+		SELFAQ.buff:SetAlpha(0)
+		SELFAQ.buff:SetBackdropColor(0,0,0,0)
 	else
-		AQSELF.buff.drag:Show()
-		AQSELF.buff:SetAlpha(1)
-		AQSELF.buff:SetBackdropColor(0,0,0,1)
+		SELFAQ.buff.drag:Show()
+		SELFAQ.buff:SetAlpha(1)
+		SELFAQ.buff:SetBackdropColor(0,0,0,1)
 	end
 end
 
-function AQSELF.onBuffChanged(self, elapsed)
+function SELFAQ.onBuffChanged(self, elapsed)
 	self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
     if (self.TimeSinceLastUpdate > self.Interval) then
@@ -154,19 +154,19 @@ function AQSELF.onBuffChanged(self, elapsed)
 			if buffTime > 60 then
 				buffTime = math.ceil(buffTime / 60).."m"
 			end
-			AQSELF.buff.texture:SetTexture(icon)
-			AQSELF.buff:SetAlpha(1)
-			AQSELF.buff.buffTime:SetText(buffTime)
+			SELFAQ.buff.texture:SetTexture(icon)
+			SELFAQ.buff:SetAlpha(1)
+			SELFAQ.buff.buffTime:SetText(buffTime)
 			if count > 0 then
-				AQSELF.buff.count:SetText(count)
+				SELFAQ.buff.count:SetText(count)
 			end
 		else
-			AQSELF.buff.texture:SetTexture()
-			AQSELF.buff.count:SetText()
+			SELFAQ.buff.texture:SetTexture()
+			SELFAQ.buff.count:SetText()
 			if AQSV.buffLocked then
-				AQSELF.buff:SetAlpha(0)
+				SELFAQ.buff:SetAlpha(0)
 			end
-			AQSELF.buff.buffTime:SetText()
+			SELFAQ.buff.buffTime:SetText()
 		end
 	end
 end

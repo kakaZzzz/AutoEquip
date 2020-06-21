@@ -1,12 +1,12 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local color = AQSELF.color
+local color = SELFAQ.color
 
-AQSELF.color =  function( rgb, text )
+SELFAQ.color =  function( rgb, text )
     return "|cFF"..rgb..text.."|r"
 end
 
-local color = AQSELF.color
+local color = SELFAQ.color
 
 local L = setmetatable({}, {
     __index = function(table, key)
@@ -17,7 +17,7 @@ local L = setmetatable({}, {
     end,
 })
 
-AQSELF.L = L
+SELFAQ.L = L
 
 local locale = GetLocale()
 

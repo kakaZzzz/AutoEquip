@@ -1,35 +1,35 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local initSV = AQSELF.initSV
-local loopSlots = AQSELF.loopSlots
-local chatInfo = AQSELF.chatInfo
-local chatInfo = AQSELF.chatInfo
-local popupInfo = AQSELF.popupInfo
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local L = SELFAQ.L
+local initSV = SELFAQ.initSV
+local loopSlots = SELFAQ.loopSlots
+local chatInfo = SELFAQ.chatInfo
+local chatInfo = SELFAQ.chatInfo
+local popupInfo = SELFAQ.popupInfo
 
 
 -- 主函数 --
 
-for k,v in pairs(AQSELF.gearSlots) do
-    _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = AQSELF.slotToName[v]
+for k,v in pairs(SELFAQ.gearSlots) do
+    _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = SELFAQ.slotToName[v]
 end
 
 -- _G.BINDING_NAME_AUTOEQUIP_BUTTON14 = L['Trinket Slot ']..2
 _G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Equipment Bar Button"]
 
 -- 注册事件
-AQSELF.main = CreateFrame("Frame")
+SELFAQ.main = CreateFrame("Frame")
 
 -- 计数器
-AQSELF.main.TimeSinceLastUpdate = 0
+SELFAQ.main.TimeSinceLastUpdate = 0
 -- 函数执行间隔时间
-AQSELF.main.Interval = 0.5
-AQSELF.main.garbageCount = 0
+SELFAQ.main.Interval = 0.5
+SELFAQ.main.garbageCount = 0
 
-AQSELF.onMainUpdate = function(self, elapsed)
+SELFAQ.onMainUpdate = function(self, elapsed)
 
     self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
@@ -54,12 +54,12 @@ AQSELF.onMainUpdate = function(self, elapsed)
         end
 
         -- 插件初始化，包括构建选项菜单
-        if not AQSELF.init then
+        if not SELFAQ.init then
 
             -- 初始化全局变量
             AQSV = initSV(AQSV, {})
-            AQSV.usableItems = initSV(AQSV.usableItems, AQSELF.usable)
-            AQSV.usableChests = initSV(AQSV.usableChests, AQSELF.usableChests)
+            AQSV.usableItems = initSV(AQSV.usableItems, SELFAQ.usable)
+            AQSV.usableChests = initSV(AQSV.usableChests, SELFAQ.usableChests)
             AQSV.enable = initSV(AQSV.enable, true)
             AQSV.enableBattleground = initSV(AQSV.enableBattleground, true)
             AQSV.disableSlot14 = initSV(AQSV.disableSlot14, false)
@@ -148,7 +148,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
-                for k,v in pairs(AQSELF.slotToName) do
+                for k,v in pairs(SELFAQ.slotToName) do
                     AQSV.slotStatus[k] = {
                         ["backup"] = 0,
                         ["locked"] = false,
@@ -158,28 +158,28 @@ AQSELF.onMainUpdate = function(self, elapsed)
                 end
             end
 
-            AQSELF.addonInit()
-            AQSELF.createItemBar()
-            AQSELF.createBuffIcon()
-            AQSELF.mainInit( )
+            SELFAQ.addonInit()
+            SELFAQ.createItemBar()
+            SELFAQ.createBuffIcon()
+            SELFAQ.mainInit( )
 
             chatInfo(L["Loaded"])
 
-            AQSELF.init = true
+            SELFAQ.init = true
 
         end
 
         -- 记录装备栏位置
-        if AQSELF.bar then
-            local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.bar:GetPoint()
+        if SELFAQ.bar then
+            local point, relativeTo, relativePoint, xOfs, yOfs = SELFAQ.bar:GetPoint()
             AQSV.x = xOfs
             AQSV.y = yOfs
             AQSV.point = point
         end
 
         -- 记录buff提醒位置
-        if AQSELF.buff then
-            local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.buff:GetPoint()
+        if SELFAQ.buff then
+            local point, relativeTo, relativePoint, xOfs, yOfs = SELFAQ.buff:GetPoint()
             AQSV.xBuff = xOfs
             AQSV.yBuff = yOfs
             AQSV.pointBuff = point
@@ -200,26 +200,26 @@ AQSELF.onMainUpdate = function(self, elapsed)
         end
 
         -- 角色处在战斗状态或跑尸状态，不进行换饰品逻辑，退出函数
-        if not AQSELF.playerCanEquip() then
+        if not SELFAQ.playerCanEquip() then
             return 
         end
 
         -- 自动换奥妮克希亚披风
-        -- AQSELF.equipOnyxiaCloak()
+        -- SELFAQ.equipOnyxiaCloak()
 
-        AQSELF.updateMembersTarget()
+        SELFAQ.updateMembersTarget()
 
-        AQSELF.checkAllWait()
+        SELFAQ.checkAllWait()
 
-        AQSELF.changeSuit()
+        SELFAQ.changeSuit()
 
         -- 自动更换饰品
 
         loopSlots(function(slot_id)
             if slot_id == 13 then
-                AQSELF.changeTrinket()
+                SELFAQ.changeTrinket()
             else
-                AQSELF.changeItem(slot_id)
+                SELFAQ.changeItem(slot_id)
             end
         end)
         
@@ -227,7 +227,7 @@ AQSELF.onMainUpdate = function(self, elapsed)
 end
 
 
-function AQSELF.mainInit()
+function SELFAQ.mainInit()
 
     SLASH_AQCMD1 = "/aq";
     SLASH_AQCMD2 = "/autoequip";
@@ -237,27 +237,27 @@ function AQSELF.mainInit()
         debug(msg)
 
         if msg == "" then
-            AQSELF.enableAutoEuquip()
+            SELFAQ.enableAutoEuquip()
 
         elseif msg == "settings" then
-             InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
-             InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
+             InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
+             InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
 
         elseif msg == "pvp" then
-            AQSELF. enablePvpMode()
+            SELFAQ. enablePvpMode()
 
         elseif msg == "unlock" then
              for k,v in pairs(AQSV.slotStatus) do
-                 AQSELF.cancelLocker(k)
+                 SELFAQ.cancelLocker(k)
              end
              chatInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
              popupInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
 
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
-            if AQSELF.playerCanEquip()  then
+            if SELFAQ.playerCanEquip()  then
                 print(tonumber(msg))
-                AQSELF.needSuit = tonumber(msg)
+                SELFAQ.needSuit = tonumber(msg)
             else
                 chatInfo(L["|cFF00FF00In combat|r"])
             end
@@ -278,7 +278,7 @@ function AQSELF.mainInit()
 
             if n > 0 then
                 AQSV.buttonSpacing = n
-                chatInfo(L["Set Equipment button spacing to "]..AQSELF.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
+                chatInfo(L["Set Equipment button spacing to "]..SELFAQ.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
             end
 
         elseif strfind(msg, "rm") then
@@ -361,26 +361,26 @@ function AQSELF.mainInit()
         end
     end
 
-    AQSELF.main:RegisterEvent("UNIT_INVENTORY_CHANGED")
-    AQSELF.main:RegisterEvent("UPDATE_BINDINGS")
-    AQSELF.main:RegisterEvent("PLAYER_REGEN_ENABLED")
-    AQSELF.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
-    -- AQSELF.main:RegisterEvent("UNIT_TARGET") 
+    SELFAQ.main:RegisterEvent("UNIT_INVENTORY_CHANGED")
+    SELFAQ.main:RegisterEvent("UPDATE_BINDINGS")
+    SELFAQ.main:RegisterEvent("PLAYER_REGEN_ENABLED")
+    SELFAQ.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
+    -- SELFAQ.main:RegisterEvent("UNIT_TARGET") 
 
-    AQSELF.main:RegisterEvent("BAG_UPDATE") 
-    -- AQSELF.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
-    -- AQSELF.main:RegisterEvent("ZONE_CHANGED_INDOORS") 
-    -- AQSELF.main:RegisterEvent("ZONE_CHANGED") 
+    SELFAQ.main:RegisterEvent("BAG_UPDATE") 
+    -- SELFAQ.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
+    -- SELFAQ.main:RegisterEvent("ZONE_CHANGED_INDOORS") 
+    -- SELFAQ.main:RegisterEvent("ZONE_CHANGED") 
 
-    AQSELF.main:SetScript("OnEvent", function( self, event, arg1 )
+    SELFAQ.main:SetScript("OnEvent", function( self, event, arg1 )
         if event == "UNIT_INVENTORY_CHANGED" and arg1 == "player" then
-            for k,v in pairs(AQSELF.slots) do
-                AQSELF.updateItemButton( v )
+            for k,v in pairs(SELFAQ.slots) do
+                SELFAQ.updateItemButton( v )
             end
         end
 
         if event == "UPDATE_BINDINGS" then
-            AQSELF.bindingSlot()
+            SELFAQ.bindingSlot()
         end
 
         if event == "ZONE_CHANGED_NEW_AREA" or event == "ZONE_CHANGED_INDOORS" or event == "ZONE_CHANGED" then
@@ -397,27 +397,27 @@ function AQSELF.mainInit()
         if event == "PLAYER_REGEN_ENABLED" then
 
             -- 脱战也要判断一下其他状态
-            if not AQSELF.playerCanEquip() then
+            if not SELFAQ.playerCanEquip() then
                 return 
             end
 
             -- 避免每次脱离战斗都触发
-            if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and AQSELF.inInstance() then
-                AQSELF.needSuit = 60
+            if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and SELFAQ.inInstance() then
+                SELFAQ.needSuit = 60
             end
 
             -- 执行一系列更换逻辑
-            AQSELF.checkAllWait()
+            SELFAQ.checkAllWait()
 
 
-            AQSELF.changeSuit()
+            SELFAQ.changeSuit()
 
             -- 自动更换饰品
             loopSlots(function(slot_id)
                 if slot_id == 13 then
-                    AQSELF.changeTrinket()
+                    SELFAQ.changeTrinket()
                 else
-                    AQSELF.changeItem(slot_id)
+                    SELFAQ.changeItem(slot_id)
                 end
             end)
         end
@@ -426,7 +426,7 @@ function AQSELF.mainInit()
         -- if event == "UNIT_TARGET" then
         --     -- debug(arg1)
 
-        --     if not AQSELF.playerCanEquip() then
+        --     if not SELFAQ.playerCanEquip() then
         --         return 
         --     end
 
@@ -437,18 +437,18 @@ function AQSELF.mainInit()
         --     if arg1 == "player" then
 
         --     else
-        --         AQSELF.checkAndFireChangeSuit(arg1.."target")
+        --         SELFAQ.checkAndFireChangeSuit(arg1.."target")
         --     end
   
         -- end
 
         if event == "BAG_UPDATE" then
-            AQSELF.updateAllItems( )
+            SELFAQ.updateAllItems( )
         end
 
         if event == "PLAYER_TARGET_CHANGED" then
 
-            if not AQSELF.playerCanEquip() then
+            if not SELFAQ.playerCanEquip() then
                 return 
             end
 
@@ -456,15 +456,15 @@ function AQSELF.mainInit()
                 return
             end
 
-            if not AQSELF.inInstance() then
+            if not SELFAQ.inInstance() then
                 return
             end
 
-            AQSELF.checkAndFireChangeSuit("target")
+            SELFAQ.checkAndFireChangeSuit("target")
         end
 
     end)
 end
 
 
-AQSELF.main:SetScript("OnUpdate", AQSELF.onMainUpdate)
+SELFAQ.main:SetScript("OnUpdate", SELFAQ.onMainUpdate)

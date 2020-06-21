@@ -1,14 +1,14 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local GetItemLink = AQSELF.GetItemLink
-local player = AQSELF.player
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local L = SELFAQ.L
+local GetItemLink = SELFAQ.GetItemLink
+local player = SELFAQ.player
 
 -- 设置菜单初始化
-function AQSELF.settingInit()
+function SELFAQ.settingInit()
 
     
     local top = CreateFrame("Frame", nil, UIParent)
@@ -22,14 +22,14 @@ function AQSELF.settingInit()
     local helpOption = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local helpFrame = CreateFrame("Frame", nil, helpOption)
     
-    AQSELF.general = p
-    AQSELF.f = f
+    SELFAQ.general = p
+    SELFAQ.f = f
 
-    AQSELF.queueOption = queueOption
-    AQSELF.queueFrame = queueFrame
+    SELFAQ.queueOption = queueOption
+    SELFAQ.queueFrame = queueFrame
 
-    AQSELF.helpOption = helpOption
-    AQSELF.helpFrame = helpFrame
+    SELFAQ.helpOption = helpOption
+    SELFAQ.helpFrame = helpFrame
 
     top.name = "AutoEquip"
 
@@ -42,9 +42,9 @@ function AQSELF.settingInit()
     helpOption.name = L["Help"]
     helpOption.parent = "AutoEquip"
 
-    AQSELF.lastHeight = -475
-    AQSELF.lastHeightQueue = -30
-    AQSELF.lastHeightHelp = 30
+    SELFAQ.lastHeight = -475
+    SELFAQ.lastHeightQueue = -30
+    SELFAQ.lastHeightHelp = 30
 
     -- 缓存主动饰品下拉框
     f.dropdown = {}
@@ -59,13 +59,13 @@ function AQSELF.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        t:SetText(L["AutoEquip "]..AQSELF.version)
+        t:SetText(L["AutoEquip "]..SELFAQ.version)
         t:SetPoint("TOPLEFT", f, 25, -20)
     end
 
     do
         local t = top:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        t:SetText(L["AutoEquip "]..AQSELF.version)
+        t:SetText(L["AutoEquip "]..SELFAQ.version)
         t:SetPoint("TOPLEFT", top, 25, -20)
     end
 
@@ -152,7 +152,7 @@ function AQSELF.settingInit()
         level = level or 1;
         if (level == 1) then
             local slot_id = self.slot
-         for k, v in ipairs(AQSELF.items[slot_id]) do
+         for k, v in ipairs(SELFAQ.items[slot_id]) do
            local info = UIDropDownMenu_CreateInfo();
            -- info.hasArrow = true; -- creates submenu
            info.text = GetItemLink(v);
@@ -207,35 +207,35 @@ function AQSELF.settingInit()
 
         line:SetWidth(570)
         line:SetHeight(1)
-        line:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+        line:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue)
 
         line:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
         line:SetBackdropColor(0.8,0.8,0.8,0.8);
 
-        AQSELF.lastHeightQueue = AQSELF.lastHeightQueue - 25
+        SELFAQ.lastHeightQueue = SELFAQ.lastHeightQueue - 25
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetFont(STANDARD_TEXT_FONT, 20)
             if slot_id == 13 then
-                t:SetText(AQSELF.color("FF4500", L["Trinkets"]))
+                t:SetText(SELFAQ.color("FF4500", L["Trinkets"]))
             else
-                t:SetText(AQSELF.color("FF4500", AQSELF.slotToName[slot_id]))
+                t:SetText(SELFAQ.color("FF4500", SELFAQ.slotToName[slot_id]))
             end
-            t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+            t:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue)
         end
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetText(L["Mode:"])
-            t:SetPoint("TOPLEFT", queueFrame, 354, AQSELF.lastHeightQueue)
+            t:SetPoint("TOPLEFT", queueFrame, 354, SELFAQ.lastHeightQueue)
         end
 
         if slot_id == 13 then
             do
                 local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
                 t:SetText(L["Slot:"])
-                t:SetPoint("TOPLEFT", queueFrame, 494, AQSELF.lastHeightQueue)
+                t:SetPoint("TOPLEFT", queueFrame, 494, SELFAQ.lastHeightQueue)
             end
         end
 
@@ -244,7 +244,7 @@ function AQSELF.settingInit()
         -- 主动饰品
         for k,v in ipairs(AQSV.usableItems[slot_id]) do
             local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue + 5 - k*35)
+            dropdown:SetPoint("TOPLEFT", 100, SELFAQ.lastHeightQueue + 5 - k*35)
             -- 保存当前选项序号
             dropdown.index = k
             dropdown.slot = slot_id
@@ -253,10 +253,10 @@ function AQSELF.settingInit()
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["Usable "]..k)
-            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - k*35)
+            l:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue - k*35)
 
             -- 保存最后一个下拉框的位置
-            height = AQSELF.lastHeightQueue - k*35
+            height = SELFAQ.lastHeightQueue - k*35
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
@@ -271,7 +271,7 @@ function AQSELF.settingInit()
             -- 后面追加checkbox
             do
                 local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 350, AQSELF.lastHeightQueue + 7 - k*35)
+                b:SetPoint("TOPLEFT", 350, SELFAQ.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pveTrinkets[v])
                 f.pveCheckbox[k] = b
 
@@ -287,7 +287,7 @@ function AQSELF.settingInit()
 
             do
                 local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 420, AQSELF.lastHeightQueue + 7 - k*35)
+                b:SetPoint("TOPLEFT", 420, SELFAQ.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pvpTrinkets[v])
                 f.pvpCheckbox[k] = b
 
@@ -304,7 +304,7 @@ function AQSELF.settingInit()
             if slot_id == 13 then
                 do
                     local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", 490, AQSELF.lastHeightQueue + 7 - k*35)
+                    b:SetPoint("TOPLEFT", 490, SELFAQ.lastHeightQueue + 7 - k*35)
                     b:SetChecked(AQSV.queue13[v])
                     f.queue13[k] = b
 
@@ -320,7 +320,7 @@ function AQSELF.settingInit()
 
                 do
                     local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", 540, AQSELF.lastHeightQueue + 7 - k*35)
+                    b:SetPoint("TOPLEFT", 540, SELFAQ.lastHeightQueue + 7 - k*35)
                     b:SetChecked(AQSV.queue14[v])
                     f.queue14[k] = b
 
@@ -342,17 +342,17 @@ function AQSELF.settingInit()
         if #AQSV.usableItems[slot_id] == 0 then
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
             l:SetText(L["<There is no suitable trinkets>"])
-            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 35)
+            l:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue - 35)
 
-            height = AQSELF.lastHeightQueue - 35
+            height = SELFAQ.lastHeightQueue - 35
         end
 
-        AQSELF.lastHeightQueue = height
+        SELFAQ.lastHeightQueue = height
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
             t:SetText(L["Backup (Be equiped when usable items are all on CD):"] )
-            t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 45)
+            t:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue - 45)
         end
 
         
@@ -366,15 +366,15 @@ function AQSELF.settingInit()
             f.resident[slot_id -1 +k] = {}
 
             local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
-            dropdown:SetPoint("TOPLEFT", 100, AQSELF.lastHeightQueue-(40 + k*35))
+            dropdown:SetPoint("TOPLEFT", 100, SELFAQ.lastHeightQueue-(40 + k*35))
             dropdown.index = k
             dropdown.slot = slot_id -1 +k
 
             f.resident[dropdown.slot] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-            l:SetText(AQSELF.slotToName[dropdown.slot])
-            l:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue-(45 + k*35))
+            l:SetText(SELFAQ.slotToName[dropdown.slot])
+            l:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue-(45 + k*35))
 
             UIDropDownMenu_SetButtonWidth(dropdown, 205)
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
@@ -387,10 +387,10 @@ function AQSELF.settingInit()
             UIDropDownMenu_SetWidth(dropdown, 200)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
-            height = AQSELF.lastHeightQueue-(45 + k*35)
+            height = SELFAQ.lastHeightQueue-(45 + k*35)
         end
 
-        AQSELF.lastHeightQueue = height - 43
+        SELFAQ.lastHeightQueue = height - 43
 
     end
 
@@ -416,31 +416,31 @@ function AQSELF.settingInit()
             if key == "enableItemBar" then  
                 -- 装备栏的开关
                 if not AQSV.enableItemBar then
-                    AQSELF.bar:Hide()
+                    SELFAQ.bar:Hide()
                 else
-                    AQSELF.bar:Show()
+                    SELFAQ.bar:Show()
                 end
             end
 
             if key == "enableBuff" then  
                 -- 装备栏的开关
                 if not AQSV.enableBuff then
-                    AQSELF.buff:Hide()
+                    SELFAQ.buff:Hide()
                 else
-                    AQSELF.buff:Show()
+                    SELFAQ.buff:Show()
                 end
             end
 
             if key == "locked" then
-                AQSELF.lockItemBar()
+                SELFAQ.lockItemBar()
             end
 
             if key == "buffLocked" then
-                AQSELF.lockBuff()
+                SELFAQ.lockBuff()
             end
 
             if key == "hideBackdrop" then
-                AQSELF.hideBackdrop()
+                SELFAQ.hideBackdrop()
             end
         end)
 
@@ -506,7 +506,7 @@ function AQSELF.settingInit()
             self:SetText(v)
             AQSV.barZoom = v
 
-            AQSELF.bar:SetScale(AQSV.barZoom)
+            SELFAQ.bar:SetScale(AQSV.barZoom)
 
         end)
     end
@@ -581,7 +581,7 @@ function AQSELF.settingInit()
             self:SetText(v)
             AQSV.buffZoom = v
 
-            AQSELF.buff:SetScale(AQSV.buffZoom)
+            SELFAQ.buff:SetScale(AQSV.buffZoom)
 
         end)
     end
@@ -619,44 +619,44 @@ function AQSELF.settingInit()
     do
         local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Go to 'General' page and add the unidentified usable items manually"])
-        t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue)
+        t:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue)
     end
     do
         local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Not only trinkets, any equippable usable item is acceptable"])
-        t:SetPoint("TOPLEFT", queueFrame, 25, AQSELF.lastHeightQueue - 25)
+        t:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue - 25)
     end
 
-    AQSELF.lastHeightQueue = AQSELF.lastHeightQueue - 70
+    SELFAQ.lastHeightQueue = SELFAQ.lastHeightQueue - 70
 
-    AQSELF.loopSlots(buildDropdownGroup)
+    SELFAQ.loopSlots(buildDropdownGroup)
 
-    AQSELF.lastHeight = otherHight - 40
+    SELFAQ.lastHeight = otherHight - 40
 
     -- 添加主动装备
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Append Usable Items (not only trinket):"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight-60)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Unidentified usable items need to be added manually by yourself"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight - 85)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Format - ItemID/BuffTime,ItemID/BuffTime"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 110)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight - 110)
     end
 
     do
 
         local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
         s:SetSize(350,80)
-        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 135)
+        s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 135)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
         s:SetBackdropBorderColor(1,1,1,0.7);
         local e = CreateFrame("EditBox", nil, s)
@@ -674,33 +674,33 @@ function AQSELF.settingInit()
         b:SetText(L["Submit & Reload UI"])
         b:SetWidth(160)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
+        b:SetPoint("TOPLEFT", f, 410, SELFAQ.lastHeight - 131)
         b:SetScript("OnClick", function(self)
             AQSV.additionItems = e:GetText()
             C_UI.Reload()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 185
+    SELFAQ.lastHeight = SELFAQ.lastHeight - 185
 
     -- 自定义buff
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Custom Buff Alert:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight-60)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Format - BuffName,BuffName,BuffName"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight - 85)
     end
 
     do
 
         local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
         s:SetSize(350,80)
-        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 110)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
         s:SetBackdropBorderColor(1,1,1,0.7);
         local e = CreateFrame("EditBox", nil, s)
@@ -719,32 +719,32 @@ function AQSELF.settingInit()
         b:SetText(L["Submit"])
         b:SetWidth(100)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 108)
+        b:SetPoint("TOPLEFT", f, 410, SELFAQ.lastHeight - 108)
         b:SetScript("OnClick", function(self)
             AQSV.buffNames = e:GetText()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 160
+    SELFAQ.lastHeight = SELFAQ.lastHeight - 160
 
     -- 自定义buff
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Block Items:"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight-60)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight-60)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Format - ItemID,ItemID,ItemID"])
-        t:SetPoint("TOPLEFT", f, 25, AQSELF.lastHeight - 85)
+        t:SetPoint("TOPLEFT", f, 25, SELFAQ.lastHeight - 85)
     end
 
     do
 
         local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
         s:SetSize(350,80)
-        s:SetPoint("TOPLEFT", f, 26, AQSELF.lastHeight - 110)
+        s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 110)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
         s:SetBackdropBorderColor(1,1,1,0.7);
         local e = CreateFrame("EditBox", nil, s)
@@ -763,217 +763,217 @@ function AQSELF.settingInit()
         b:SetText(L["Submit & Reload UI"])
         b:SetWidth(160)
         b:SetHeight(30)
-        b:SetPoint("TOPLEFT", f, 410, AQSELF.lastHeight - 131)
+        b:SetPoint("TOPLEFT", f, 410, SELFAQ.lastHeight - 131)
         b:SetScript("OnClick", function(self)
             AQSV.blockItems = e:GetText()
             C_UI.Reload()
         end)
     end
 
-    AQSELF.lastHeight = AQSELF.lastHeight - 220
+    SELFAQ.lastHeight = SELFAQ.lastHeight - 220
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Command (/aq /autoequip are valid):"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 60)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 60)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 85)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Enable/disable AutoEquip function"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 85)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae settings"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 105)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Open settings"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 105)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae pvp"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 125)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Enable/disable PVP mode manually"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 125)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae unlock"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 145)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 145)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText("/ae 60(63/64)")
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 165)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 165)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Equip Suit "]..L[60].."/"..L[63].."/"..L[64])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 165)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 165)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Advanced Settings:"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 205)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 205)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae ips 5"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 230)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 230)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set 5 items per column in dropdown list (default 4)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 230)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 230)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae ceb 5,13,16"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 250)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 250)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Customize equipment bar (enter 0 to disable)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 250)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 250)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae hiq 1(0)"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 270)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 270)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Hide the usable items queue (hide 1, show 0)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 270)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 270)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae bs 1"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 290)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 290)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set equipment button spacing to 1 (default 3)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 290)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 290)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae dm 1"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 310)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 310)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Disable the display of item list when moseover (enable 0)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 310)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 310)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae pp 0,0"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 330)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 330)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set popup info to the center of screen (default 0,320)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 330)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 330)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["/ae rm 3"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 350)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 350)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set threshold of member's target to 3 (default 1)"])
-        t:SetPoint("TOPLEFT", helpFrame, 170, AQSELF.lastHeightHelp - 350)
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 350)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 335
+    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 335
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["Tips:"])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 60)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 60)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["1. Equip item manually through the Equipment Bar will temporarily lock the button."])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 85)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 85)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["2. Right click or use the '/ae unlock' command will unlock the button."])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 105)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 105)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["3. Before using item, the button will be unlocked automatically."])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 125)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 125)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."])
-        t:SetPoint("TOPLEFT", helpFrame, 25, AQSELF.lastHeightHelp - 145)
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 145)
     end
 
-    AQSELF.lastHeightHelp = AQSELF.lastHeightHelp - 200
+    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 200
 
 
     f:SetAllPoints(p)
     p:SetScrollChild(f)
-    f:SetSize(1000, -AQSELF.lastHeight)
+    f:SetSize(1000, -SELFAQ.lastHeight)
 
     queueFrame:SetAllPoints(queueOption)
     queueOption:SetScrollChild(queueFrame)
-    queueFrame:SetSize(1000, -AQSELF.lastHeightQueue)
+    queueFrame:SetSize(1000, -SELFAQ.lastHeightQueue)
 
     helpFrame:SetAllPoints(helpOption)
     helpOption:SetScrollChild(helpFrame)
-    helpFrame:SetSize(1000, -AQSELF.lastHeightHelp)
+    helpFrame:SetSize(1000, -SELFAQ.lastHeightHelp)
 
     InterfaceOptions_AddCategory(top)
     InterfaceOptions_AddCategory(p)

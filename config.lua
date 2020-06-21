@@ -1,50 +1,50 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local merge = AQSELF.merge
-local initSV = AQSELF.initSV
-local L = AQSELF.L
+local merge = SELFAQ.merge
+local initSV = SELFAQ.initSV
+local L = SELFAQ.L
 
 -- 配置 --
 
-AQSELF.version = "v4.12"
+SELFAQ.version = "v4.12"
 
--- AQSELF.enableDebug = true          -- 调试开关
-AQSELF.enableDebug = false          -- 调试开关
+-- SELFAQ.enableDebug = true          -- 调试开关
+SELFAQ.enableDebug = false          -- 调试开关
 
-AQSELF.init = false
+SELFAQ.init = false
 
 -- 获取当前角色名字
-AQSELF.player = UnitName("player")
+SELFAQ.player = UnitName("player")
 
-if AQSELF.player == "卡法" or AQSELF.player == "卡卡咔" or AQSELF.player == "水猎"  then
-	AQSELF.enableDebug = true          -- 调试开关
+if SELFAQ.player == "卡法" or SELFAQ.player == "卡卡咔" or SELFAQ.player == "水猎"  then
+	SELFAQ.enableDebug = true          -- 调试开关
 end
 
 -- 构建下拉框组时，记录纵坐标
 
 
 -- 操作的装备栏
-AQSELF.slots = {13, 14}
-AQSELF.slotFrames = {}
+SELFAQ.slots = {13, 14}
+SELFAQ.slotFrames = {}
 
-AQSELF.realtimeQueue = {}
+SELFAQ.realtimeQueue = {}
 
-AQSELF.needSuit = 0
+SELFAQ.needSuit = 0
 
 -- 避免数组内容泄露，全程缓存数组
-AQSELF.empty1 = {}			-- realtimeQueue/core
-AQSELF.empty2 = {}			-- slotIds/ui
-AQSELF.empty3 = {}			-- diff/base
-AQSELF.empty4 = {}			-- diff2/base
-AQSELF.empty5 = {}			-- waitId/chance2hit
-AQSELF.empty6 = {}			-- 
-AQSELF.empty7 = {}			-- 
-AQSELF.empty8 = {}			-- 
+SELFAQ.empty1 = {}			-- realtimeQueue/core
+SELFAQ.empty2 = {}			-- slotIds/ui
+SELFAQ.empty3 = {}			-- diff/base
+SELFAQ.empty4 = {}			-- diff2/base
+SELFAQ.empty5 = {}			-- waitId/chance2hit
+SELFAQ.empty6 = {}			-- 
+SELFAQ.empty7 = {}			-- 
+SELFAQ.empty8 = {}			-- 
 
-AQSELF.e0 = {}		-- slot13/core
-AQSELF.e1 = {}		-- slot14/core
+SELFAQ.e0 = {}		-- slot13/core
+SELFAQ.e1 = {}		-- slot14/core
 
-AQSELF.slotToName = {
+SELFAQ.slotToName = {
 	[1] = L["Head"],
 	[2] = L["Neck"],
 	[3] = L["Shoulder"],
@@ -64,7 +64,7 @@ AQSELF.slotToName = {
 	[18] = L["Ranged"],
 }
 
-AQSELF.slotName = {
+SELFAQ.slotName = {
 	[1] = "HeadSlot",
 	[2] = "NeckSlot",
 	[3] = "ShoulderSlot",
@@ -84,7 +84,7 @@ AQSELF.slotName = {
 	[18] = "RangedSlot",
 }
 
-AQSELF.gearSlots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}
+SELFAQ.gearSlots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}
 
 
 -- 配置结束 --

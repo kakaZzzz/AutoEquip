@@ -1,9 +1,9 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local L = AQSELF.L
+local L = SELFAQ.L
 
 -- 复制table的数据，而不是引用
-AQSELF.clone =  function(org)
+SELFAQ.clone =  function(org)
     local function copy(org, res)
         for k,v in pairs(org) do
             if type(v) ~= "table" then
@@ -20,7 +20,7 @@ AQSELF.clone =  function(org)
     return res
 end
 
-AQSELF.tableInsert = function(t,v)
+SELFAQ.tableInsert = function(t,v)
     if t == nil then
         t = {}
     end
@@ -32,7 +32,7 @@ AQSELF.tableInsert = function(t,v)
 end
 
 -- 合并两个数组
-AQSELF.merge = function(...)
+SELFAQ.merge = function(...)
     local tabs = {...}
     if not tabs then
         return {}
@@ -53,9 +53,9 @@ AQSELF.merge = function(...)
 end
 
 -- 去掉重复的值
-AQSELF.diff =  function( t1, t2 )
-    wipe(AQSELF.empty3)
-    local new = AQSELF.empty3
+SELFAQ.diff =  function( t1, t2 )
+    wipe(SELFAQ.empty3)
+    local new = SELFAQ.empty3
 
     for i,v in ipairs(t1) do
         if not tContains(t2, v) then
@@ -66,9 +66,9 @@ AQSELF.diff =  function( t1, t2 )
     return new
 end
 
-AQSELF.diff2 =  function( t1, t2 )
-    wipe(AQSELF.empty4)
-    local new = AQSELF.empty4
+SELFAQ.diff2 =  function( t1, t2 )
+    wipe(SELFAQ.empty4)
+    local new = SELFAQ.empty4
 
     for i,v in ipairs(t1) do
         if not tContains(t2, v) then
@@ -79,7 +79,7 @@ AQSELF.diff2 =  function( t1, t2 )
     return new
 end
 
-AQSELF.empty = function( t )
+SELFAQ.empty = function( t )
     
     if t == nil then
         t = {}
@@ -89,7 +89,7 @@ AQSELF.empty = function( t )
 
 end
 
-AQSELF.findItemsOrder = function( id )
+SELFAQ.findItemsOrder = function( id )
     
     local count = GetItemCount(id)
     local order = 1
@@ -103,9 +103,9 @@ AQSELF.findItemsOrder = function( id )
 
             if not find then
                 local fid = (index-1)*100000 + id
-                -- print(AQSELF.itemInBags[fid])
+                -- print(SELFAQ.itemInBags[fid])
 
-                if AQSELF.itemInBags[fid] == nil then
+                if SELFAQ.itemInBags[fid] == nil then
                     order = index
                     find = true
                 end
@@ -119,7 +119,7 @@ AQSELF.findItemsOrder = function( id )
 
 end
 
-AQSELF.reverseId = function( id )
+SELFAQ.reverseId = function( id )
     
     local order = math.floor(id/100000)
     local rid = id%100000
@@ -128,9 +128,9 @@ AQSELF.reverseId = function( id )
 
 end
 
-AQSELF.reverseBagSlot = function( id )
+SELFAQ.reverseBagSlot = function( id )
 
-    local num = AQSELF.itemInBags[id]
+    local num = SELFAQ.itemInBags[id]
     
     local bag = math.floor(num/100)
     local slot = num%100
@@ -139,7 +139,7 @@ AQSELF.reverseBagSlot = function( id )
 
 end
 
-AQSELF.otherSlot = function(slot_id)
+SELFAQ.otherSlot = function(slot_id)
     
     local other = 0
 
@@ -154,13 +154,13 @@ AQSELF.otherSlot = function(slot_id)
     return other
 end
 
-AQSELF.loopSlots = function( func )
-    for k,v in pairs(AQSELF.needSlots) do
+SELFAQ.loopSlots = function( func )
+    for k,v in pairs(SELFAQ.needSlots) do
         func(v)
     end
 end
 
-AQSELF.shortKey = function(v)
+SELFAQ.shortKey = function(v)
     
     local t = {strsplit("-", v)}
     local s = ""
@@ -179,8 +179,8 @@ AQSELF.shortKey = function(v)
 end
 
 -- 调试函数
-AQSELF.debug = function( t )
-    if not AQSELF.enableDebug then
+SELFAQ.debug = function( t )
+    if not SELFAQ.enableDebug then
         return
     end
 
@@ -189,7 +189,7 @@ AQSELF.debug = function( t )
             
             if type(v) == "table" then
                 print("@DEBUG: ",k)
-                AQSELF.debug(v)
+                SELFAQ.debug(v)
             else
                 print("@KV: ",k.." =>"..tostring(v))
             end
@@ -199,7 +199,7 @@ AQSELF.debug = function( t )
     end
 end
 
-AQSELF.getCooldownText = function(rest)
+SELFAQ.getCooldownText = function(rest)
     local text = math.floor(rest)
     
     if rest > 3600 then
@@ -211,15 +211,15 @@ AQSELF.getCooldownText = function(rest)
     return text
 end
 
-AQSELF.chatInfo = function(s)
+SELFAQ.chatInfo = function(s)
     print(L["prefix"].." "..s)
 end
 
-AQSELF.initSV = function( v, init )
+SELFAQ.initSV = function( v, init )
     if v == nil then
 
         if type(init) == "table" then
-            local t = AQSELF.clone(init)
+            local t = SELFAQ.clone(init)
             return t
         end
 
@@ -228,9 +228,9 @@ AQSELF.initSV = function( v, init )
     return v
 end
 
-AQSELF.GetItemLink = function( id )
+SELFAQ.GetItemLink = function( id )
 
-    local id, order = AQSELF.reverseId(id)
+    local id, order = SELFAQ.reverseId(id)
 
     if id == 0 then
         return L["[Empty]"]
@@ -244,7 +244,7 @@ AQSELF.GetItemLink = function( id )
     return link
 end
 
-AQSELF.GetEnchanitID = function(link)
+SELFAQ.GetEnchanitID = function(link)
     
     if link then
         local _, enchantId = link:match("item:(%d+):(%d+)")
@@ -254,12 +254,12 @@ AQSELF.GetEnchanitID = function(link)
     end
 end
 
-AQSELF.GetItemEquipLoc = function( id )
+SELFAQ.GetItemEquipLoc = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemEquipLoc
 end
 
-AQSELF.GetItemSlot = function( id )
+SELFAQ.GetItemSlot = function( id )
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     local slot = 0
 
@@ -300,14 +300,14 @@ AQSELF.GetItemSlot = function( id )
     return slot
 end
 
-AQSELF.GetItemTexture = function( id )
-    id = AQSELF.reverseId(id)
+SELFAQ.GetItemTexture = function( id )
+    id = SELFAQ.reverseId(id)
 
     local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
     return itemTexture
 end
 
-AQSELF.GetSlotID = function(slot_id)
+SELFAQ.GetSlotID = function(slot_id)
     local id = GetInventoryItemID("player", slot_id)
 
     if id == nil then
@@ -317,62 +317,62 @@ AQSELF.GetSlotID = function(slot_id)
     return id
 end
 
-AQSELF.AddonEquipItemByName = function( item_id, slot_id )
+SELFAQ.AddonEquipItemByName = function( item_id, slot_id )
 
     EquipItemByName(item_id, slot_id)
 
-    local link = AQSELF.GetItemLink(item_id)
+    local link = SELFAQ.GetItemLink(item_id)
     
-    AQSELF.popupInfo(L["Equip "]..link)
+    SELFAQ.popupInfo(L["Equip "]..link)
 end
 
-AQSELF.findCarrot = function( id, slot_id, link )
+SELFAQ.findCarrot = function( id, slot_id, link )
 
     if slot_id == 13 then
 
         if id == 11122 then
-            AQSELF.carrot = id
+            SELFAQ.carrot = id
         end
 
-        if not tContains(AQSELF.needSlots, 13) and AQSELF.carrot > 0 then
-            table.insert(AQSELF.needSlots, 13)
+        if not tContains(SELFAQ.needSlots, 13) and SELFAQ.carrot > 0 then
+            table.insert(SELFAQ.needSlots, 13)
         end
 
         return
     end
 
-    local enchantId = AQSELF.GetEnchanitID(link)
+    local enchantId = SELFAQ.GetEnchanitID(link)
 
     -- 找到带有秘银马刺的鞋子，保存起来
     if enchantId == "464" or enchantId == "930" then
-        AQSELF["ride"..slot_id] = id
+        SELFAQ["ride"..slot_id] = id
     end
 
-    if not tContains(AQSELF.needSlots, slot_id) and AQSELF["ride"..slot_id]>0 then
-        table.insert(AQSELF.needSlots, slot_id)
+    if not tContains(SELFAQ.needSlots, slot_id) and SELFAQ["ride"..slot_id]>0 then
+        table.insert(SELFAQ.needSlots, slot_id)
     end
 end
 
-AQSELF.findSwim = function( id, slot_id )
+SELFAQ.findSwim = function( id, slot_id )
 
     -- 找到水藤或者碧蓝腰带，保存起来
     if id == 7052 or id == 9452 or id == 10506 then
-        AQSELF["swim"..slot_id] = id
+        SELFAQ["swim"..slot_id] = id
     end
 
-    if not tContains(AQSELF.needSlots, slot_id) and AQSELF["swim"..slot_id]>0 then
-        table.insert(AQSELF.needSlots, slot_id)
+    if not tContains(SELFAQ.needSlots, slot_id) and SELFAQ["swim"..slot_id]>0 then
+        table.insert(SELFAQ.needSlots, slot_id)
     end
 end
 
-AQSELF.equipByID = function(item_id, slot_id, popup)
+SELFAQ.equipByID = function(item_id, slot_id, popup)
 
     if popup == nil then
         popup = true
     end
 
     if item_id > 100000 then
-        local bag,slot = AQSELF.reverseBagSlot(item_id)
+        local bag,slot = SELFAQ.reverseBagSlot(item_id)
 
         ClearCursor()
         PickupContainerItem(bag,slot)
@@ -384,50 +384,50 @@ AQSELF.equipByID = function(item_id, slot_id, popup)
         EquipItemByName(item_id, slot_id)
     end
 
-    local rid = AQSELF.reverseId(item_id)
+    local rid = SELFAQ.reverseId(item_id)
 
-    local link = AQSELF.GetItemLink(rid)
+    local link = SELFAQ.GetItemLink(rid)
 
     if popup then
-        AQSELF.popupInfo(L["Equip "]..link)
+        SELFAQ.popupInfo(L["Equip "]..link)
     end
 
 end
 
 
-AQSELF.infoFrameIndex = 0
-AQSELF.infoTexts = {}
+SELFAQ.infoFrameIndex = 0
+SELFAQ.infoTexts = {}
 
-AQSELF.popupInfo = function(text)
+SELFAQ.popupInfo = function(text)
 
     if AQSV.hidePopupInfo then
         return
     end
 
     -- 避免短时的多次显示
-    -- print(AQSELF.infoTexts, tostring(text), tContains(AQSELF.infoTexts, text))
-    if tContains(AQSELF.infoTexts, text) then
+    -- print(SELFAQ.infoTexts, tostring(text), tContains(SELFAQ.infoTexts, text))
+    if tContains(SELFAQ.infoTexts, text) then
         return
     end
     
     -- 最多显示5条
-    if AQSELF.infoFrameIndex >= 5 then
+    if SELFAQ.infoFrameIndex >= 5 then
         return
     end
     
-    AQSELF.infoFrameIndex = AQSELF.infoFrameIndex + 1
+    SELFAQ.infoFrameIndex = SELFAQ.infoFrameIndex + 1
 
-    if _G["AutoEquip_Popup"..AQSELF.infoFrameIndex] == nil then
-        CreateFrame( "GameTooltip", "AutoEquip_Popup"..AQSELF.infoFrameIndex, UIParent, "GameTooltipTemplate" )
+    if _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex] == nil then
+        CreateFrame( "GameTooltip", "AutoEquip_Popup"..SELFAQ.infoFrameIndex, UIParent, "GameTooltipTemplate" )
     end
 
-    local f = _G["AutoEquip_Popup"..AQSELF.infoFrameIndex]
+    local f = _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex]
 
-    -- if AQSELF.infoFrame == nil then
-    --  AQSELF.infoFrame = CreateFrame( "GameTooltip", "AutoEquip_Popup", UIParent, "GameTooltipTemplate" )
+    -- if SELFAQ.infoFrame == nil then
+    --  SELFAQ.infoFrame = CreateFrame( "GameTooltip", "AutoEquip_Popup", UIParent, "GameTooltipTemplate" )
     -- end
 
-    -- local f= AQSELF.infoFrame
+    -- local f= SELFAQ.infoFrame
 
     if f.moveOut then
         f.fadeOut:Stop()
@@ -437,20 +437,20 @@ AQSELF.popupInfo = function(text)
     f:Hide()
 
     f:SetOwner(UIParent, "ANCHOR_NONE")
-    f:SetPoint("CENTER", UIParent,  AQSV.popupX, -40*(AQSELF.infoFrameIndex - 1) + AQSV.popupY )
+    f:SetPoint("CENTER", UIParent,  AQSV.popupX, -40*(SELFAQ.infoFrameIndex - 1) + AQSV.popupY )
 
     f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
     f:SetBackdropColor(0,0,0,0.8);
 
-    if AQSELF.infoFrameIndex == 5 then
+    if SELFAQ.infoFrameIndex == 5 then
         f:SetText("...")
     else
         f:SetText(text)
-        table.insert(AQSELF.infoTexts, text)
+        table.insert(SELFAQ.infoTexts, text)
     end
 
-    _G["AutoEquip_Popup"..AQSELF.infoFrameIndex.."TextLeft1"]:SetFont(STANDARD_TEXT_FONT, 14)
-    _G["AutoEquip_Popup"..AQSELF.infoFrameIndex.."TextLeft1"]:SetTextColor(255,255,255)
+    _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex.."TextLeft1"]:SetFont(STANDARD_TEXT_FONT, 14)
+    _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex.."TextLeft1"]:SetTextColor(255,255,255)
 
     f:Show()
 
@@ -466,9 +466,9 @@ AQSELF.popupInfo = function(text)
         animOut:SetStartDelay(2)
         f.moveOut:SetScript("OnFinished",function() 
             f:Hide()
-            AQSELF.infoFrameIndex = 0
-            wipe(AQSELF.infoTexts)
-            -- AQSELF.debug(AQSELF.infoFrameIndex)
+            SELFAQ.infoFrameIndex = 0
+            wipe(SELFAQ.infoTexts)
+            -- SELFAQ.debug(SELFAQ.infoFrameIndex)
         end)
     end
 

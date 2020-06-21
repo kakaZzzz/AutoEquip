@@ -1,17 +1,17 @@
 
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local player = AQSELF.player
-local GetItemTexture = AQSELF.GetItemTexture
-local otherSlot = AQSELF.otherSlot
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local L = SELFAQ.L
+local player = SELFAQ.player
+local GetItemTexture = SELFAQ.GetItemTexture
+local otherSlot = SELFAQ.otherSlot
 
-function AQSELF.customSlots()
+function SELFAQ.customSlots()
 	if #AQSV.customSlots > 0 then
-		AQSELF.slots = AQSV.customSlots
+		SELFAQ.slots = AQSV.customSlots
 	else
 		-- 从设置页面读取
 		local new = {}
@@ -23,34 +23,34 @@ function AQSELF.customSlots()
 		end
 
 		table.sort( new )
-		AQSELF.slots = AQSELF.merge(AQSELF.slots, new)
+		SELFAQ.slots = SELFAQ.merge(SELFAQ.slots, new)
 	end 
 end
 
-function AQSELF.createItemBar()
+function SELFAQ.createItemBar()
 
 	-- 选择BUTTON类似，才能触发鼠标事件
 	local f = CreateFrame("Button", "AutoEquip_ItemBar", UIParent)
-	AQSELF.bar = f
-	AQSELF.list = {}
-	AQSELF.itemButtons = {}
+	SELFAQ.bar = f
+	SELFAQ.list = {}
+	SELFAQ.itemButtons = {}
 
-	AQSELF.customSlots()
+	SELFAQ.customSlots()
 
 	f:SetFrameStrata("MEDIUM")
-	f:SetWidth(#AQSELF.slots * (40 + AQSV.buttonSpacing) + 10)
+	f:SetWidth(#SELFAQ.slots * (40 + AQSV.buttonSpacing) + 10)
 	f:SetHeight(40)
 	f:SetScale(AQSV.barZoom)
 
 	-- 可以使用鼠标
 	f:EnableMouse(true)
 
-	AQSELF.bar:SetMovable(not AQSV.locked)
+	SELFAQ.bar:SetMovable(not AQSV.locked)
 	if AQSV.locked then
 		-- 关闭拖动，同时不影响右键单击
-		AQSELF.bar:RegisterForDrag("")
+		SELFAQ.bar:RegisterForDrag("")
 	else
-		AQSELF.bar:RegisterForDrag("LeftButton")
+		SELFAQ.bar:RegisterForDrag("LeftButton")
 	end
 
 	-- 实现拖动
@@ -62,7 +62,7 @@ function AQSELF.createItemBar()
     -- 有材质才能设置颜色和透明度
 	t:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
 	
-	AQSELF.hideBackdrop()
+	SELFAQ.hideBackdrop()
 
 	-- 尺寸和位置覆盖
 	t:SetAllPoints(f)
@@ -76,23 +76,23 @@ function AQSELF.createItemBar()
 
 
 	-- 创建右键菜单
-	AQSELF.createMenu()
+	SELFAQ.createMenu()
 
 	-- 绘制冷却时间
 	f.TimeSinceLastUpdate = 0
 	-- 函数执行间隔时间
 	f.Interval = 0.1
-	f:SetScript("OnUpdate", AQSELF.cooldownUpdate)
+	f:SetScript("OnUpdate", SELFAQ.cooldownUpdate)
 
 	-- 创建按钮
-	for k,v in pairs(AQSELF.slots) do
-		AQSELF.createItemButton( v, k )
+	for k,v in pairs(SELFAQ.slots) do
+		SELFAQ.createItemButton( v, k )
 	end
 
 	-- 装备栏不显示的槽都解锁
 	for k,v in pairs(AQSV.slotStatus) do
-    	if not tContains(AQSELF.slots, k) then
-    		AQSELF.cancelLocker(k)
+    	if not tContains(SELFAQ.slots, k) then
+    		SELFAQ.cancelLocker(k)
     	end
     end
 
@@ -112,7 +112,7 @@ function AQSELF.createItemBar()
 		pvpIcon:Hide()
 	end
 
-	AQSELF.pvpIcon = pvpIcon
+	SELFAQ.pvpIcon = pvpIcon
 
 	-- 设置里是否启用装备栏
 	if AQSV.enableItemBar then
@@ -121,20 +121,20 @@ function AQSELF.createItemBar()
 		f:Hide()
 	end
 
-	AQSELF.bindingSlot( )
+	SELFAQ.bindingSlot( )
 end
 
-function AQSELF.hideBackdrop(  )
+function SELFAQ.hideBackdrop(  )
 	if AQSV.hideBackdrop then
-		AQSELF.bar.texture:SetVertexColor(0, 0, 0, 0)
+		SELFAQ.bar.texture:SetVertexColor(0, 0, 0, 0)
 	else
-		AQSELF.bar.texture:SetVertexColor(0, 0, 0, 0.9)
+		SELFAQ.bar.texture:SetVertexColor(0, 0, 0, 0.9)
 	end
 end
 
-function  AQSELF.createMenu()
+function  SELFAQ.createMenu()
 
-	local menuFrame = CreateFrame("Frame", nil, AQSELF.bar, "UIDropDownMenuTemplate")
+	local menuFrame = CreateFrame("Frame", nil, SELFAQ.bar, "UIDropDownMenuTemplate")
 
 	local menu = {}
 
@@ -142,21 +142,21 @@ function  AQSELF.createMenu()
 	menu[1]["text"] = " "..L["Enable AutoEquip function"]
 	menu[1]["checked"] = AQSV.enable
 	menu[1]["func"] = function()
-		AQSELF.enableAutoEuquip()
+		SELFAQ.enableAutoEuquip()
 	end
 
 	menu[2] = {}
 	menu[2]["text"] = L[" Enable PVP mode"]
 	menu[2]["checked"] = AQSV.pvpMode
 	menu[2]["func"] = function()
-		AQSELF.enablePvpMode()
+		SELFAQ.enablePvpMode()
 	end
 
 	menu[3] = {}
 	menu[3]["text"] = L[" Settings"]
 	menu[3]["func"] = function()
-		InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
-		InterfaceOptionsFrame_OpenToCategory(AQSELF.general);
+		InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
+		InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
 	end
 
 	menu[4] = {}
@@ -164,7 +164,7 @@ function  AQSELF.createMenu()
 	menu[4]["checked"] = AQSV.locked
 	menu[4]["func"] = function()
 		AQSV.locked = not AQSV.locked
-		AQSELF.lockItemBar()
+		SELFAQ.lockItemBar()
 	end
 
 	menu[5] = {}
@@ -173,32 +173,32 @@ function  AQSELF.createMenu()
 		menuFrame:Hide()
 	end
 
-	AQSELF.menu = menuFrame
-	AQSELF.menuList = menu
+	SELFAQ.menu = menuFrame
+	SELFAQ.menuList = menu
 
-	AQSELF.bar:RegisterForClicks("RightButtonDown");
-	AQSELF.bar:SetScript('OnClick', function(self, button)
+	SELFAQ.bar:RegisterForClicks("RightButtonDown");
+	SELFAQ.bar:SetScript('OnClick', function(self, button)
 	    EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
 	end)
 end
 
-function AQSELF.lockItemBar()
+function SELFAQ.lockItemBar()
 	
-	AQSELF.menuList[4]["checked"] = AQSV.locked
+	SELFAQ.menuList[4]["checked"] = AQSV.locked
 
-	AQSELF.bar:SetMovable(not AQSV.locked)
+	SELFAQ.bar:SetMovable(not AQSV.locked)
 	if AQSV.locked then
-		AQSELF.bar:RegisterForDrag("")
+		SELFAQ.bar:RegisterForDrag("")
 	else
-		AQSELF.bar:RegisterForDrag("LeftButton")
+		SELFAQ.bar:RegisterForDrag("LeftButton")
 	end
 
-	AQSELF.f.checkbox["locked"]:SetChecked(AQSV.locked)
+	SELFAQ.f.checkbox["locked"]:SetChecked(AQSV.locked)
 end
 
-function AQSELF.createItemButton( slot_id, position )
+function SELFAQ.createItemButton( slot_id, position )
 
-	local button = CreateFrame("Button", "AQBTN"..slot_id, AQSELF.bar, "SecureActionButtonTemplate")
+	local button = CreateFrame("Button", "AQBTN"..slot_id, SELFAQ.bar, "SecureActionButtonTemplate")
 	button:SetSize(40, 40)
 
 	local itemId = GetInventoryItemID("player", slot_id)
@@ -206,7 +206,7 @@ function AQSELF.createItemButton( slot_id, position )
 	if itemId then
 		itemTexture = GetItemTexture(itemId)
 	else
-		_, itemTexture = GetInventorySlotInfo(AQSELF.slotName[slot_id])
+		_, itemTexture = GetInventorySlotInfo(SELFAQ.slotName[slot_id])
 	end
 
 	button.itemId = itemId
@@ -222,14 +222,14 @@ function AQSELF.createItemButton( slot_id, position )
     -- 右键解锁
     button:SetAttribute("type2", "unlockSlot")
     button.unlockSlot = function( ... )
-    	AQSELF.cancelLocker(slot_id)
+    	SELFAQ.cancelLocker(slot_id)
     end
 
     -- 右键解锁
     button:SetAttribute("shift-type1", "showDropdown")
     button.showDropdown = function( ... )
     	if AQSV.shiftLeftShowDropdown or AQSV.disableMouseover  then
-    		AQSELF.showDropdown(slot_id, position)
+    		SELFAQ.showDropdown(slot_id, position)
     	end
     end
 
@@ -331,12 +331,12 @@ function AQSELF.createItemButton( slot_id, position )
 	-- end)
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", AQSELF.bar, (position - 1) * (40 + AQSV.buttonSpacing), 0)
+   	button:SetPoint("TOPLEFT", SELFAQ.bar, (position - 1) * (40 + AQSV.buttonSpacing), 0)
    	button:Show()
 
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
-		AQSELF.showTooltip(self, "inventory", button.itemId, slot_id)
+		SELFAQ.showTooltip(self, "inventory", button.itemId, slot_id)
 
 		if AQSV.disableMouseover then
 			return
@@ -346,73 +346,73 @@ function AQSELF.createItemButton( slot_id, position )
 			return
 		end
 
-		AQSELF.showDropdown(slot_id, position)
+		SELFAQ.showDropdown(slot_id, position)
 
 	end)
    	button:SetScript("OnLeave", function( self )
-   		AQSELF.hideTooltip()
-   		AQSELF.hideItemDropdown( 0.5 )
+   		SELFAQ.hideTooltip()
+   		SELFAQ.hideItemDropdown( 0.5 )
    	end)
 
    	-- 缓存
-   	AQSELF.slotFrames[slot_id] = button
+   	SELFAQ.slotFrames[slot_id] = button
 end
 
-function AQSELF.showDropdown(slot_id, position)
+function SELFAQ.showDropdown(slot_id, position)
 	-- 更新物品在背包里的位置
-	-- AQSELF.updateItemInBags()
+	-- SELFAQ.updateItemInBags()
 
 	-- 显示可用饰品的下拉框
-	AQSELF.itemDropdownTimestamp = nil
+	SELFAQ.itemDropdownTimestamp = nil
 
 	local index = 1
 	local itemId1 = GetInventoryItemID("player", slot_id)
 	local itemId2 = GetInventoryItemID("player", otherSlot(slot_id))
 
-	for k,v in pairs(AQSELF.items[slot_id]) do
+	for k,v in pairs(SELFAQ.items[slot_id]) do
 		-- 推算出真实id
-		local rid = AQSELF.reverseId(v)
+		local rid = SELFAQ.reverseId(v)
 		if v ~= itemId1 and v ~= itemId2 and v > 0 then
-			AQSELF.createItemDropdown(v, (40 + AQSV.buttonSpacing) * (position - 1), index, slot_id)
+			SELFAQ.createItemDropdown(v, (40 + AQSV.buttonSpacing) * (position - 1), index, slot_id)
 			index = index + 1
-		elseif AQSELF.itemButtons[v] then
-			AQSELF.itemButtons[v]:Hide()
+		elseif SELFAQ.itemButtons[v] then
+			SELFAQ.itemButtons[v]:Hide()
 		end
 	end
 
-	for k,v in pairs(AQSELF.itemButtons) do
+	for k,v in pairs(SELFAQ.itemButtons) do
 		if v.inSlot ~= slot_id then
 			v:Hide()
 		end
 	end
 end
 
-function AQSELF.hideItemDropdown( delay )
+function SELFAQ.hideItemDropdown( delay )
 	-- 设置计时
-	AQSELF.itemDropdownTimestamp = GetTime()
-	AQSELF.itemDropdownDelay =  delay
+	SELFAQ.itemDropdownTimestamp = GetTime()
+	SELFAQ.itemDropdownDelay =  delay
 end
 
 -- 在update里执行
-function AQSELF.doHideItemDropdown()
-	if AQSELF.itemDropdownTimestamp then
-		if GetTime() - AQSELF.itemDropdownTimestamp > AQSELF.itemDropdownDelay then
-			for k,v in pairs(AQSELF.itemButtons) do
+function SELFAQ.doHideItemDropdown()
+	if SELFAQ.itemDropdownTimestamp then
+		if GetTime() - SELFAQ.itemDropdownTimestamp > SELFAQ.itemDropdownDelay then
+			for k,v in pairs(SELFAQ.itemButtons) do
 	   			v:Hide()
 	   		end
-	   		AQSELF.itemDropdownTimestamp = nil
+	   		SELFAQ.itemDropdownTimestamp = nil
 		end
 	end
 end
 
 -- 创建饰品下拉框
-function AQSELF.createItemDropdown(item_id, x, position, slot_id)
+function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 
 	if item_id == 0 then
 		return
 	end
 
-	local rid = AQSELF.reverseId(item_id)
+	local rid = SELFAQ.reverseId(item_id)
 	-- print(rid)
 
 	-- 分列，计算位置
@@ -422,23 +422,23 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	local newY = position % AQSV.itemsPerColumn + 1
 
 	-- 如果已经创建过物品图层，只修改位置
-	if AQSELF.itemButtons[item_id] then
-		AQSELF.itemButtons[item_id]:SetPoint("TOPLEFT", AQSELF.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
-		AQSELF.itemButtons[item_id]:Show()
+	if SELFAQ.itemButtons[item_id] then
+		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
+		SELFAQ.itemButtons[item_id]:Show()
 		-- 点击图标是获取正确的slot
-		AQSELF.itemButtons[item_id].inSlot = slot_id
+		SELFAQ.itemButtons[item_id].inSlot = slot_id
 		return
 	end
 
 	local button
 
 	-- if slot_id == 16 or slot_id == 17 or slot_id == 18 then
-	-- 	button = CreateFrame("Button", nil, AQSELF.bar, "SecureActionButtonTemplate")
+	-- 	button = CreateFrame("Button", nil, SELFAQ.bar, "SecureActionButtonTemplate")
 	-- 	button:SetAttribute("type", "item")
 	-- 	-- 饰品切换后自动匹配点击功能
 	--     button:SetAttribute("item", item_id)
 	-- else
-		button = CreateFrame("Button", nil, AQSELF.bar)
+		button = CreateFrame("Button", nil, SELFAQ.bar)
 	-- end
 	
 	button:SetFrameStrata("HIGH")
@@ -478,23 +478,23 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", AQSELF.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
+   	button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
    	button:Show()
 
    	button:SetScript("OnEnter", function(self)
    		-- 停掉隐藏下拉框的计时器
-		AQSELF.itemDropdownTimestamp = nil
+		SELFAQ.itemDropdownTimestamp = nil
 
-		local bag,slot = AQSELF.reverseBagSlot(item_id)
+		local bag,slot = SELFAQ.reverseBagSlot(item_id)
 
 		-- print(item_id, bag, slot)
 
-		AQSELF.showTooltip( self, "bag", item_id, bag, slot)
+		SELFAQ.showTooltip( self, "bag", item_id, bag, slot)
 	end)
    	button:SetScript("OnLeave", function( self )
    		-- 开启隐藏计时
-   		AQSELF.hideItemDropdown( 0.5 )
-   		AQSELF.hideTooltip()
+   		SELFAQ.hideItemDropdown( 0.5 )
+   		SELFAQ.hideTooltip()
    	end)
 
 	button.inSlot = slot_id
@@ -504,29 +504,29 @@ function AQSELF.createItemDropdown(item_id, x, position, slot_id)
 	button:SetScript('OnClick', function(self)
 
 		-- 点击后立即隐藏下拉框
-	    for k,v in pairs(AQSELF.itemButtons) do
+	    for k,v in pairs(SELFAQ.itemButtons) do
    			v:Hide()
    		end
 
-        if not AQSELF.playerCanEquip() then
+        if not SELFAQ.playerCanEquip() then
         	-- 缓存起来
-        	AQSELF.setWait(item_id, button.inSlot)
+        	SELFAQ.setWait(item_id, button.inSlot)
             return 
         else
         	-- 立即装备
-        	AQSELF.equipWait(item_id, button.inSlot)
+        	SELFAQ.equipWait(item_id, button.inSlot)
         end
        
 	end)
 
    	-- 缓存
-   	AQSELF.itemButtons[item_id] = button
+   	SELFAQ.itemButtons[item_id] = button
 end
 
 -- 更新按钮材质
-function AQSELF.updateItemButton( slot_id )
+function SELFAQ.updateItemButton( slot_id )
 	local itemId = GetInventoryItemID("player", slot_id)
-	local button = AQSELF.slotFrames[slot_id]
+	local button = SELFAQ.slotFrames[slot_id]
 
 	button.itemId = itemId
 
@@ -534,7 +534,7 @@ function AQSELF.updateItemButton( slot_id )
 	if itemId then
 		itemTexture = GetItemTexture(itemId)
 	else
-		_, itemTexture = GetInventorySlotInfo(AQSELF.slotName[slot_id])
+		_, itemTexture = GetInventorySlotInfo(SELFAQ.slotName[slot_id])
 	end
 
 	if button then
@@ -542,10 +542,10 @@ function AQSELF.updateItemButton( slot_id )
 	end
 end
 
-function AQSELF.bindingSlot( )
+function SELFAQ.bindingSlot( )
 	if UnitAffectingCombat("player") then return end
 
-	for k,v in pairs(AQSELF.slotFrames) do
+	for k,v in pairs(SELFAQ.slotFrames) do
 		ClearOverrideBindings(v)
 
 		v.shortcut:SetText("")
@@ -557,7 +557,7 @@ function AQSELF.bindingSlot( )
 
 			if v1 and v1 ~= "" then
 				SetOverrideBindingClick(v, false, v1, "AQBTN"..k)
-				local s = AQSELF.shortKey(v1)
+				local s = SELFAQ.shortKey(v1)
 				v.shortcut:SetText(s)
 				v.shortcut:Show()
 			end
@@ -568,9 +568,9 @@ function AQSELF.bindingSlot( )
 end
 
 -- 绘制下方的饰品队列
-function AQSELF.createCooldownUnit( item_id, position )
-	local f = CreateFrame("Frame", nil, AQSELF.bar)
-	-- f:SetPoint("TOPLEFT", AQSELF.bar, 0 , - (40 + AQSV.buttonSpacing) - (position - 1) * 23)
+function SELFAQ.createCooldownUnit( item_id, position )
+	local f = CreateFrame("Frame", nil, SELFAQ.bar)
+	-- f:SetPoint("TOPLEFT", SELFAQ.bar, 0 , - (40 + AQSV.buttonSpacing) - (position - 1) * 23)
 	f:SetSize(20, 20)
 
 	f:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -596,7 +596,7 @@ function AQSELF.createCooldownUnit( item_id, position )
 	return f
 end
 
-function AQSELF.showTooltip( button, t, item_id, arg1, arg2 )
+function SELFAQ.showTooltip( button, t, item_id, arg1, arg2 )
 
 	if not AQSV.hideTooltip then
 		local tooltip = _G["GameTooltip"]
@@ -608,7 +608,7 @@ function AQSELF.showTooltip( button, t, item_id, arg1, arg2 )
 	    	tooltip:SetOwner(button, ANCHOR_LEFT, 0, -35)
 	    	-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
 
-    		local link = AQSELF.GetItemLink(item_id)
+    		local link = SELFAQ.GetItemLink(item_id)
 			tooltip:SetText(link)
 
 	    else
@@ -627,25 +627,25 @@ function AQSELF.showTooltip( button, t, item_id, arg1, arg2 )
 
 end
 
-function AQSELF.hideTooltip()
+function SELFAQ.hideTooltip()
 	local tooltip = _G["GameTooltip"]
     tooltip:Hide()
 end
 
-function AQSELF.cooldownUpdate( self, elapsed )
+function SELFAQ.cooldownUpdate( self, elapsed )
 	self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
     if (self.TimeSinceLastUpdate > self.Interval) then
     	-- 重新计时
         self.TimeSinceLastUpdate = 0
 
-        AQSELF.doHideItemDropdown()
+        SELFAQ.doHideItemDropdown()
 
 		-- 计算饰品下拉框的冷却时间
-		for k,v in pairs(AQSELF.itemButtons) do
-			-- if AQSELF.itemButtons[v] then
+		for k,v in pairs(SELFAQ.itemButtons) do
+			-- if SELFAQ.itemButtons[v] then
 				-- 获取饰品的冷却状态
-				local rid = AQSELF.reverseId(k)
+				local rid = SELFAQ.reverseId(k)
 
 			    local start, duration, enable = GetItemCooldown(rid)
 			    -- 剩余冷却时间
@@ -653,7 +653,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 
 			    -- 在队列中的显示冷却时间
 			    if duration > 0 and rest > 0 then
-			    	local text = AQSELF.getCooldownText(rest)
+			    	local text = SELFAQ.getCooldownText(rest)
 
 			    	v.text:SetText(text)
 			    else
@@ -663,7 +663,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 		end
 
 		-- 计算图标上的冷却时间
-    	for key,value in pairs(AQSELF.slots) do
+    	for key,value in pairs(SELFAQ.slots) do
     		local itemId = GetInventoryItemID("player", value)
 
     		if itemId then
@@ -672,10 +672,10 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    -- 剩余冷却时间
 			    local rest = duration - GetTime() + start
 
-			    local button = AQSELF.slotFrames[value]
+			    local button = SELFAQ.slotFrames[value]
 
 			    if duration > 0 and rest > 0 then
-			    	local text = AQSELF.getCooldownText(rest)
+			    	local text = SELFAQ.getCooldownText(rest)
 
 			    	button.text:SetText(text)
 			    	local height = (rest/duration)*40
@@ -685,7 +685,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 					button.cooldown:SetHeight(1)
 			    end
 			else
-				local button = AQSELF.slotFrames[value]
+				local button = SELFAQ.slotFrames[value]
 				-- 装备被换下，清空倒计时
 				button.text:SetText()
 				button.cooldown:SetHeight(1)
@@ -693,20 +693,20 @@ function AQSELF.cooldownUpdate( self, elapsed )
 
 
     		-- 判断是否是需要更换的slot
-    		if tContains(AQSELF.needSlots, value)  then
+    		if tContains(SELFAQ.needSlots, value)  then
 
     			-- print(value)
 
     			local slot_id = value
 
 	    		-- 计算冷却队列
-				local queue = AQSELF.buildQueueRealtime(slot_id)
+				local queue = SELFAQ.buildQueueRealtime(slot_id)
 
 				-- print(queue)
 
-				wipe(AQSELF.empty2)
+				wipe(SELFAQ.empty2)
 
-				local slotIds = AQSELF.empty2
+				local slotIds = SELFAQ.empty2
 
 			    slotIds[1] = GetInventoryItemID("player", slot_id)
 
@@ -719,32 +719,32 @@ function AQSELF.cooldownUpdate( self, elapsed )
 			    -- -- 算出等待换上的饰品
 			    local wait = diff(queue, slotIds)
 
-			    if AQSELF.list[slot_id] == nil then
-			    	AQSELF.list[slot_id] = {}
+			    if SELFAQ.list[slot_id] == nil then
+			    	SELFAQ.list[slot_id] = {}
 			    end
 
 			    -- 根据顺序创建图标，或者使其显示
 			    for k,v in pairs(wait) do
 
-			    	-- if tContains(AQSELF.slots, v) then
+			    	-- if tContains(SELFAQ.slots, v) then
 
-				    	if not AQSELF.list[slot_id][v] then
-				    		AQSELF.list[slot_id][v] = AQSELF.createCooldownUnit(v, k)
+				    	if not SELFAQ.list[slot_id][v] then
+				    		SELFAQ.list[slot_id][v] = SELFAQ.createCooldownUnit(v, k)
 				    	end
-				    		-- AQSELF.list[v]:SetPoint("TOPLEFT", AQSELF.bar, 0 , -(40 + AQSV.buttonSpacing) - (k - 1) * 23)
+				    		-- SELFAQ.list[v]:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -(40 + AQSV.buttonSpacing) - (k - 1) * 23)
 
 				    	if not AQSV.hideItemQueue then
-				    		AQSELF.list[slot_id][v]:Show()
+				    		SELFAQ.list[slot_id][v]:Show()
 
-				    		local point, relativeTo, relativePoint, xOfs, yOfs = AQSELF.slotFrames[slot_id]:GetPoint()
+				    		local point, relativeTo, relativePoint, xOfs, yOfs = SELFAQ.slotFrames[slot_id]:GetPoint()
 
 					    	if AQSV.reverseCooldownUnit then
-					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , 30 + (k - 1) * 23)
+					    		SELFAQ.list[slot_id][v]:SetPoint("TOPLEFT", SELFAQ.bar, xOfs , 30 + (k - 1) * 23)
 					    	else
-					    		AQSELF.list[slot_id][v]:SetPoint("TOPLEFT", AQSELF.bar, xOfs , -(43) - (k - 1) * 23)
+					    		SELFAQ.list[slot_id][v]:SetPoint("TOPLEFT", SELFAQ.bar, xOfs , -(43) - (k - 1) * 23)
 					    	end
 				    	else
-				    		AQSELF.list[slot_id][v]:Hide()
+				    		SELFAQ.list[slot_id][v]:Hide()
 				    	end
 
 				    -- end
@@ -753,7 +753,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 
 			    if not AQSV.hideItemQueue then
 				    -- 计算队列冷却时间
-				    for k,v in pairs(AQSELF.list[slot_id]) do
+				    for k,v in pairs(SELFAQ.list[slot_id]) do
 				    	-- 如果已经换上了，隐藏
 				    	if not tContains(wait, k) then
 				    		v:Hide()
@@ -765,7 +765,7 @@ function AQSELF.cooldownUpdate( self, elapsed )
 
 						    -- 在队列中的显示冷却时间
 						    if duration > 0 and rest > 0 then
-						    	local text = AQSELF.getCooldownText(rest)
+						    	local text = SELFAQ.getCooldownText(rest)
 
 						    	v.text:SetText(text)
 						    else

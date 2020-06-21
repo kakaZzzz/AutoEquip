@@ -1,50 +1,50 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local diff2 = AQSELF.diff2
-local L = AQSELF.L
-local player = AQSELF.player
-local initSV = AQSELF.initSV
-local GetItemTexture = AQSELF.GetItemTexture
-local GetItemEquipLoc = AQSELF.GetItemEquipLoc
-local tableInsert = AQSELF.tableInsert
-local loopSlots = AQSELF.loopSlots
-local GetItemLink = AQSELF.GetItemLink
-local GetEnchanitID = AQSELF.GetEnchanitID
-local findCarrot = AQSELF.findCarrot
-local findSwim = AQSELF.findSwim
-local chatInfo = AQSELF.chatInfo
-local popupInfo = AQSELF.popupInfo
-local AddonEquipItemByName = AQSELF.AddonEquipItemByName
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local diff2 = SELFAQ.diff2
+local L = SELFAQ.L
+local player = SELFAQ.player
+local initSV = SELFAQ.initSV
+local GetItemTexture = SELFAQ.GetItemTexture
+local GetItemEquipLoc = SELFAQ.GetItemEquipLoc
+local tableInsert = SELFAQ.tableInsert
+local loopSlots = SELFAQ.loopSlots
+local GetItemLink = SELFAQ.GetItemLink
+local GetEnchanitID = SELFAQ.GetEnchanitID
+local findCarrot = SELFAQ.findCarrot
+local findSwim = SELFAQ.findSwim
+local chatInfo = SELFAQ.chatInfo
+local popupInfo = SELFAQ.popupInfo
+local AddonEquipItemByName = SELFAQ.AddonEquipItemByName
 
 
 -- 初始化插件
-function AQSELF.addonInit()
+function SELFAQ.addonInit()
 
-        AQSELF.buildBlockTable()
-        AQSELF.addItems()
+        SELFAQ.buildBlockTable()
+        SELFAQ.addItems()
 
-        AQSELF.updateAllItems( )
+        SELFAQ.updateAllItems( )
 
-        AQSELF.settingInit()
-        AQSELF.suitInit()
+        SELFAQ.settingInit()
+        SELFAQ.suitInit()
 
 end
 
-function AQSELF.updateAllItems( )
-    for k,v in pairs(AQSELF.pvpSet) do
+function SELFAQ.updateAllItems( )
+    for k,v in pairs(SELFAQ.pvpSet) do
         if GetItemCount(v) > 0 then
-            table.insert(AQSELF.pvp, v)
+            table.insert(SELFAQ.pvp, v)
         end
     end
     
-    AQSELF.checkUsable()
+    SELFAQ.checkUsable()
 
-    loopSlots(AQSELF.initGroupCheckbox)
+    loopSlots(SELFAQ.initGroupCheckbox)
 
-    AQSELF.checkItems()
+    SELFAQ.checkItems()
 end
 
 function aq_test( )
@@ -98,9 +98,9 @@ function aq_test( )
 
 end
 
-AQSELF.buildBlockTable =function()
+SELFAQ.buildBlockTable =function()
     
-    AQSELF.blockTable = {}
+    SELFAQ.blockTable = {}
 
     local str = string.gsub(AQSV.blockItems,"，", ",")
 
@@ -110,13 +110,13 @@ AQSELF.buildBlockTable =function()
         v = tonumber(v)
 
         if v then
-            table.insert(AQSELF.blockTable, v)
+            table.insert(SELFAQ.blockTable, v)
         end
     end
 
 end
 
-AQSELF.addItems = function()
+SELFAQ.addItems = function()
     -- 兼容全角逗号
     AQSV.additionItems = string.gsub(AQSV.additionItems,"，", ",")
     local t = { strsplit(",", AQSV.additionItems) }
@@ -132,17 +132,17 @@ AQSELF.addItems = function()
         -- 避免nil的情况
         if id then
 
-            local slot_id = AQSELF.GetItemSlot(id)
+            local slot_id = SELFAQ.GetItemSlot(id)
 
             if slot_id > 0 then
 
-                if AQSELF.usable[slot_id] == nil then
-                    AQSELF.usable[slot_id] = {}
+                if SELFAQ.usable[slot_id] == nil then
+                    SELFAQ.usable[slot_id] = {}
                 end
 
-                if not tContains(AQSELF.usable[slot_id], id) and id and time then
-                    table.insert(AQSELF.usable[slot_id], id)
-                    AQSELF.buffTime[id] = time
+                if not tContains(SELFAQ.usable[slot_id], id) and id and time then
+                    table.insert(SELFAQ.usable[slot_id], id)
+                    SELFAQ.buffTime[id] = time
 
                     if AQSV.pvpTrinkets[id] == nil then
                         AQSV.pvpTrinkets[id] = false
@@ -154,7 +154,7 @@ AQSELF.addItems = function()
 
                 -- 手动修改buff持续时间
                 if id and time then
-                    AQSELF.buffTime[id] = time
+                    SELFAQ.buffTime[id] = time
                 end
 
             end
@@ -164,8 +164,8 @@ AQSELF.addItems = function()
     end
 end
 
-AQSELF.initGroupCheckbox = function(slot_id)
-    for k,v in pairs(AQSELF.pvp) do
+SELFAQ.initGroupCheckbox = function(slot_id)
+    for k,v in pairs(SELFAQ.pvp) do
         if AQSV.pveTrinkets[v] == nil then
             AQSV.pveTrinkets[v] = false
         end
@@ -188,12 +188,12 @@ AQSELF.initGroupCheckbox = function(slot_id)
 end
 
 -- 检查主动饰品
-AQSELF.checkUsable = function()
+SELFAQ.checkUsable = function()
     -- 删除没有或者放在银行里的主动饰品，并保持优先级不变
 
-    AQSELF.needSlots = {}
+    SELFAQ.needSlots = {}
 
-    for sid,items in pairs(AQSELF.usable) do
+    for sid,items in pairs(SELFAQ.usable) do
         
         local new = {}
 
@@ -203,7 +203,7 @@ AQSELF.checkUsable = function()
 
         for i,v in pairs(AQSV.usableItems[sid]) do
 
-            if GetItemCount(v) > 0 and not tContains(new, v) and tContains(AQSELF.usable[sid], v) then
+            if GetItemCount(v) > 0 and not tContains(new, v) and tContains(SELFAQ.usable[sid], v) then
                 table.insert(new, v)
             end
             -- debug(new)
@@ -211,23 +211,23 @@ AQSELF.checkUsable = function()
         AQSV.usableItems[sid] = new
 
         -- 获得新饰品，或者从银行取出，保持优先级不变，追加到最后
-        for i,v in ipairs(AQSELF.usable[sid]) do
+        for i,v in ipairs(SELFAQ.usable[sid]) do
             if GetItemCount(v) > 0 and not tContains(AQSV.usableItems[sid], v) then
                 table.insert(AQSV.usableItems[sid], v)
             end
         end
 
         if #AQSV.usableItems[sid] > 0 then
-            table.insert(AQSELF.needSlots, sid)
+            table.insert(SELFAQ.needSlots, sid)
         end
 
     end
 
-    table.sort(AQSELF.needSlots)
+    table.sort(SELFAQ.needSlots)
 
     local new = {}
 
-    for k,v in pairs(AQSELF.needSlots) do
+    for k,v in pairs(SELFAQ.needSlots) do
         if v == 13 then
             table.insert(new, 1, v)
         else
@@ -235,40 +235,40 @@ AQSELF.checkUsable = function()
         end
     end
 
-    AQSELF.needSlots = new
+    SELFAQ.needSlots = new
 
 end
 
 -- 检查角色身上所有的饰品
-AQSELF.checkItems = function( )
+SELFAQ.checkItems = function( )
     
-    wipe(AQSELF.empty6)
+    wipe(SELFAQ.empty6)
 
-    AQSELF.items = AQSELF.empty6
+    SELFAQ.items = SELFAQ.empty6
 
-    wipe(AQSELF.empty7)
+    wipe(SELFAQ.empty7)
 
     -- 保存饰品在背包中的位置
-    AQSELF.itemInBags = AQSELF.empty7
+    SELFAQ.itemInBags = SELFAQ.empty7
 
     for i=1,18 do
         if i ~= 4 then
-            AQSELF.items[i] = tableInsert(AQSELF.items[i], 0)
+            SELFAQ.items[i] = tableInsert(SELFAQ.items[i], 0)
 
             local id = GetInventoryItemID("player", i)
 
             if id then
                 -- 保存身上的装备
-                AQSELF.itemInBags[id] = 1000*i
+                SELFAQ.itemInBags[id] = 1000*i
 
-                tableInsert(AQSELF.items[i], id)
+                tableInsert(SELFAQ.items[i], id)
                 if i == 11 or i == 13 then
-                    AQSELF.items[i+1] = tableInsert(AQSELF.items[i+1], id)
+                    SELFAQ.items[i+1] = tableInsert(SELFAQ.items[i+1], id)
                 elseif i == 12 or i == 14 then
-                    AQSELF.items[i-1] = tableInsert(AQSELF.items[i-1], id)
+                    SELFAQ.items[i-1] = tableInsert(SELFAQ.items[i-1], id)
                 elseif i == 16 or i == 17 then
                     if(GetItemEquipLoc(id) == "INVTYPE_WEAPON") then
-                        AQSELF.items[33-i] = tableInsert(AQSELF.items[33-i], id)
+                        SELFAQ.items[33-i] = tableInsert(SELFAQ.items[33-i], id)
                     end
                 end
 
@@ -297,7 +297,7 @@ AQSELF.checkItems = function( )
                 local id = GetContainerItemID(i,s)
 
                 -- 不在屏蔽列表里
-                if not tContains(AQSELF.blockTable, id) then
+                if not tContains(SELFAQ.blockTable, id) then
                      local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemTexture, itemSellPrice = GetItemInfo(id)
 
                      -- debug(itemEquipLoc)
@@ -308,62 +308,62 @@ AQSELF.checkItems = function( )
 
                     if itemEquipLoc ~= "" and itemEquipLoc ~= "INVTYPE_AMMO" then
                         -- 拥有物品的个数，计算出内部id
-                        id = AQSELF.findItemsOrder(id)
-                        AQSELF.itemInBags[id] = i*100 + s
+                        id = SELFAQ.findItemsOrder(id)
+                        SELFAQ.itemInBags[id] = i*100 + s
                         
                     end
 
                     if itemEquipLoc == "INVTYPE_TRINKET" then
-                        table.insert(AQSELF.items[13], id)
-                        table.insert(AQSELF.items[14], id)
+                        table.insert(SELFAQ.items[13], id)
+                        table.insert(SELFAQ.items[14], id)
 
                         findCarrot(id, 13)
                         
 
                     elseif itemEquipLoc == "INVTYPE_CHEST" or itemEquipLoc == "INVTYPE_ROBE" then
-                        table.insert(AQSELF.items[5], id)
+                        table.insert(SELFAQ.items[5], id)
                     elseif itemEquipLoc == "INVTYPE_HEAD" then
-                        table.insert(AQSELF.items[1], id)
+                        table.insert(SELFAQ.items[1], id)
                         findSwim(id, 1)
                     elseif itemEquipLoc == "INVTYPE_NECK" then
-                        table.insert(AQSELF.items[2], id)
+                        table.insert(SELFAQ.items[2], id)
                     elseif itemEquipLoc == "INVTYPE_SHOULDER" then
-                        table.insert(AQSELF.items[3], id)
+                        table.insert(SELFAQ.items[3], id)
                     elseif itemEquipLoc == "INVTYPE_WAIST" then
-                        table.insert(AQSELF.items[6], id)
+                        table.insert(SELFAQ.items[6], id)
                         findSwim(id, 6)
                     elseif itemEquipLoc == "INVTYPE_LEGS" then
-                        table.insert(AQSELF.items[7], id)
+                        table.insert(SELFAQ.items[7], id)
                     elseif itemEquipLoc == "INVTYPE_FEET" then
-                        table.insert(AQSELF.items[8], id)
+                        table.insert(SELFAQ.items[8], id)
 
                         local link = GetContainerItemLink(i, s)
                         findCarrot(id, 8, link)
 
                     elseif itemEquipLoc == "INVTYPE_WRIST" then
-                        table.insert(AQSELF.items[9], id)
+                        table.insert(SELFAQ.items[9], id)
                     elseif itemEquipLoc == "INVTYPE_HAND" then
-                        table.insert(AQSELF.items[10], id)
+                        table.insert(SELFAQ.items[10], id)
 
                         local link = GetContainerItemLink(i, s)
                         findCarrot(id, 10, link)
 
                     elseif itemEquipLoc == "INVTYPE_FINGER" then
-                        table.insert(AQSELF.items[11], id)
-                        table.insert(AQSELF.items[12], id)
+                        table.insert(SELFAQ.items[11], id)
+                        table.insert(SELFAQ.items[12], id)
                     elseif itemEquipLoc == "INVTYPE_CLOAK" then
-                        table.insert(AQSELF.items[15], id)
+                        table.insert(SELFAQ.items[15], id)
                     elseif itemEquipLoc == "INVTYPE_WEAPON" then
-                        table.insert(AQSELF.items[16], id)
-                        table.insert(AQSELF.items[17], id)
+                        table.insert(SELFAQ.items[16], id)
+                        table.insert(SELFAQ.items[17], id)
                     elseif itemEquipLoc == "INVTYPE_SHIELD" or itemEquipLoc == "INVTYPE_WEAPONOFFHAND" or itemEquipLoc == "INVTYPE_HOLDABLE" then
-                        table.insert(AQSELF.items[17], id)
+                        table.insert(SELFAQ.items[17], id)
                     elseif itemEquipLoc == "INVTYPE_2HWEAPON" or itemEquipLoc == "INVTYPE_WEAPONMAINHAND" then
-                        table.insert(AQSELF.items[16], id)
+                        table.insert(SELFAQ.items[16], id)
                         -- 水藤是双手武器
                         findSwim(id, 16)
                     elseif itemEquipLoc == "INVTYPE_RANGED" or itemEquipLoc == "INVTYPE_THROWN" or itemEquipLoc == "INVTYPE_RANGEDRIGHT" or itemEquipLoc == "INVTYPE_RELIC" then
-                        table.insert(AQSELF.items[18], id)
+                        table.insert(SELFAQ.items[18], id)
                     end
                     
                 end
@@ -374,21 +374,21 @@ AQSELF.checkItems = function( )
     loopSlots(function(slot_id)
 
         -- 去掉主动饰品
-        -- AQSELF.items[slot_id] = diff2(AQSELF.items[slot_id], AQSV.usableItems[slot_id])
+        -- SELFAQ.items[slot_id] = diff2(SELFAQ.items[slot_id], AQSV.usableItems[slot_id])
 
         -- 降幂排序，序号大的正常来看是等级高的饰品
-        table.sort(AQSELF.items[slot_id], function(a, b)
+        table.sort(SELFAQ.items[slot_id], function(a, b)
             -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
             return a > b
         end)
 
     end)
 
-    -- debug(AQSELF.itemInBags)
+    -- debug(SELFAQ.itemInBags)
 
 end
 
-AQSELF.updateItemInBags = function()
+SELFAQ.updateItemInBags = function()
     for i=0,NUM_BAG_SLOTS do
         local count = GetContainerNumSlots(i)
 
@@ -403,11 +403,11 @@ AQSELF.updateItemInBags = function()
 
                 if itemEquipLoc ~= "" then
                     
-                    if AQSELF.itemInBags[id] then
-                        AQSELF.itemInBags[id][1] = i
-                        AQSELF.itemInBags[id][2] = s
+                    if SELFAQ.itemInBags[id] then
+                        SELFAQ.itemInBags[id][1] = i
+                        SELFAQ.itemInBags[id][2] = s
                     else
-                        AQSELF.itemInBags[id] = {i,s}
+                        SELFAQ.itemInBags[id] = {i,s}
                     end
                 end
             end  
@@ -417,11 +417,11 @@ end
 
 
 -- 获取当前装备饰品的状态
-AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
+SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
 
-    wipe(AQSELF["e"..(slot_id%2)])
+    wipe(SELFAQ["e"..(slot_id%2)])
 
-    local slot = AQSELF["e"..(slot_id%2)]
+    local slot = SELFAQ["e"..(slot_id%2)]
 
     slot["id"] = GetInventoryItemID("player", slot_id)
 
@@ -456,8 +456,8 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 如果buff时间没有记录，默认为0
-    if AQSELF.buffTime[slot["id"]] == nil then
-        AQSELF.buffTime[slot["id"]] = 0
+    if SELFAQ.buffTime[slot["id"]] == nil then
+        SELFAQ.buffTime[slot["id"]] = 0
     end
 
     -- 如果当前饰品可用，或者剩余时间30秒之内，取消CD锁
@@ -470,10 +470,10 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     -- 饰品已经使用，并且超过了buff时间
     -- 剩余时间要大于30，避免饰品使用后，但是cd快到了，还被换下
     -- 主动CD锁判断
-    if slot["duration"] > 30 and slot["buff"] > AQSELF.buffTime[slot["id"]] and slot["rest"] > 30 and not AQSV.slotStatus[slot_id].lockedCD then
+    if slot["duration"] > 30 and slot["buff"] > SELFAQ.buffTime[slot["id"]] and slot["rest"] > 30 and not AQSV.slotStatus[slot_id].lockedCD then
         slot["busy"] = false
         -- 饰品使用后，取消锁定
-        AQSELF.cancelLocker( slot_id )
+        SELFAQ.cancelLocker( slot_id )
     end
 
     -- 使用busy属性，控制饰品槽是否参与更换逻辑
@@ -483,16 +483,16 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换萝卜
-    if slot_id == 14 and not AQSV.slotStatus[14].locked and AQSV.enableCarrot and AQSELF.carrot > 0 then
+    if slot_id == 14 and not AQSV.slotStatus[14].locked and AQSV.enableCarrot and SELFAQ.carrot > 0 then
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if(IsMounted() and not UnitOnTaxi("player")) then
 
             -- 战场判断放这里，不然进战场不会换下
             -- 副本里也不使用
-            if not AQSELF.inInstance() then
-                if slot["id"] ~= AQSELF.carrot then
+            if not SELFAQ.inInstance() then
+                if slot["id"] ~= SELFAQ.carrot then
                     AQSV.carrotBackup = slot["id"]
-                    AddonEquipItemByName(AQSELF.carrot, 14)
+                    AddonEquipItemByName(SELFAQ.carrot, 14)
                     -- collectgarbage("collect")
                 end
                 -- 骑马时一直busy，中断更换主动饰品的逻辑
@@ -500,10 +500,10 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif slot["id"] == AQSELF.carrot and (AQSV.disableSlot14 or (#queue== 0 and AQSV.slotStatus[14].backup == 0)) then
+        elseif slot["id"] == SELFAQ.carrot and (AQSV.disableSlot14 or (#queue== 0 and AQSV.slotStatus[14].backup == 0)) then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
-            if AQSV.carrotBackup == AQSELF.carrot then
+            if AQSV.carrotBackup == SELFAQ.carrot then
                 AQSV.carrotBackup = 0
             end
 
@@ -521,7 +521,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换手套或靴子
-    if tContains({8,10}, slot_id) and AQSELF["ride"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableCarrot  then
+    if tContains({8,10}, slot_id) and SELFAQ["ride"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableCarrot  then
 
         local link = GetInventoryItemLink("player",slot_id)
         local enchantId = GetEnchanitID(link)
@@ -531,14 +531,14 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
 
             -- 战场判断放这里，不然进战场不会换下
             -- 副本里也不使用
-            if not AQSELF.inInstance() then
+            if not SELFAQ.inInstance() then
 
-                if enchantId ~= "930" and enchantId ~= "464" and AQSELF["ride"..slot_id] > 0 then
+                if enchantId ~= "930" and enchantId ~= "464" and SELFAQ["ride"..slot_id] > 0 then
 
                     AQSV["backup"..slot_id] = slot["id"]
 
                     -- 存在两个相同物品的可能
-                    AQSELF.equipByID(AQSELF["ride"..slot_id], slot_id)
+                    SELFAQ.equipByID(SELFAQ["ride"..slot_id], slot_id)
 
                     -- collectgarbage("collect")
                 end
@@ -548,10 +548,10 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
             end
 
         elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
-            -- print( AQSV["backup"..slot_id], AQSELF["ride"..slot_id])
+            -- print( AQSV["backup"..slot_id], SELFAQ["ride"..slot_id])
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
-            if AQSV["backup"..slot_id] == AQSELF["ride"..slot_id] then
+            if AQSV["backup"..slot_id] == SELFAQ["ride"..slot_id] then
                 AQSV["backup"..slot_id] = 0
             end
 
@@ -566,12 +566,12 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换水藤
-    if tContains({1,6,16}, slot_id) and AQSELF["swim"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableSwim  then
+    if tContains({1,6,16}, slot_id) and SELFAQ["swim"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableSwim  then
 
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if IsSwimming() then
 
-            if slot["id"] ~= AQSELF["swim"..slot_id] and AQSELF["swim"..slot_id] > 0 then
+            if slot["id"] ~= SELFAQ["swim"..slot_id] and SELFAQ["swim"..slot_id] > 0 then
 
                 AQSV["backup"..slot_id] = slot["id"]
 
@@ -589,7 +589,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 end
 
                 -- 存在两个相同物品的可能
-                AQSELF.equipByID(AQSELF["swim"..slot_id], slot_id)
+                SELFAQ.equipByID(SELFAQ["swim"..slot_id], slot_id)
   
             end
             -- 骑马时一直busy，中断更换主动饰品的逻辑
@@ -607,7 +607,7 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
                 end
             end
 
-            if AQSV["backup"..slot_id] == AQSELF["swim"..slot_id] then
+            if AQSV["backup"..slot_id] == SELFAQ["swim"..slot_id] then
 
                 if slot_id == 16 then
                      AQSV["backup17"] = 0
@@ -630,15 +630,15 @@ AQSELF.getTrinketStatusBySlotId = function( slot_id, queue )
     return slot
 end
 
-function AQSELF.buildQueueRealtime(slot_id)
+function SELFAQ.buildQueueRealtime(slot_id)
 
-    wipe(AQSELF.empty1)
+    wipe(SELFAQ.empty1)
 
     if not AQSV.enable then
-        return AQSELF.empty1
+        return SELFAQ.empty1
     end
 
-    local queue = AQSELF.empty1
+    local queue = SELFAQ.empty1
     local inBattleground = UnitInBattleground("player")
 
     if not AQSV.usableItems[slot_id] then
@@ -647,12 +647,12 @@ function AQSELF.buildQueueRealtime(slot_id)
 
     for k,v in pairs(AQSV.usableItems[slot_id]) do
         if inBattleground or AQSV.pvpMode then
-            AQSELF.pvpIcon:Show()
+            SELFAQ.pvpIcon:Show()
             if AQSV.pvpTrinkets[v] then
                 table.insert(queue, v)
             end
         else
-            AQSELF.pvpIcon:Hide()
+            SELFAQ.pvpIcon:Hide()
             if AQSV.pveTrinkets[v] then
                 table.insert(queue, v)
             end
@@ -662,14 +662,14 @@ function AQSELF.buildQueueRealtime(slot_id)
     return queue
 end
 
-function AQSELF.changeTrinket()
+function SELFAQ.changeTrinket()
     -- 主要代码部分 --
     
-    local queue = AQSELF.buildQueueRealtime(13)
+    local queue = SELFAQ.buildQueueRealtime(13)
 
     -- 获取当前饰品的状态
-    local slot13 = AQSELF.getTrinketStatusBySlotId(13, queue)
-    local slot14 = AQSELF.getTrinketStatusBySlotId(14, queue)
+    local slot13 = SELFAQ.getTrinketStatusBySlotId(13, queue)
+    local slot14 = SELFAQ.getTrinketStatusBySlotId(14, queue)
 
     -- 如果没有主动饰品，则停止更换饰品
     -- if #queue == 0 then
@@ -703,12 +703,12 @@ function AQSELF.changeTrinket()
                     AddonEquipItemByName(v, 13)
                     slot13["busy"] = true
                     slot13["priority"] = k
-                    -- AQSELF.cancelLocker( 13 )
+                    -- SELFAQ.cancelLocker( 13 )
                 elseif k <  slot14["priority"] and not AQSV.slotStatus[14].locked and not AQSV.disableSlot14 and AQSV.queue14[v] then
                     AddonEquipItemByName(v, 14)
                     slot14["busy"] = true
                     slot14["priority"] = k
-                    -- AQSELF.cancelLocker( 14 )
+                    -- SELFAQ.cancelLocker( 14 )
                 end
             end
         end
@@ -764,13 +764,13 @@ function AQSELF.changeTrinket()
     end
 end
 
-function AQSELF.changeItem(slot_id)
+function SELFAQ.changeItem(slot_id)
     -- 主要代码部分 --
     -- debug(slot_id)
-    local queue = AQSELF.buildQueueRealtime(slot_id)
+    local queue = SELFAQ.buildQueueRealtime(slot_id)
 
     -- 获取当前饰品的状态
-    local slot13 = AQSELF.getTrinketStatusBySlotId(slot_id, queue)
+    local slot13 = SELFAQ.getTrinketStatusBySlotId(slot_id, queue)
 
     -- 如果没有主动饰品，则停止更换饰品
     -- if #queue == 0 then
@@ -844,10 +844,10 @@ function AQSELF.changeItem(slot_id)
 
 end
 
-function AQSELF.enablePvpMode()
+function SELFAQ.enablePvpMode()
     AQSV.pvpMode = not AQSV.pvpMode
 
-    AQSELF.menuList[2]["checked"] = AQSV.pvpMode
+    SELFAQ.menuList[2]["checked"] = AQSV.pvpMode
 
     local on = ""
     if AQSV.pvpMode then
@@ -857,19 +857,19 @@ function AQSELF.enablePvpMode()
     end
 
     if AQSV.pvpMode then
-        AQSELF.pvpIcon:Show()
+        SELFAQ.pvpIcon:Show()
     else
-        AQSELF.pvpIcon:Hide()
+        SELFAQ.pvpIcon:Hide()
     end
     chatInfo(L["PVP mode "]..on)
     popupInfo(L["PVP mode "]..on)
 end
 
-function AQSELF.enableAutoEuquip()
+function SELFAQ.enableAutoEuquip()
     AQSV.enable = not AQSV.enable
 
-    AQSELF.f.checkbox["enable"]:SetChecked(AQSV.enable)
-    AQSELF.menuList[1]["checked"] = AQSV.enable
+    SELFAQ.f.checkbox["enable"]:SetChecked(AQSV.enable)
+    SELFAQ.menuList[1]["checked"] = AQSV.enable
 
     if AQSV.enable then
         chatInfo(L["AutoEquip function |cFF00FF00Enabled|r"])
@@ -880,7 +880,7 @@ function AQSELF.enableAutoEuquip()
     end
 end
 
-function AQSELF.setCDLock( item_id, slot_id )
+function SELFAQ.setCDLock( item_id, slot_id )
 
     local start, duration, enable = GetItemCooldown(item_id)
 
@@ -894,16 +894,16 @@ function AQSELF.setCDLock( item_id, slot_id )
     end
 end
 
-function AQSELF.setWait(item_id, slot_id)
+function SELFAQ.setWait(item_id, slot_id)
 
-    local rid = AQSELF.reverseId(item_id)
+    local rid = SELFAQ.reverseId(item_id)
 
     local texture = GetItemTexture(rid)
 
     -- 所有slot都可能出现队列，没显示装备栏的这里会报错
-    if AQSELF.slotFrames[slot_id] then
-        AQSELF.slotFrames[slot_id].wait:SetTexture(texture)
-        AQSELF.slotFrames[slot_id].waitFrame:Show()
+    if SELFAQ.slotFrames[slot_id] then
+        SELFAQ.slotFrames[slot_id].wait:SetTexture(texture)
+        SELFAQ.slotFrames[slot_id].waitFrame:Show()
     end
 
     AQSV["slot"..slot_id.."Wait"] = {
@@ -912,11 +912,11 @@ function AQSELF.setWait(item_id, slot_id)
     }
 end
 
-function AQSELF.cancelLocker( slot_id )
+function SELFAQ.cancelLocker( slot_id )
     AQSV.slotStatus[slot_id].locked = false
 
-    if  AQSELF.slotFrames[slot_id] then
-        AQSELF.slotFrames[slot_id].locker:Hide()
+    if  SELFAQ.slotFrames[slot_id] then
+        SELFAQ.slotFrames[slot_id].locker:Hide()
     end
 
     -- 解开CD锁
@@ -924,44 +924,44 @@ function AQSELF.cancelLocker( slot_id )
     AQSV.slotStatus[slot_id].lockedTime = 0
 end
 
-function AQSELF.equipWait(item_id, slot_id, popup)
+function SELFAQ.equipWait(item_id, slot_id, popup)
 
     if popup == nil then
         popup = true
     end
 
-    local rid = AQSELF.reverseId(item_id)
+    local rid = SELFAQ.reverseId(item_id)
 
-    AQSELF.equipByID(item_id, slot_id, popup)
+    SELFAQ.equipByID(item_id, slot_id, popup)
 
     AQSV.slotStatus[slot_id].locked = true
     AQSV["slot"..slot_id.."Wait"] = nil
 
-    if AQSELF.slotFrames[slot_id] then
-        AQSELF.slotFrames[slot_id].wait:SetTexture()
-        AQSELF.slotFrames[slot_id].waitFrame:Hide()
-        AQSELF.slotFrames[slot_id].locker:Show()
+    if SELFAQ.slotFrames[slot_id] then
+        SELFAQ.slotFrames[slot_id].wait:SetTexture()
+        SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+        SELFAQ.slotFrames[slot_id].locker:Show()
     end
 
-    AQSELF.setCDLock( rid, slot_id )
+    SELFAQ.setCDLock( rid, slot_id )
 end
 
-function AQSELF.checkAllWait()
-    for k,v in pairs(AQSELF.slots) do
+function SELFAQ.checkAllWait()
+    for k,v in pairs(SELFAQ.slots) do
         if AQSV["slot"..v.."Wait"] then
             local one = AQSV["slot"..v.."Wait"]
-            AQSELF.equipWait(one[1], one[2])
+            SELFAQ.equipWait(one[1], one[2])
         end
     end
 end
 
-function AQSELF.inInstance()
+function SELFAQ.inInstance()
     local inInstance, instanceType = IsInInstance()
 
     return inInstance
 end
 
-function AQSELF.playerCanEquip()
+function SELFAQ.playerCanEquip()
     local f=UnitAffectingCombat("player")
     local d=UnitIsDeadOrGhost("player")
     local c1 = CastingInfo("player") 
@@ -975,17 +975,17 @@ function AQSELF.playerCanEquip()
     end
 end
 
-function AQSELF.slotsCanEquip()
+function SELFAQ.slotsCanEquip()
     local slots = {16,17,18}
 
-    if AQSELF.playerCanEquip() then
+    if SELFAQ.playerCanEquip() then
         slots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}
     end
 
     return slots
 end
 
-AQSELF.equipOnyxiaCloak = function()
+SELFAQ.equipOnyxiaCloak = function()
     
     local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
 
@@ -997,14 +997,14 @@ AQSELF.equipOnyxiaCloak = function()
 
         if GetItemCount(15138) > 0 then
             AQSV.cloakBackup = GetInventoryItemID("player", 15)
-            AQSELF.equipWait(15138, 15)
+            SELFAQ.equipWait(15138, 15)
             chatInfo(L[" Equip "]..GetItemLink(15138))
         end
 
     elseif GetInventoryItemID("player", 15) == 15138 and AQSV.cloakBackup > 0 then
         AddonEquipItemByName(AQSV.cloakBackup, 15)
         chatInfo(L[" Equip "]..GetItemLink(AQSV.cloakBackup))
-        AQSELF.cancelLocker( 15 )
+        SELFAQ.cancelLocker( 15 )
         AQSV.cloakBackup = 0
     end
 

@@ -1,23 +1,23 @@
-local _, AQSELF = ...
+local _, SELFAQ = ...
 
-local debug = AQSELF.debug
-local clone = AQSELF.clone
-local diff = AQSELF.diff
-local L = AQSELF.L
-local GetItemLink = AQSELF.GetItemLink
-local GetItemEquipLoc = AQSELF.GetItemEquipLoc
+local debug = SELFAQ.debug
+local clone = SELFAQ.clone
+local diff = SELFAQ.diff
+local L = SELFAQ.L
+local GetItemLink = SELFAQ.GetItemLink
+local GetItemEquipLoc = SELFAQ.GetItemEquipLoc
 
-local GetSlotID = AQSELF.GetSlotID
-local player = AQSELF.player
+local GetSlotID = SELFAQ.GetSlotID
+local player = SELFAQ.player
 
 -- 设置菜单初始化
-function AQSELF.suitInit()
+function SELFAQ.suitInit()
 
     
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
 
-    AQSELF.suitOption = f
+    SELFAQ.suitOption = f
     f.checkbox = {}
     f.dropdown = {
         [63] = {},
@@ -29,7 +29,7 @@ function AQSELF.suitInit()
     p.parent = "AutoEquip"
 
 
-    function AQSELF.updateMembersTarget()
+    function SELFAQ.updateMembersTarget()
 
         if not AQSV.enableSuit then
             return
@@ -39,7 +39,7 @@ function AQSELF.suitInit()
             return
         end
 
-        if not AQSELF.inInstance() then
+        if not SELFAQ.inInstance() then
             return
         end
 
@@ -94,17 +94,17 @@ function AQSELF.suitInit()
         -- 团队里有一定人数目标为xx，才切换
 
         if level63 > AQSV.raidTargetThreshold and level63 > level64 then
-            AQSELF.needSuit = 63
+            SELFAQ.needSuit = 63
         end
 
         if level64 > AQSV.raidTargetThreshold and level64 > level63 then
-            AQSELF.needSuit = 64
+            SELFAQ.needSuit = 64
         end
 
 
     end
 
-    function AQSELF.checkAndFireChangeSuit(target)
+    function SELFAQ.checkAndFireChangeSuit(target)
 
         local level = UnitLevel(target)
 
@@ -129,10 +129,10 @@ function AQSELF.suitInit()
 
         -- print(boss,UnitAffectingCombat("player"))
         -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
-        if level ~= 0 and not UnitIsDead(target) and AQSELF.playerCanEquip() then
+        if level ~= 0 and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
             -- print(boss,UnitAffectingCombat("player"))
-            -- AQSELF.changeSuit(boss)               
-           AQSELF.needSuit = boss
+            -- SELFAQ.changeSuit(boss)               
+           SELFAQ.needSuit = boss
 
            return true
 
@@ -143,13 +143,13 @@ function AQSELF.suitInit()
     end
 
 
-    function AQSELF.changeSuit()
+    function SELFAQ.changeSuit()
 
         if not AQSV.enableSuit then
             return true
         end
 
-        local boss = AQSELF.needSuit
+        local boss = SELFAQ.needSuit
 
         if boss == 0 or boss == AQSV.currentSuit then
             return
@@ -157,11 +157,11 @@ function AQSELF.suitInit()
 
         local res = true
 
-        for k,v in pairs(AQSELF.gearSlots) do
+        for k,v in pairs(SELFAQ.gearSlots) do
 
             -- 判断当前栏是否需要更换
-            wipe(AQSELF.empty5)
-            local waitId = AQSELF.empty5
+            wipe(SELFAQ.empty5)
+            local waitId = SELFAQ.empty5
 
             waitId[63] = AQSV.suit[63][v]
             waitId[64] = AQSV.suit[64][v]
@@ -178,7 +178,7 @@ function AQSELF.suitInit()
                 if boss > 60 and waitId[boss] > 0 then
                     -- 跟当前装备的id不同时
                     if slotId ~= waitId[boss] then
-                        AQSELF.equipWait(waitId[boss], v, false)
+                        SELFAQ.equipWait(waitId[boss], v, false)
                     end
                 end
 
@@ -204,7 +204,7 @@ function AQSELF.suitInit()
                         end
 
                         -- res = false
-                        AQSELF.equipByID(wait60 + order, v, false)
+                        SELFAQ.equipByID(wait60 + order, v, false)
 
                     end
                     
@@ -212,13 +212,13 @@ function AQSELF.suitInit()
 
 
                 -- 解锁受到影响的位置
-                if AQSELF.slotFrames[v] and boss == 60 then
-                    AQSELF.cancelLocker( v )
+                if SELFAQ.slotFrames[v] and boss == 60 then
+                    SELFAQ.cancelLocker( v )
                 end
 
             elseif boss == 60 then
                  if v == 17 and GetItemEquipLoc(GetSlotID(16)) == "INVTYPE_2HWEAPON" then
-                    AQSELF.equipByID(AQSV.suit[boss][v], v, false)
+                    SELFAQ.equipByID(AQSV.suit[boss][v], v, false)
                 else
                     -- AQSV.suit[boss][v] = 0
                 end
@@ -236,11 +236,11 @@ function AQSELF.suitInit()
         if res then
 
             if AQSV.currentSuit ~= boss then
-                AQSELF.popupInfo(L["Equip "]..L["Suit "..L[boss]])
-                AQSELF.chatInfo(L["Equip "]..L["Suit "..L[boss]])
+                SELFAQ.popupInfo(L["Equip "]..L["Suit "..L[boss]])
+                SELFAQ.chatInfo(L["Equip "]..L["Suit "..L[boss]])
             end
 
-            AQSELF.needSuit = 0
+            SELFAQ.needSuit = 0
             AQSV.currentSuit = boss
         end
 
@@ -271,31 +271,31 @@ function AQSELF.suitInit()
             if key == "enableItemBar" then  
                 -- 装备栏的开关
                 if not AQSV.enableItemBar then
-                    AQSELF.bar:Hide()
+                    SELFAQ.bar:Hide()
                 else
-                    AQSELF.bar:Show()
+                    SELFAQ.bar:Show()
                 end
             end
 
             if key == "enableBuff" then  
                 -- 装备栏的开关
                 if not AQSV.enableBuff then
-                    AQSELF.buff:Hide()
+                    SELFAQ.buff:Hide()
                 else
-                    AQSELF.buff:Show()
+                    SELFAQ.buff:Show()
                 end
             end
 
             if key == "locked" then
-                AQSELF.lockItemBar()
+                SELFAQ.lockItemBar()
             end
 
             if key == "buffLocked" then
-                AQSELF.lockBuff()
+                SELFAQ.lockBuff()
             end
 
             if key == "hideBackdrop" then
-                AQSELF.hideBackdrop()
+                SELFAQ.hideBackdrop()
             end
         end)
 
@@ -394,7 +394,7 @@ function AQSELF.suitInit()
     local height = -175
     local lastHeight = 0
 
-    for k,v in pairs(AQSELF.items) do
+    for k,v in pairs(SELFAQ.items) do
 
         if AQSV.suit[63][k] == nil then
             AQSV.suit[63][k] = 0
@@ -415,7 +415,7 @@ function AQSELF.suitInit()
         end
 
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        l:SetText(AQSELF.slotToName[k])
+        l:SetText(SELFAQ.slotToName[k])
         l:SetPoint("TOPLEFT", f, 515, height - heightK*35)
 
         buildLine(60, v, k, height + 5 - heightK*35)
@@ -433,7 +433,7 @@ function AQSELF.suitInit()
 
     InterfaceOptions_AddCategory(p)
     -- 最后加载帮助页面
-    InterfaceOptions_AddCategory(AQSELF.helpOption)
+    InterfaceOptions_AddCategory(SELFAQ.helpOption)
 
     -- 运行两遍才行
     -- InterfaceOptionsFrame_OpenToCategory("AutoEquip");
