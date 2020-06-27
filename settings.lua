@@ -846,7 +846,7 @@ function SELFAQ.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["/ae ips 5"])
+        t:SetText(L["/ae ipc 5"])
         t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 230)
     end
 

@@ -396,6 +396,10 @@ function SELFAQ.mainInit()
         -- 脱离战斗的事件
         if event == "PLAYER_REGEN_ENABLED" then
 
+            if not AQSV.enable then
+                return
+            end
+            
             -- 脱战也要判断一下其他状态
             if not SELFAQ.playerCanEquip() then
                 return 

@@ -571,30 +571,33 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
         if IsSwimming() then
 
-            if slot["id"] ~= SELFAQ["swim"..slot_id] and SELFAQ["swim"..slot_id] > 0 then
+            if not SELFAQ.inInstance() then
 
-                AQSV["backup"..slot_id] = slot["id"]
+                if slot["id"] ~= SELFAQ["swim"..slot_id] and SELFAQ["swim"..slot_id] > 0 then
 
-                if slot_id == 16 then
+                    AQSV["backup"..slot_id] = slot["id"]
 
-                    local slot17 = GetInventoryItemID("player", 17)
+                    if slot_id == 16 then
 
-                    -- 修正slot为空时出现的问题
-                    if slot17 == nil then
-                        slot17 = 0
+                        local slot17 = GetInventoryItemID("player", 17)
+
+                        -- 修正slot为空时出现的问题
+                        if slot17 == nil then
+                            slot17 = 0
+                        end
+
+                        AQSV["backup17"] = slot17
+
                     end
 
-                    AQSV["backup17"] = slot17
-
+                    -- 存在两个相同物品的可能
+                    SELFAQ.equipByID(SELFAQ["swim"..slot_id], slot_id)
+      
                 end
-
-                -- 存在两个相同物品的可能
-                SELFAQ.equipByID(SELFAQ["swim"..slot_id], slot_id)
-  
+                -- 骑马时一直busy，中断更换主动饰品的逻辑
+                slot["busy"] = true
+                slot["priority"] = 0
             end
-            -- 骑马时一直busy，中断更换主动饰品的逻辑
-            slot["busy"] = true
-            slot["priority"] = 0
 
         elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
 

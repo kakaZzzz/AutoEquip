@@ -23,7 +23,7 @@ local locale = GetLocale()
 
 L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Alliance]\124h\124r \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Horde]\124h\124r."
 L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff1eff00[Mithril Spurs]|r|cffffffff[Riding Skill]|r when riding (Not in Instance). "
-L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r|cff1eff00[Deepdive Helmet]|r when swiming."
+L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r|cff1eff00[Deepdive Helmet]|r when swiming (Not in Instance)."
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
 L[60] = color("00FF00", "General")
@@ -39,7 +39,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
 	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
-	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r"
+	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r（战场/副本中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
