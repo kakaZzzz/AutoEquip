@@ -120,6 +120,10 @@ SELFAQ.findItemsOrder = function( id )
 end
 
 SELFAQ.reverseId = function( id )
+
+    if id == nil then
+        return 0,0
+    end
     
     local order = math.floor(id/100000)
     local rid = id%100000
