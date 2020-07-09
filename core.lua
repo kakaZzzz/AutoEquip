@@ -49,52 +49,54 @@ end
 
 function aq_test( )
 
-    local t1 = loadstring("function t2() print(1234) end")
+    -- local t1 = loadstring("function t2() print(1234) end")
 
-    local res, info = pcall(t1)
+    -- local res, info = pcall(t1)
     
-    if res then
-        t1()
-        t1 = nil
-    else
-        print(info)
-    end
+    -- if res then
+    --     t1()
+    --     t1 = nil
+    -- else
+    --     print(info)
+    -- end
 
-    print(1)
-    res, info = pcall(t2)
+    -- print(1)
+    -- res, info = pcall(t2)
 
-    print(res)
+    -- print(res)
 
-    if res then
-        -- t2()
-        t2 = nil
-    else
-        print(info)
-    end
+    -- if res then
+    --     -- t2()
+    --     t2 = nil
+    -- else
+    --     print(info)
+    -- end
 
 
-    local t1 = loadstring("function t2() print(5678) end")
+    -- local t1 = loadstring("function t2() print(5678) end")
 
-    res, info = pcall(t1)
+    -- res, info = pcall(t1)
     
-    if res then
-        t1()
-        t1 = nil
-    else
-        print(info)
-    end
+    -- if res then
+    --     t1()
+    --     t1 = nil
+    -- else
+    --     print(info)
+    -- end
 
 
-    res, info = pcall(t2)
+    -- res, info = pcall(t2)
 
-    print(res)
+    -- print(res)
 
-    if res then
-        t2()
-        t2 = nil
-    else
-        print(info)
-    end
+    -- if res then
+    --     t2()
+    --     t2 = nil
+    -- else
+    --     print(info)
+    -- end
+
+    print(UnitIsFriend("player", "target"))
 
 end
 
@@ -654,6 +656,10 @@ function SELFAQ.buildQueueRealtime(slot_id)
             if AQSV.pvpTrinkets[v] then
                 table.insert(queue, v)
             end
+        elseif AQSV.enableRaidQueue and SELFAQ.inInstance() then
+            if AQSV.raidTrinkets[v] then
+                table.insert(queue, v)
+            end
         else
             SELFAQ.pvpIcon:Hide()
             if AQSV.pveTrinkets[v] then
@@ -864,8 +870,8 @@ function SELFAQ.enablePvpMode()
     else
         SELFAQ.pvpIcon:Hide()
     end
-    chatInfo(L["PVP mode "]..on)
-    popupInfo(L["PVP mode "]..on)
+    chatInfo(L["PVP queue "]..on)
+    popupInfo(L["PVP queue "]..on)
 end
 
 function SELFAQ.enableAutoEuquip()
@@ -989,10 +995,12 @@ function SELFAQ.slotsCanEquip()
 end
 
 SELFAQ.equipOnyxiaCloak = function()
-    
-    local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
 
-    if zonetext == "奈法利安的巢穴" then
+    if not AQSV.enableOnyxiaCloak then
+        return
+    end
+    
+    if SELFAQ.isNefNest() then
         
         if GetInventoryItemID("player", 15) == 15138 then
             return
@@ -1001,12 +1009,12 @@ SELFAQ.equipOnyxiaCloak = function()
         if GetItemCount(15138) > 0 then
             AQSV.cloakBackup = GetInventoryItemID("player", 15)
             SELFAQ.equipWait(15138, 15)
-            chatInfo(L[" Equip "]..GetItemLink(15138))
+            chatInfo(L["Equip "]..GetItemLink(15138))
         end
 
     elseif GetInventoryItemID("player", 15) == 15138 and AQSV.cloakBackup > 0 then
         AddonEquipItemByName(AQSV.cloakBackup, 15)
-        chatInfo(L[" Equip "]..GetItemLink(AQSV.cloakBackup))
+        chatInfo(L["Equip "]..GetItemLink(AQSV.cloakBackup))
         SELFAQ.cancelLocker( 15 )
         AQSV.cloakBackup = 0
     end

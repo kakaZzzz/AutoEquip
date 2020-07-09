@@ -37,7 +37,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Loaded"] = " 加载完毕"
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动换装功能"
-	L["Automatic switch to PVP mode in Battleground"] = "战场中自动切换到PVP模式"
+	L["Automatic switch to PVP queue in Battleground"] = "战场中自动切换到PVP队列"
 	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
 	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r（战场/副本中不生效）"
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
@@ -45,6 +45,9 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
 	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
 	L["Show simple tooltip (only item name)"] = "显示精简提示（只有物品名）"
+	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering Nefarian's Lair"] = "进入 奈法利安的巢穴 装备|cff0070dd[奥妮克希亚鳞片披风]|r"
+
+	L["#Don't change clock when you are in Nefarian's Lair"] = "#进入 奈法利安的巢穴 后不会更换披风"
 
 	L["Expand Settings"] = "展开设置列表"
 
@@ -76,24 +79,24 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["|cFF00FF00Enabled|r"] = "|cFF00FF00启用|r"
 	L["|cFFFF0000Disabled|r"] = "|cFFFF0000停用|r"
-	L["PVP mode "] = " PVP模式"
+	L["PVP queue "] = " PVP队列"
 
 	L["Custom Buff Alert:"] = "自定义Buff提醒:"
 	L["Format - BuffName,BuffName,BuffName"] = "格式 - Buff名称,Buff名称,Buff名称"
 	L["Append Usable Items (not only trinket):"] = "追加主动装备（不只是饰品）:"
 	L["Unidentified usable items need to be added manually by yourself"] = "未被识别的主动装备，需要自己手动添加"
-	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 装备ID/Buff持续时间,装备ID/Buff持续时间"
+	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 物品ID/Buff持续时间,物品ID/Buff持续时间"
 	L["Submit"] = "提交"
 	L["Submit & Reload UI"] = "提交并重载UI"
 
 	L["Command (/aq /autoequip are valid):"] = "命令行（也可用 /aq /autoequip）:"
 	L["Advanced Settings:"] = "进阶设置:"
 	L["DRAG"] = "拖拽"
-	L[" Enable PVP mode"] = " 启用PVP模式"
+	L[" Enable PVP queue"] = " 启用PVP队列"
 
 	L["-- Enable/disable AutoEquip function"] = "-- 启用/禁用自动更换装备功能"
 	L["-- Open settings"] = "-- 打开设置页面"
-	L["-- Enable/disable PVP mode manually"] = "-- 手动启用/禁用PVP模式"
+	L["-- Enable/disable PVP queue manually"] = "-- 手动启用/禁用PVP队列"
 	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动换装功能不生效）"
 	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
 	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
@@ -102,14 +105,14 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 
 	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
-	L["2. Right click or use the '/aq unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/aq unlock"
+	L["2. Right click or use the '/ae unlock' command will unlock the button."] = "2. 解锁装备栏可以右键点击按钮，或者聊天框输入/ae unlock"
 	L["3. Before using item, the button will be unlocked automatically."] = "3. 使用物品后，对应装备栏按钮将会自动解锁"
 	L["4. AutoEquip/Equipment Bar/Buff Alert can be enabled/disabled independently."] = "4. 自动换装、装备栏、Buff提醒，三个功能可以独立启用/禁用"
 
 	L["Unstable Power, Mind Quickening"] = "能量无常,思维敏捷"
 
 	L["Zoom"] = "缩放"
-	L["Mode:"] = "模式:"
+	L["Queue:"] = "队列:"
 	L["Slot:"] = "装备栏:"
 	L["Hide black translucent border"] = "隐藏黑色半透明边框"
 	L["#Effective after ENTER"] = "#回车后生效"
@@ -175,4 +178,13 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
 	L["|cFF00FF00Unlocked|r all equipment buttons"] = "|cFF00FF00解锁|r全部装备栏按钮"
 	L["Set threshold of member's target to "] = "将团员目标阈值设置为"
+
+	L["Block Items:"] = "屏蔽物品:"
+	L["Format - ItemID,ItemID,ItemID"] = "格式 - 物品ID,物品ID,物品ID"
+
+	L["AutoEquip Function:"] = "自动换装功能:"
+	L["Display:"] = "显示:"
+
+	L["Enable Raid checkbox / Automatic switch to Raid queue in Instance"] = "启用Raid勾选框/副本中自动切换到Raid队列"
+	L["Default"] = "默认"
 end

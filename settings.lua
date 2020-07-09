@@ -54,6 +54,7 @@ function SELFAQ.settingInit()
     f.checkbox = {}
     f.pveCheckbox = {}
     f.pvpCheckbox = {}
+    f.raidCheckbox = {}
     f.queue13 = {}
     f.queue14 = {}
 
@@ -130,8 +131,9 @@ function SELFAQ.settingInit()
                     for k,v in ipairs(AQSV.usableItems[slot_id]) do
                         UIDropDownMenu_SetSelectedValue(f.dropdown[slot_id][k], v, 0)
                         UIDropDownMenu_SetText(f.dropdown[slot_id][k], GetItemLink(v)) 
-                        f.pveCheckbox[k]:SetChecked(AQSV.pveTrinkets[v])
-                        f.pvpCheckbox[k]:SetChecked(AQSV.pvpTrinkets[v])
+                        f.pveCheckbox[slot_id][k]:SetChecked(AQSV.pveTrinkets[v])
+                        f.pvpCheckbox[slot_id][k]:SetChecked(AQSV.pvpTrinkets[v])
+                        f.raidCheckbox[slot_id][k]:SetChecked(AQSV.raidTrinkets[v])
 
                         if slot_id == 13 then
                             f.queue13[k]:SetChecked(AQSV.queue13[v])
@@ -227,20 +229,23 @@ function SELFAQ.settingInit()
 
         do
             local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-            t:SetText(L["Mode:"])
-            t:SetPoint("TOPLEFT", queueFrame, 354, SELFAQ.lastHeightQueue)
+            t:SetText(L["Queue:"])
+            t:SetPoint("TOPLEFT", queueFrame, 284, SELFAQ.lastHeightQueue)
         end
 
         if slot_id == 13 then
             do
                 local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
                 t:SetText(L["Slot:"])
-                t:SetPoint("TOPLEFT", queueFrame, 494, SELFAQ.lastHeightQueue)
+                t:SetPoint("TOPLEFT", queueFrame, 509, SELFAQ.lastHeightQueue)
             end
         end
 
         local height = 0
         f.dropdown[slot_id] = {}
+        f.pveCheckbox[slot_id] = {}
+        f.pvpCheckbox[slot_id] = {}
+        f.raidCheckbox[slot_id] = {}
         -- 主动饰品
         for k,v in ipairs(AQSV.usableItems[slot_id]) do
             local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate");
@@ -258,26 +263,27 @@ function SELFAQ.settingInit()
             -- 保存最后一个下拉框的位置
             height = SELFAQ.lastHeightQueue - k*35
 
-            UIDropDownMenu_SetButtonWidth(dropdown, 205)
+            UIDropDownMenu_SetButtonWidth(dropdown, 130)
             UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
             UIDropDownMenu_SetSelectedValue(dropdown, v, 0)
             
             UIDropDownMenu_SetText(dropdown, GetItemLink(v)) 
             
             
-            UIDropDownMenu_SetWidth(dropdown, 200)
+            UIDropDownMenu_SetWidth(dropdown, 130)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
             -- 后面追加checkbox
             do
                 local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 350, SELFAQ.lastHeightQueue + 7 - k*35)
+                b:SetPoint("TOPLEFT", 280, SELFAQ.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pveTrinkets[v])
-                f.pveCheckbox[k] = b
+                f.pveCheckbox[slot_id][k] = b
 
                 b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                 b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                b.text:SetText("PVE")
+                b.text:SetText(L["Default"])
+                b.text:SetFont(STANDARD_TEXT_FONT, 12)
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
                     AQSV.pveTrinkets[vaule] = not AQSV.pveTrinkets[vaule]
@@ -287,13 +293,48 @@ function SELFAQ.settingInit()
 
             do
                 local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                b:SetPoint("TOPLEFT", 420, SELFAQ.lastHeightQueue + 7 - k*35)
+                b:SetPoint("TOPLEFT", 365, SELFAQ.lastHeightQueue + 7 - k*35)
+                b:SetChecked(AQSV.raidTrinkets[v])
+                f.raidCheckbox[slot_id][k] = b
+
+                b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.text:SetText("Raid")
+                b.text:SetFont(STANDARD_TEXT_FONT, 12)
+
+                b.dtext = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                b.dtext:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                b.dtext:SetText("Raid")
+                b.dtext:SetFont(STANDARD_TEXT_FONT, 12)
+                b.dtext:SetTextColor(0.5,0.5,0.5,0.7)
+
+                if AQSV.enableRaidQueue then
+                    b:Enable()
+                    b.dtext:Hide()
+                    b.text:Show()
+                else
+                    b:Disable()
+                    b.dtext:Show()
+                    b.text:Hide()
+                end
+
+                b:SetScript("OnClick", function()
+                    local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
+                    AQSV.raidTrinkets[vaule] = not AQSV.raidTrinkets[vaule]
+                    b:SetChecked(AQSV.raidTrinkets[vaule])
+                end)
+            end
+
+            do
+                local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                b:SetPoint("TOPLEFT", 435, SELFAQ.lastHeightQueue + 7 - k*35)
                 b:SetChecked(AQSV.pvpTrinkets[v])
-                f.pvpCheckbox[k] = b
+                f.pvpCheckbox[slot_id][k] = b
 
                 b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                 b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
                 b.text:SetText("PVP")
+                b.text:SetFont(STANDARD_TEXT_FONT, 12)
                 b:SetScript("OnClick", function()
                     local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
                     AQSV.pvpTrinkets[vaule] = not AQSV.pvpTrinkets[vaule]
@@ -304,13 +345,14 @@ function SELFAQ.settingInit()
             if slot_id == 13 then
                 do
                     local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", 490, SELFAQ.lastHeightQueue + 7 - k*35)
+                    b:SetPoint("TOPLEFT", 505, SELFAQ.lastHeightQueue + 7 - k*35)
                     b:SetChecked(AQSV.queue13[v])
                     f.queue13[k] = b
 
                     b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                     b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
                     b.text:SetText("1")
+                    b.text:SetFont(STANDARD_TEXT_FONT, 12)
                     b:SetScript("OnClick", function()
                         local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
                         AQSV.queue13[vaule] = not AQSV.queue13[vaule]
@@ -320,13 +362,14 @@ function SELFAQ.settingInit()
 
                 do
                     local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", 540, SELFAQ.lastHeightQueue + 7 - k*35)
+                    b:SetPoint("TOPLEFT", 555, SELFAQ.lastHeightQueue + 7 - k*35)
                     b:SetChecked(AQSV.queue14[v])
                     f.queue14[k] = b
 
                     b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                     b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
                     b.text:SetText("2")
+                    b.text:SetFont(STANDARD_TEXT_FONT, 12)
                     b:SetScript("OnClick", function()
                         local vaule = UIDropDownMenu_GetSelectedValue(dropdown)
                         AQSV.queue14[vaule] = not AQSV.queue14[vaule]
@@ -376,7 +419,7 @@ function SELFAQ.settingInit()
             l:SetText(SELFAQ.slotToName[dropdown.slot])
             l:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue-(45 + k*35))
 
-            UIDropDownMenu_SetButtonWidth(dropdown, 205)
+            UIDropDownMenu_SetButtonWidth(dropdown, 130)
             UIDropDownMenu_Initialize(dropdown, Resident_Trinket_Initialize)
 
             local seleted = AQSV.slotStatus[dropdown.slot].backup
@@ -384,7 +427,7 @@ function SELFAQ.settingInit()
             UIDropDownMenu_SetSelectedValue(dropdown, seleted, 0)
             UIDropDownMenu_SetText(dropdown, GetItemLink(seleted))      
             
-            UIDropDownMenu_SetWidth(dropdown, 200)
+            UIDropDownMenu_SetWidth(dropdown, 130)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
 
             height = SELFAQ.lastHeightQueue-(45 + k*35)
@@ -586,20 +629,38 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = -285
+    otherHight = -290
 
-    buildCheckbox(L["Automatic switch to PVP mode in Battleground"], "enableBattleground", otherHight)
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["AutoEquip Function:"])
+        t:SetPoint("TOPLEFT", f, 25, otherHight)
+    end
+
+    otherHight = otherHight-25
+
+    buildCheckbox(L["Automatic switch to PVP queue in Battleground"], "enableBattleground", otherHight)
     buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight-25)
     buildCheckbox(L["enable_swim"], "enableSwim", otherHight-50)
     buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-75)
     buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-100)
-    buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-125)
-    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-150)
-    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-175)
-    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-200)
-    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-225)
+    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering Nefarian's Lair"], "enableOnyxiaCloak", otherHight-125)
 
-    otherHight = otherHight - 225
+    otherHight = otherHight-170
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Display:"])
+        t:SetPoint("TOPLEFT", f, 25, otherHight)
+    end
+
+    buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-25)
+    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-50)
+    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-75)
+    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-100)
+    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-125)
+
+    otherHight = otherHight - 125
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -627,7 +688,41 @@ function SELFAQ.settingInit()
         t:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue - 25)
     end
 
-    SELFAQ.lastHeightQueue = SELFAQ.lastHeightQueue - 70
+    do
+        local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+        b:SetPoint("TOPLEFT", queueFrame, 20, SELFAQ.lastHeightQueue - 50)
+        b:SetChecked(AQSV.enableRaidQueue)
+
+        b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+        b.text:SetText(L["Enable Raid checkbox / Automatic switch to Raid queue in Instance"])
+        b:SetScript("OnClick", function()
+            
+            AQSV.enableRaidQueue = not AQSV.enableRaidQueue
+            b:SetChecked(AQSV.enableRaidQueue)
+
+            for k,v in pairs(f.raidCheckbox) do
+
+                for k1,v1 in pairs(v) do
+                    
+                    if AQSV.enableRaidQueue then
+                        v1:Enable()
+                        v1.dtext:Hide()
+                        v1.text:Show()
+                    else
+                        v1:Disable()
+                        v1.dtext:Show()
+                        v1.text:Hide()
+                    end
+
+                end
+            end
+
+
+        end)
+    end
+
+    SELFAQ.lastHeightQueue = SELFAQ.lastHeightQueue - 95
 
     SELFAQ.loopSlots(buildDropdownGroup)
 
@@ -810,7 +905,7 @@ function SELFAQ.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- Enable/disable PVP mode manually"])
+        t:SetText(L["-- Enable/disable PVP queue manually"])
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 125)
     end
 

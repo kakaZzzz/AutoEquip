@@ -77,6 +77,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableItemBar = initSV(AQSV.enableItemBar, true)
             AQSV.enableItemBarSlot = initSV(AQSV.enableItemBarSlot, {})
 
+            AQSV.raidTrinkets = initSV(AQSV.raidTrinkets, {})
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
@@ -134,7 +135,10 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.shiftLeftShowDropdown = initSV(AQSV.shiftLeftShowDropdown, false)
             AQSV.buttonSpacing = initSV(AQSV.buttonSpacing, 3)
 
+
             AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
+            AQSV.enableOnyxiaCloak = initSV(AQSV.enableOnyxiaCloak, true)
+
             AQSV.simpleTooltip = initSV(AQSV.simpleTooltip, false)
 
             AQSV.disableMouseover = initSV(AQSV.disableMouseover, false)
@@ -145,6 +149,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.enableMembersTarget = initSV(AQSV.enableMembersTarget, false)
             AQSV.raidTargetThreshold = initSV(AQSV.raidTargetThreshold, 1)
+
+            AQSV.enableRaidQueue = initSV(AQSV.enableRaidQueue, false)
+
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -205,7 +212,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         end
 
         -- 自动换奥妮克希亚披风
-        -- SELFAQ.equipOnyxiaCloak()
+        SELFAQ.equipOnyxiaCloak()
 
         SELFAQ.updateMembersTarget()
 

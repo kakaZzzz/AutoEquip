@@ -129,7 +129,7 @@ function SELFAQ.suitInit()
 
         -- print(boss,UnitAffectingCombat("player"))
         -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
-        if level ~= 0 and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
+        if level ~= 0 and not UnitIsFriend("player", target) and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
             -- print(boss,UnitAffectingCombat("player"))
             -- SELFAQ.changeSuit(boss)               
            SELFAQ.needSuit = boss
@@ -178,7 +178,14 @@ function SELFAQ.suitInit()
                 if boss > 60 and waitId[boss] > 0 then
                     -- 跟当前装备的id不同时
                     if slotId ~= waitId[boss] then
-                        SELFAQ.equipWait(waitId[boss], v, false)
+
+                        local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
+
+                        if v == 15 and SELFAQ.isNefNest() then
+
+                        else
+                            SELFAQ.equipWait(waitId[boss], v, false)
+                        end
                     end
                 end
 
@@ -190,6 +197,8 @@ function SELFAQ.suitInit()
 
                     -- 如果当前套装是双手武器，则副手不换
                     if v == 17 and GetItemEquipLoc(AQSV.suit[boss][16]) == "INVTYPE_2HWEAPON" then
+
+                    elseif v == 15 and SELFAQ.isNefNest() then
 
                     else
 
@@ -203,7 +212,6 @@ function SELFAQ.suitInit()
 
                         end
 
-                        -- res = false
                         SELFAQ.equipByID(wait60 + order, v, false)
 
                     end
@@ -228,7 +236,9 @@ function SELFAQ.suitInit()
         -- 检查是否套装更换完成
         for k,v in pairs(AQSV.suit[boss]) do
             local slotId = GetSlotID(k)
-            if v > 0 and slotId ~= v then
+
+                
+            elseif v > 0 and slotId ~= v then
                 res = false
             end
         end
@@ -309,27 +319,33 @@ function SELFAQ.suitInit()
         t:SetPoint("TOPLEFT", f, 52, -58)
     end
 
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Don't change clock when you are in Nefarian's Lair"])
+        t:SetPoint("TOPLEFT", f, 52, -78)
+    end
+
     buildCheckbox(L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"], "enableSuit", -25)
-    buildCheckbox(L["Equip suit when more than 1 raid members target lv.63 elite or boss"], "enableMembersTarget", -75)
-    buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -100)
-    buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -125)
+    buildCheckbox(L["Equip suit when more than 1 raid members target lv.63 elite or boss"], "enableMembersTarget", -100)
+    buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -125)
+    buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -150)
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[60]])
-        l:SetPoint("TOPLEFT", f, 25, -180)
+        l:SetPoint("TOPLEFT", f, 25, -205)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[63]])
-        l:SetPoint("TOPLEFT", f, 188, -180)
+        l:SetPoint("TOPLEFT", f, 188, -205)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[64]])
-        l:SetPoint("TOPLEFT", f, 351, -180)
+        l:SetPoint("TOPLEFT", f, 351, -205)
     end
 
     function DropDown_Initialize(self,level)
@@ -391,7 +407,7 @@ function SELFAQ.suitInit()
         UIDropDownMenu_JustifyText(dropdown, "LEFT")
     end
 
-    local height = -175
+    local height = -200
     local lastHeight = 0
 
     for k,v in pairs(SELFAQ.items) do

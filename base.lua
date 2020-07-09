@@ -491,3 +491,14 @@ SELFAQ.popupInfo = function(text)
     f.moveOut:Play()
 
 end
+
+SELFAQ.isNefNest = function()
+    local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
+
+    if zonetext == "奈法利安的巢穴" or zonetext ==  "Nefarian's Lair" then
+    -- if zonetext == "艾尔文森林" then
+        return true
+    else
+        return false
+    end
+end

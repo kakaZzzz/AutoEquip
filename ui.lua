@@ -146,7 +146,7 @@ function  SELFAQ.createMenu()
 	end
 
 	menu[2] = {}
-	menu[2]["text"] = L[" Enable PVP mode"]
+	menu[2]["text"] = L[" Enable PVP queue"]
 	menu[2]["checked"] = AQSV.pvpMode
 	menu[2]["func"] = function()
 		SELFAQ.enablePvpMode()
