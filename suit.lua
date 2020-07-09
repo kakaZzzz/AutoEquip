@@ -237,6 +237,7 @@ function SELFAQ.suitInit()
         for k,v in pairs(AQSV.suit[boss]) do
             local slotId = GetSlotID(k)
 
+            if k == 15 and SELFAQ.isNefNest() then
                 
             elseif v > 0 and slotId ~= v then
                 res = false
