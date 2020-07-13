@@ -96,7 +96,7 @@ function aq_test( )
     --     print(info)
     -- end
 
-    print(UnitIsFriend("player", "target"))
+    print(GetUnitName("target"))
 
 end
 
@@ -953,6 +953,18 @@ function SELFAQ.equipWait(item_id, slot_id, popup)
     end
 
     SELFAQ.setCDLock( rid, slot_id )
+end
+
+function SELFAQ.setLocker(slot_id)
+
+    AQSV.slotStatus[slot_id].locked = true
+    AQSV["slot"..slot_id.."Wait"] = nil
+
+    if SELFAQ.slotFrames[slot_id] then
+        SELFAQ.slotFrames[slot_id].wait:SetTexture()
+        SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+        SELFAQ.slotFrames[slot_id].locker:Show()
+    end
 end
 
 function SELFAQ.checkAllWait()

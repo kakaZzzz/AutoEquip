@@ -114,6 +114,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.buffNames = initSV(AQSV.buffNames, L["Unstable Power, Mind Quickening"])
             AQSV.additionItems = initSV(AQSV.additionItems, "14023/0")
             AQSV.blockItems = initSV(AQSV.blockItems, "6219,5956")
+            AQSV.ignoreBoss = initSV(AQSV.ignoreBoss, "")
 
             AQSV.barZoom = initSV(AQSV.barZoom, 1)
             AQSV.buffZoom = initSV(AQSV.buffZoom, 1)
@@ -152,7 +153,6 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.enableRaidQueue = initSV(AQSV.enableRaidQueue, false)
 
-
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do
@@ -182,6 +182,19 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.x = xOfs
             AQSV.y = yOfs
             AQSV.point = point
+
+            -- 副本外隐藏装备栏
+            -- if AQSV.hideEquipmentBarOutsideInstance and SELFAQ.playerCanEquip() then
+
+            --     if not SELFAQ.inInstance() then
+            --         SELFAQ.bar:Hide()
+            --     else
+            --         SELFAQ.bar:Show()
+            --     end
+            -- else
+            --     SELFAQ.bar:Show()
+            -- end
+            
         end
 
         -- 记录buff提醒位置
@@ -196,6 +209,15 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         -- UpdateAddOnMemoryUsage()
         -- print(string.format("%.2f mb", (GetAddOnMemoryUsage("AutoEquip") / 1024)))
 
+        -- 装备栏队列应该不受开关影响
+
+         -- 角色处在战斗状态或跑尸状态，不进行换饰品逻辑，退出函数
+        if not SELFAQ.playerCanEquip() then
+            return 
+        end
+
+        SELFAQ.checkAllWait()
+
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
             return
@@ -205,18 +227,11 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         if UnitInBattleground("player") and not AQSV.enableBattleground then
             return
         end
-
-        -- 角色处在战斗状态或跑尸状态，不进行换饰品逻辑，退出函数
-        if not SELFAQ.playerCanEquip() then
-            return 
-        end
-
+        
         -- 自动换奥妮克希亚披风
         SELFAQ.equipOnyxiaCloak()
 
         SELFAQ.updateMembersTarget()
-
-        SELFAQ.checkAllWait()
 
         SELFAQ.changeSuit()
 
@@ -260,6 +275,13 @@ function SELFAQ.mainInit()
              chatInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
              popupInfo(L["|cFF00FF00Unlocked|r all equipment buttons"])
 
+        elseif msg == "lock" then
+             for k,v in pairs(AQSV.slotStatus) do
+                 SELFAQ.setLocker(k)
+             end
+             chatInfo(L["|cFF00FF00Locked|r all equipment buttons"])
+             popupInfo(L["|cFF00FF00Locked|r all equipment buttons"])
+
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
             if SELFAQ.playerCanEquip()  then
@@ -283,7 +305,7 @@ function SELFAQ.mainInit()
             -- equipment button spacing
             local n = tonumber(strmatch(msg, "%d+"))
 
-            if n > 0 then
+            if n >= 0 then
                 AQSV.buttonSpacing = n
                 chatInfo(L["Set Equipment button spacing to "]..SELFAQ.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
             end
@@ -403,23 +425,23 @@ function SELFAQ.mainInit()
         -- 脱离战斗的事件
         if event == "PLAYER_REGEN_ENABLED" then
 
-            if not AQSV.enable then
-                return
-            end
-            
             -- 脱战也要判断一下其他状态
             if not SELFAQ.playerCanEquip() then
                 return 
             end
 
+            SELFAQ.checkAllWait()
+
+            if not AQSV.enable then
+                return
+            end
+            
             -- 避免每次脱离战斗都触发
             if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and SELFAQ.inInstance() then
                 SELFAQ.needSuit = 60
             end
 
             -- 执行一系列更换逻辑
-            SELFAQ.checkAllWait()
-
 
             SELFAQ.changeSuit()
 

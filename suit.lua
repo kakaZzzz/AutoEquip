@@ -50,6 +50,8 @@ function SELFAQ.suitInit()
         local count = 0
         local level63 = 0
         local level64 = 0
+
+        -- print(SELFAQ.needSuit)
         
         if UnitInRaid("player") then
 
@@ -59,7 +61,7 @@ function SELFAQ.suitInit()
                 local target = "raid"..i.."target"
 
                 -- 如果有成员
-                if name and not UnitIsDead(target) then
+                if name and GetUnitName(target) and not UnitIsDead(target) and not UnitIsFriend("player", target) and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
 
                     count = count + 1
 
@@ -94,11 +96,11 @@ function SELFAQ.suitInit()
         -- 团队里有一定人数目标为xx，才切换
 
         if level63 > AQSV.raidTargetThreshold and level63 > level64 then
-            SELFAQ.needSuit = 63
+                SELFAQ.needSuit = 63
         end
 
         if level64 > AQSV.raidTargetThreshold and level64 > level63 then
-            SELFAQ.needSuit = 64
+                SELFAQ.needSuit = 64
         end
 
 
@@ -131,16 +133,21 @@ function SELFAQ.suitInit()
         -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
         if level ~= 0 and not UnitIsFriend("player", target) and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
             -- print(boss,UnitAffectingCombat("player"))
-            -- SELFAQ.changeSuit(boss)               
-           SELFAQ.needSuit = boss
+            -- SELFAQ.changeSuit(boss)
 
-           return true
-
+            if not string.find(AQSV.ignoreBoss, GetUnitName("target")) then
+                SELFAQ.needSuit = boss
+                return true
+            else
+                return false
+            end
         else
             return false
         end
 
     end
+
+    SELFAQ.bossCount = 0
 
 
     function SELFAQ.changeSuit()
@@ -150,6 +157,12 @@ function SELFAQ.suitInit()
         end
 
         local boss = SELFAQ.needSuit
+
+        if boss == 0 then
+            SELFAQ.bossCount = 0
+        else
+            SELFAQ.bossCount = SELFAQ.bossCount + 1
+        end
 
         if boss == 0 or boss == AQSV.currentSuit then
             return
@@ -244,7 +257,7 @@ function SELFAQ.suitInit()
             end
         end
 
-        if res then
+        if res or SELFAQ.bossCount > 3 then
 
             if AQSV.currentSuit ~= boss then
                 SELFAQ.popupInfo(L["Equip "]..L["Suit "..L[boss]])
@@ -253,6 +266,7 @@ function SELFAQ.suitInit()
 
             SELFAQ.needSuit = 0
             AQSV.currentSuit = boss
+            SELFAQ.bossCount = 0
         end
 
         debug(res)
@@ -331,22 +345,62 @@ function SELFAQ.suitInit()
     buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -125)
     buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -150)
 
+    -- 自定义buff
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Don't equip suit when you target those boss"])
+        t:SetPoint("TOPLEFT", f, 25, -190)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Format - BossName,BossName,BossName"])
+        t:SetPoint("TOPLEFT", f, 25, -215)
+    end
+
+    do
+
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        s:SetSize(350,60)
+        s:SetPoint("TOPLEFT", f, 26, -240)
+        s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+        s:SetBackdropBorderColor(1,1,1,0.7);
+        local e = CreateFrame("EditBox", nil, s)
+        e:SetMultiLine(true)
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(350)
+        e:SetText(AQSV.ignoreBoss)
+        e:SetTextInsets(8,8,8,8)
+        e:SetAutoFocus(false)
+
+        s:SetScrollChild(e)
+
+        local b = CreateFrame("Button", nil, f, "GameMenuButtonTemplate")
+        b:SetText(L["Submit"])
+        b:SetWidth(100)
+        b:SetHeight(30)
+        b:SetPoint("TOPLEFT", f, 410, -238)
+        b:SetScript("OnClick", function(self)
+            AQSV.ignoreBoss = e:GetText()
+        end)
+    end
+
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[60]])
-        l:SetPoint("TOPLEFT", f, 25, -205)
+        l:SetPoint("TOPLEFT", f, 25, -330)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[63]])
-        l:SetPoint("TOPLEFT", f, 188, -205)
+        l:SetPoint("TOPLEFT", f, 188, -330)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         l:SetText(L["Suit "..L[64]])
-        l:SetPoint("TOPLEFT", f, 351, -205)
+        l:SetPoint("TOPLEFT", f, 351, -330)
     end
 
     function DropDown_Initialize(self,level)
@@ -408,7 +462,7 @@ function SELFAQ.suitInit()
         UIDropDownMenu_JustifyText(dropdown, "LEFT")
     end
 
-    local height = -200
+    local height = -330
     local lastHeight = 0
 
     for k,v in pairs(SELFAQ.items) do

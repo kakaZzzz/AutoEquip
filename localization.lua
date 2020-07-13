@@ -97,11 +97,13 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Enable/disable AutoEquip function"] = "-- 启用/禁用自动更换装备功能"
 	L["-- Open settings"] = "-- 打开设置页面"
 	L["-- Enable/disable PVP queue manually"] = "-- 手动启用/禁用PVP队列"
-	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏按钮（锁定时自动换装功能不生效）"
+	L["-- Unlock Equipment Bar (AutoEquip function is invalid when locked)"] = "-- 解锁装备栏全部按钮（锁定时自动换装功能不生效）"
+	L["-- Lock Equipment Bar"] = "-- 锁定装备栏全部按钮"
 	L["-- Customize equipment bar (enter 0 to disable)"] = "-- 自定义装备栏（输入0禁用）"
 	L["-- Hide the usable items queue (hide 1, show 0)"] = "-- 隐藏主动物品队列（隐藏1，显示0）"
 	L["-- Set equipment button spacing to 1 (default 3)"] = "-- 将装备栏按钮间距设置为1（默认是3）"
 	L["-- Set threshold of member's target to 3 (default 1)"] = "-- 将团员目标阈值设置为3（默认是1）"
+	L["-- Hide equipment bar outside Instance (show 0)"] = "-- 副本外隐藏装备栏（显示0）"
 
 
 	L["1. Equip item manually through the Equipment Bar will temporarily lock the button."] = "1. 通过装备栏手动更换装备，将会暂时锁定对应的按钮"
@@ -177,6 +179,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Hide popup addon info at the top of screen"] = "隐藏屏幕上方的插件提示"
 	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
 	L["|cFF00FF00Unlocked|r all equipment buttons"] = "|cFF00FF00解锁|r全部装备栏按钮"
+	L["|cFF00FF00Locked|r all equipment buttons"] = "|cFF00FF00锁定|r全部装备栏按钮"
 	L["Set threshold of member's target to "] = "将团员目标阈值设置为"
 
 	L["Block Items:"] = "屏蔽物品:"
@@ -187,4 +190,6 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Enable Raid checkbox / Automatic switch to Raid queue in Instance"] = "启用Raid勾选框/副本中自动切换到Raid队列"
 	L["Default"] = "默认"
+	L["Don't equip suit when you target those boss"] = "面对以下Boss时不切换套装"
+	L["Format - BossName,BossName,BossName"] = "格式 - Boss名字,Boss名字,Boss名字"
 end

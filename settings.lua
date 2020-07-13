@@ -757,7 +757,7 @@ function SELFAQ.settingInit()
         local e = CreateFrame("EditBox", nil, s)
         e:SetMultiLine(true)
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(300)
+        e:SetWidth(350)
         -- AQSV.buffNames = nil
         e:SetText(AQSV.additionItems)
         e:SetTextInsets(8,8,8,8)
@@ -801,7 +801,7 @@ function SELFAQ.settingInit()
         local e = CreateFrame("EditBox", nil, s)
         e:SetMultiLine(true)
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(300)
+        e:SetWidth(350)
         -- AQSV.buffNames = nil
         -- print(AQSV.buffNames[2])
         e:SetText(AQSV.buffNames)
@@ -845,7 +845,7 @@ function SELFAQ.settingInit()
         local e = CreateFrame("EditBox", nil, s)
         e:SetMultiLine(true)
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(300)
+        e:SetWidth(350)
         -- AQSV.buffNames = nil
         -- print(AQSV.buffNames[2])
         e:SetText(AQSV.blockItems)
@@ -932,6 +932,20 @@ function SELFAQ.settingInit()
         t:SetText(L["-- Equip Suit "]..L[60].."/"..L[63].."/"..L[64])
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 165)
     end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText("/ae lock")
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 185)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Lock Equipment Bar"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 185)
+    end
+
+    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 20
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
