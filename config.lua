@@ -6,7 +6,7 @@ local L = SELFAQ.L
 
 -- 配置 --
 
-SELFAQ.version = "v4.15"
+SELFAQ.version = "v5.0"
 
 -- SELFAQ.enableDebug = true          -- 调试开关
 SELFAQ.enableDebug = false          -- 调试开关
@@ -43,6 +43,9 @@ SELFAQ.empty8 = {}			--
 
 SELFAQ.e0 = {}		-- slot13/core
 SELFAQ.e1 = {}		-- slot14/core
+
+SELFAQ.matchSuit = {}
+SELFAQ.memberTargets = {}
 
 SELFAQ.slotToName = {
 	[1] = L["Head"],
@@ -82,6 +85,10 @@ SELFAQ.slotName = {
 	[16] = "MainHandSlot",
 	[17] = "SecondaryHandSlot",
 	[18] = "RangedSlot",
+}
+
+SELFAQ.takeoffSlots = {
+	1,3,5,9,10,6,7,8,16,17,18
 }
 
 SELFAQ.gearSlots = {1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18}

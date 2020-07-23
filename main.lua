@@ -57,6 +57,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         if not SELFAQ.init then
 
             -- 初始化全局变量
+
+            SUITAQ = initSV(SUITAQ, {})
+
             AQSV = initSV(AQSV, {})
             AQSV.usableItems = initSV(AQSV.usableItems, SELFAQ.usable)
             AQSV.usableChests = initSV(AQSV.usableChests, SELFAQ.usableChests)
@@ -135,6 +138,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.hideTooltip = initSV(AQSV.hideTooltip, false)
             AQSV.shiftLeftShowDropdown = initSV(AQSV.shiftLeftShowDropdown, false)
             AQSV.buttonSpacing = initSV(AQSV.buttonSpacing, 3)
+            AQSV.buttonSpacingNew = initSV(AQSV.buttonSpacingNew, 0)
 
 
             AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
@@ -217,6 +221,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         end
 
         SELFAQ.checkAllWait()
+        SELFAQ.checkSuperSuit()
 
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
@@ -234,6 +239,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         SELFAQ.updateMembersTarget()
 
         SELFAQ.changeSuit()
+
+        -- 超级换装团员目标
+        SELFAQ.runTargetMemberRules()
 
         -- 自动更换饰品
 
@@ -258,6 +266,11 @@ function SELFAQ.mainInit()
 
         debug(msg)
 
+        local number = tonumber(msg)
+        if number and number >= 0 and number <= 9 then
+            SELFAQ.superEquipSuit(number)
+        end
+
         if msg == "" then
             SELFAQ.enableAutoEuquip()
 
@@ -267,6 +280,14 @@ function SELFAQ.mainInit()
 
         elseif msg == "pvp" then
             SELFAQ. enablePvpMode()
+
+        elseif msg == "takeoff" then
+             for k,v in pairs(AQSV.slotStatus) do
+                 SELFAQ.setLocker(k)
+             end
+             SELFAQ.takeoffAll()
+             chatInfo(L["|cFF00FF00Takeoff|r all equipments"])
+             popupInfo(L["|cFF00FF00Takeoff|r all equipments"])
 
         elseif msg == "unlock" then
              for k,v in pairs(AQSV.slotStatus) do
@@ -306,7 +327,7 @@ function SELFAQ.mainInit()
             local n = tonumber(strmatch(msg, "%d+"))
 
             if n >= 0 then
-                AQSV.buttonSpacing = n
+                AQSV.buttonSpacingNew = n
                 chatInfo(L["Set Equipment button spacing to "]..SELFAQ.color("00FF00", n).."."..L[" Please reload UI manually (/reload)."])
             end
 
@@ -397,6 +418,7 @@ function SELFAQ.mainInit()
     -- SELFAQ.main:RegisterEvent("UNIT_TARGET") 
 
     SELFAQ.main:RegisterEvent("BAG_UPDATE") 
+    SELFAQ.main:RegisterEvent("PLAYER_ENTERING_WORLD") 
     -- SELFAQ.main:RegisterEvent("ZONE_CHANGED_NEW_AREA") 
     -- SELFAQ.main:RegisterEvent("ZONE_CHANGED_INDOORS") 
     -- SELFAQ.main:RegisterEvent("ZONE_CHANGED") 
@@ -406,6 +428,9 @@ function SELFAQ.mainInit()
             for k,v in pairs(SELFAQ.slots) do
                 SELFAQ.updateItemButton( v )
             end
+
+            SELFAQ.runEquipmentRules()
+
         end
 
         if event == "UPDATE_BINDINGS" then
@@ -435,6 +460,8 @@ function SELFAQ.mainInit()
             if not AQSV.enable then
                 return
             end
+
+            SELFAQ.runLeaveCombatRules()
             
             -- 避免每次脱离战斗都触发
             if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and SELFAQ.inInstance() then
@@ -475,6 +502,12 @@ function SELFAQ.mainInit()
   
         -- end
 
+        if event == "PLAYER_ENTERING_WORLD" then
+            
+            SELFAQ.runEnterRules()
+
+        end
+
         if event == "BAG_UPDATE" then
             SELFAQ.updateAllItems( )
         end
@@ -485,7 +518,15 @@ function SELFAQ.mainInit()
                 return 
             end
 
-            if not AQSV.enableSuit then
+            -- 超级换装
+            local number = SELFAQ.checkTargetRules("target")
+
+            if number then
+                SELFAQ.superEquipSuit(number)
+            end
+
+            -- 63+套装
+            if not AQSV.enable then
                 return
             end
 
@@ -494,6 +535,7 @@ function SELFAQ.mainInit()
             end
 
             SELFAQ.checkAndFireChangeSuit("target")
+
         end
 
     end)

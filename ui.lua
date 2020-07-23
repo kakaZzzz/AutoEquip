@@ -29,6 +29,10 @@ end
 
 function SELFAQ.createItemBar()
 
+	if SELFAQ.bar ~= nil then
+		return
+	end
+
 	-- 选择BUTTON类似，才能触发鼠标事件
 	local f = CreateFrame("Button", "AutoEquip_ItemBar", UIParent)
 	SELFAQ.bar = f
@@ -38,7 +42,7 @@ function SELFAQ.createItemBar()
 	SELFAQ.customSlots()
 
 	f:SetFrameStrata("MEDIUM")
-	f:SetWidth(#SELFAQ.slots * (40 + AQSV.buttonSpacing) + 10)
+	f:SetWidth(#SELFAQ.slots * (40 + AQSV.buttonSpacingNew) + 10)
 	f:SetHeight(40)
 	f:SetScale(AQSV.barZoom)
 
@@ -122,6 +126,8 @@ function SELFAQ.createItemBar()
 	end
 
 	SELFAQ.bindingSlot( )
+	SELFAQ.createQuickButton()
+	SELFAQ.updateButtonSwitch()
 end
 
 function SELFAQ.hideBackdrop(  )
@@ -237,8 +243,10 @@ function SELFAQ.createItemButton( slot_id, position )
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
-  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	button:SetBackdropBorderColor(0,0,0,0.9);
+  	-- button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2})
+  	button:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+
+	button:SetBackdropBorderColor(0,0,0,1);
 	-- button:SetTexCoord(0.07, 0.93, 0.07, 0.93)
 	
 
@@ -296,8 +304,10 @@ function SELFAQ.createItemButton( slot_id, position )
     wait:SetPoint("BOTTOMRIGHT", button, 0, 0)
     wait:SetFrameLevel(6)
     wait:Hide()
-    wait:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	wait:SetBackdropBorderColor(0,0,0,0.9);
+    -- wait:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2})
+  	wait:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+
+	wait:SetBackdropBorderColor(0,0,0,1);
 
    	local t2 = wait:CreateTexture(nil, "BACKGROUND")
 	t2:SetAllPoints(wait)
@@ -325,13 +335,30 @@ function SELFAQ.createItemButton( slot_id, position )
 	
 	button.locker = t3
 
+	-- 自动队列开关显示
+    local icon = CreateFrame("Frame", nil, button)
+    -- 设0不成功
+    icon:SetSize(15, 15)
+    icon:SetPoint("BOTTOMRIGHT", button, 0, 2)
+    icon:SetFrameLevel(4)
+
+   	local icont = icon:CreateTexture(nil, "BACKGROUND")
+	icont:SetAllPoints(icon)
+	icont:SetTexture(1116940)
+	icont:SetTexCoord(456/512, 480/512, 92/512, 116/512)
+	-- icont:SetTexture("Interface\\AddOns\\AutoEquip\\Textures\\S.blp")
+
+	icont:Hide()
+	
+	button.icon = icont
+
 	-- button:RegisterForClicks("RightButtonDown");
 	-- button:SetScript('OnClick', function(self, button)
 	--     EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
 	-- end)
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", SELFAQ.bar, (position - 1) * (40 + AQSV.buttonSpacing), 0)
+   	button:SetPoint("TOPLEFT", SELFAQ.bar, (position - 1) * (40 + AQSV.buttonSpacingNew), 0)
    	button:Show()
 
    	-- 显示tooltip
@@ -358,6 +385,26 @@ function SELFAQ.createItemButton( slot_id, position )
    	SELFAQ.slotFrames[slot_id] = button
 end
 
+function SELFAQ.updateButtonSwitch()
+	SELFAQ.loopSlots(function(slot_id)
+        if SELFAQ.slotFrames[slot_id] then
+        	if AQSV.enable then
+            	SELFAQ.slotFrames[slot_id].icon:Show()
+            else
+            	SELFAQ.slotFrames[slot_id].icon:Hide()
+            end
+        end
+
+        if slot_id == 13 and SELFAQ.slotFrames[14] then
+        	if AQSV.enable then
+           		SELFAQ.slotFrames[14].icon:Show()
+           	else
+           		SELFAQ.slotFrames[14].icon:Hide()
+           	end
+        end
+    end)
+end
+
 function SELFAQ.showDropdown(slot_id, position)
 	-- 更新物品在背包里的位置
 	-- SELFAQ.updateItemInBags()
@@ -372,8 +419,9 @@ function SELFAQ.showDropdown(slot_id, position)
 	for k,v in pairs(SELFAQ.items[slot_id]) do
 		-- 推算出真实id
 		local rid = SELFAQ.reverseId(v)
+		
 		if v ~= itemId1 and v ~= itemId2 and v > 0 then
-			SELFAQ.createItemDropdown(v, (40 + AQSV.buttonSpacing) * (position - 1), index, slot_id)
+			SELFAQ.createItemDropdown(v, (40 + AQSV.buttonSpacingNew) * (position - 1), index, slot_id)
 			index = index + 1
 		elseif SELFAQ.itemButtons[v] then
 			SELFAQ.itemButtons[v]:Hide()
@@ -423,7 +471,7 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 
 	-- 如果已经创建过物品图层，只修改位置
 	if SELFAQ.itemButtons[item_id] then
-		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
+		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
 		SELFAQ.itemButtons[item_id]:Show()
 		-- 点击图标是获取正确的slot
 		SELFAQ.itemButtons[item_id].inSlot = slot_id
@@ -451,8 +499,9 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
   	-- 高亮材质
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
-  	button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	button:SetBackdropBorderColor(0,0,0,0.9);
+  	-- button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+  	button:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+	button:SetBackdropBorderColor(0,0,0,1);
 	
 
     local t = button:CreateTexture(nil, "BACKGROUND")
@@ -478,7 +527,7 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacing), 5+(40 + AQSV.buttonSpacing) * newY)
+   	button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
    	button:Show()
 
    	button:SetScript("OnEnter", function(self)
@@ -570,11 +619,12 @@ end
 -- 绘制下方的饰品队列
 function SELFAQ.createCooldownUnit( item_id, position )
 	local f = CreateFrame("Frame", nil, SELFAQ.bar)
-	-- f:SetPoint("TOPLEFT", SELFAQ.bar, 0 , - (40 + AQSV.buttonSpacing) - (position - 1) * 23)
+	-- f:SetPoint("TOPLEFT", SELFAQ.bar, 0 , - (40 + AQSV.buttonSpacingNew) - (position - 1) * 23)
 	f:SetSize(20, 20)
 
-	f:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
-	f:SetBackdropBorderColor(0,0,0,0.9);
+	-- f:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
+  	f:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+	f:SetBackdropBorderColor(0,0,0,1);
 
 	local t = f:CreateTexture(nil, "BACKGROUND")
 	t:SetTexture(GetItemTexture(item_id))
@@ -731,7 +781,7 @@ function SELFAQ.cooldownUpdate( self, elapsed )
 				    	if not SELFAQ.list[slot_id][v] then
 				    		SELFAQ.list[slot_id][v] = SELFAQ.createCooldownUnit(v, k)
 				    	end
-				    		-- SELFAQ.list[v]:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -(40 + AQSV.buttonSpacing) - (k - 1) * 23)
+				    		-- SELFAQ.list[v]:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -(40 + AQSV.buttonSpacingNew) - (k - 1) * 23)
 
 				    	if not AQSV.hideItemQueue then
 				    		SELFAQ.list[slot_id][v]:Show()
@@ -780,6 +830,287 @@ function SELFAQ.cooldownUpdate( self, elapsed )
 		end
 
     end
+end
+
+SELFAQ.createQuickButton = function()
+	
+	local f = SELFAQ.bar
+
+	local quickButton = CreateFrame("Frame", "AutoEquip_QuickButton", f)
+
+	quickButton:SetSize(20, 20)
+	quickButton:Show()
+
+	SELFAQ.quickButton = quickButton
+	SELFAQ.qbs = {}
+
+	SELFAQ.renderQuickButton()
+end
+
+SELFAQ.renderQuickButton = function()
+
+	if not AQSV.hideQuickButton then
+		SELFAQ.quickButton:Show()
+	else
+		SELFAQ.quickButton:Hide()
+	end
+
+	if AQSV.reverseCooldownUnit then
+		SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -45)
+	else
+		SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , 30)
+	end
+
+	local step = 0
+
+	for i=1,10 do
+		local number = i
+
+		if number == 10 then
+			number = 0
+		end
+
+		if SUITAQ[number]['enable'] then
+			print(number, step)
+			SELFAQ.createQBOne(i, step, true, function()
+				SlashCmdList.AQCMD(tostring(i))
+			end)
+			step = step + 1
+		else
+			SELFAQ.createQBOne(i, step, false, function()
+			end)
+		end
+	end
+
+	SELFAQ.createQBOne(11, step, true, function()
+		SlashCmdList.AQCMD("takeoff")
+	end)
+	step = step + 1
+
+	if AQSV.enableSuit then
+
+		SELFAQ.createQBOne(60, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("60")
+		end)
+		step = step + 1
+
+		SELFAQ.createQBOne(63, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("63")
+		end)
+		step = step + 1
+
+		SELFAQ.createQBOne(64, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("64")
+		end)
+		step = step + 1
+
+	else
+
+		SELFAQ.createQBOne(60, step, AQSV.enableSuit, function()
+		end)
+
+		SELFAQ.createQBOne(63, step, AQSV.enableSuit, function()
+		end)
+
+		SELFAQ.createQBOne(64, step, AQSV.enableSuit, function()
+		end)
+	end
+
+	SELFAQ.createQBOne(70, step, true, function()
+		SlashCmdList.AQCMD("unlock")
+	end)
+	step = step + 1
+
+	SELFAQ.createQBOne(71, step, true, function()
+		SlashCmdList.AQCMD("")
+	end)
+	step = step + 1
+
+	
+	if AQSV.currentSuit > 0 and SELFAQ.qbs[AQSV.currentSuit] then
+		SELFAQ.qbs[AQSV.currentSuit]:LockHighlight()
+	end
+end
+
+SELFAQ.createQBOne = function(word, order, show, func)
+	
+	local f = SELFAQ.bar
+	local quickButton = SELFAQ.quickButton
+
+	if SELFAQ.qbs[word] then
+		if show then
+			SELFAQ.qbs[word]:SetPoint("TOPLEFT", quickButton, 20 * order , 0)
+			SELFAQ.qbs[word]:Show()
+		else
+			SELFAQ.qbs[word]:Hide()
+		end
+
+		return
+	elseif not show then
+		return
+	end
+
+	local button = CreateFrame("Button", "AQQB"..order, quickButton, "SecureActionButtonTemplate")
+
+	button.hl = false
+
+	SELFAQ.qbs[word] = button
+
+	button:SetSize(20, 20)
+
+	button:SetPoint("TOPLEFT", quickButton, 20 * order , 0)
+
+	if word <  60 then
+		button:SetHighlightTexture("Interface\\AddOns\\AutoEquip\\Textures\\H.blp", "ADD")
+	else
+		button:SetHighlightTexture("Interface\\AddOns\\AutoEquip\\Textures\\H.blp", "ADD")
+	end
+
+ --  	button:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+	-- button:SetBackdropBorderColor(0,0,0,0.9)
+	-- button:SetBackdropColor(0,0,0,1)
+
+	if word ~= 64 and word ~= 11 and word ~= 70 and word ~= 71 then
+
+		local text
+
+		if word < 60 then
+			text = button:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+		else
+			text = button:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+		end
+
+		text:SetFont(STANDARD_TEXT_FONT, 12)
+	    text:SetPoint("CENTER", button, 1, 0)
+	    text:SetText(word)
+	end
+
+    local t = button:CreateTexture(nil, "BACKGROUND")
+	t:SetTexture("Interface\\AddOns\\AutoEquip\\Textures\\B.blp")
+
+	-- if word == 64 then
+	-- 	t:SetTexCoord(0, 0.125, 0, 0.5)
+	-- elseif word == 63 then
+	-- 	t:SetTexCoord(0.25, 0.375, 0, 0.5)
+	-- elseif word == 60 then
+	-- 	t:SetTexCoord(0.125, 0.25, 0, 0.5)
+	-- elseif word == "undress" then
+	-- 	t:SetTexCoord(0, 0.125, 0.5, 1)
+	-- elseif word == 1 then
+	-- 	t:SetTexCoord(0.375, 0.5, 0, 0.5)
+	-- elseif word == 2 then
+	-- 	t:SetTexCoord(0.5, 0.625, 0, 0.5)
+	-- elseif word == 3 then
+	-- 	t:SetTexCoord(0.625, 0.75, 0, 0.5)
+	-- elseif word == 4 then
+	-- 	t:SetTexCoord(0.75, 0.875, 0, 0.5)
+	-- elseif word == 5 then
+	-- 	t:SetTexCoord(0.875, 1, 0, 0.5)
+	-- elseif word == 6 then
+	-- 	t:SetTexCoord(0.125, 0.25, 0.5, 1)
+	-- elseif word == 7 then
+	-- 	t:SetTexCoord(0.25, 0.375, 0.5, 1)
+	-- elseif word == 8 then
+	-- 	t:SetTexCoord(0.375, 0.5, 0.5, 1)
+	-- elseif word == 9 then
+	-- 	t:SetTexCoord(0.5, 0.625, 0.5, 1)
+	-- elseif word == 0 then
+	-- 	t:SetTexCoord(0.625, 0.75, 0.5, 1)
+	-- end
+
+	if word == 64 then
+		t:SetTexCoord(0, 0.125, 0, 0.5)
+	elseif word == 11 then
+		t:SetTexCoord(0, 0.125, 0.5, 1)
+	elseif word == 70 then
+		t:SetTexCoord(0.375, 0.5, 0, 0.5)
+	elseif word == 71 then
+		t:SetTexCoord(0.125, 0.25, 0, 0.5)
+	else
+		t:SetTexCoord(0.5, 0.625, 0, 0.5)
+	end
+	
+	t:SetAllPoints(button)
+
+	-- 不然会继承parent的按键设置
+	button:RegisterForClicks("AnyDown")
+	button:Show()
+
+    -- 右键解锁
+    button:SetAttribute("type", "qbFunc")
+    button.qbFunc = function()
+    	func()
+    end
+
+    -- 显示tooltip
+   	button:SetScript("OnEnter", function(self)
+		SELFAQ.showQBTooltip(self, word)
+
+	end)
+   	button:SetScript("OnLeave", function( self )
+   		SELFAQ.hideTooltip()
+   	end)
+end
+
+function SELFAQ.showQBTooltip( button, word )
+
+	if not AQSV.hideTooltip then
+		local tooltip = _G["GameTooltip"]
+	    tooltip:ClearLines()
+
+
+    	tooltip:SetOwner(button, "ANCHOR_NONE")
+    	tooltip:SetPoint("BOTTOM", button, "TOP" )
+    	-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
+		
+		if word <= 9 then
+
+			tooltip:AddLine(L["Suit "]..SELFAQ.color("00FF00", word))
+
+			for k,v in pairs(SELFAQ.items) do
+
+				if SUITAQ[word]["slot"..k] and SUITAQ[word]["slot"..k] > 0 then
+
+                    local link = SELFAQ.GetItemLink(SUITAQ[word]["slot"..k])
+
+                    tooltip:AddLine(link)
+
+                end
+			end
+
+		elseif word == 11 then
+
+			tooltip:AddLine(SELFAQ.color("FF0000", L["Takeoff"]))
+
+		elseif word == 70 then
+
+			tooltip:AddLine(L["|cFF00FF00Unlocked|r all equipment buttons"])
+
+		elseif word == 71 then
+
+			tooltip:AddLine(L["AutoEquip ON/OFF"])
+
+		elseif word >= 60 then
+
+			tooltip:AddLine(L["Suit "..L[word]])
+
+			for k,v in pairs(SELFAQ.items) do
+
+				if AQSV.suit[word][k] and AQSV.suit[word][k] > 0 then
+
+                    local link = SELFAQ.GetItemLink(AQSV.suit[word][k])
+
+                    tooltip:AddLine(link)
+
+                end
+			end
+
+		end
+
+		
+	    tooltip:Show()
+	end
+
 end
 
 

@@ -13,6 +13,9 @@ local player = SELFAQ.player
 -- 设置菜单初始化
 function SELFAQ.suitInit()
 
+    if SELFAQ.suitOption ~= nil then
+        return
+    end
     
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
     local f = CreateFrame("Frame", nil, p)
@@ -61,16 +64,18 @@ function SELFAQ.suitInit()
                 local target = "raid"..i.."target"
 
                 -- 如果有成员
-                if name and GetUnitName(target) and not UnitIsDead(target) and not UnitIsFriend("player", target) and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
+                if name and GetUnitName(target) and not UnitIsDead(target)  then
 
                     count = count + 1
 
                     local level = UnitLevel(target)
 
-                    if level == 63 then
+                    if level == 63 and not UnitIsFriend("player", target)  then
                     -- if level == 60 or level == 62 or level == 61 then
                        level63 = level63 + 1
-                    elseif level == -1 then
+                   end
+                    
+                    if level == -1 and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
                     -- elseif level == 61 then
                         level64 = level64 + 1
                     end
@@ -131,16 +136,20 @@ function SELFAQ.suitInit()
 
         -- print(boss,UnitAffectingCombat("player"))
         -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
-        if level ~= 0 and not UnitIsFriend("player", target) and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
-            -- print(boss,UnitAffectingCombat("player"))
-            -- SELFAQ.changeSuit(boss)
+        if level ~= 0 and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
 
-            if not string.find(AQSV.ignoreBoss, GetUnitName("target")) then
+            if boss < 64 and not UnitIsFriend("player", target) then 
                 SELFAQ.needSuit = boss
                 return true
-            else
-                return false
             end
+
+            if boss == 64 and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
+                SELFAQ.needSuit = boss
+                return true
+            end
+
+            return false
+
         else
             return false
         end
@@ -264,6 +273,13 @@ function SELFAQ.suitInit()
                 SELFAQ.chatInfo(L["Equip "]..L["Suit "..L[boss]])
             end
 
+            if SELFAQ.qbs[AQSV.currentSuit] then
+                SELFAQ.qbs[AQSV.currentSuit]:UnlockHighlight()
+            end
+            if SELFAQ.qbs[boss] then
+                SELFAQ.qbs[boss]:LockHighlight()
+            end
+
             SELFAQ.needSuit = 0
             AQSV.currentSuit = boss
             SELFAQ.bossCount = 0
@@ -293,38 +309,28 @@ function SELFAQ.suitInit()
             AQSV[key] = not AQSV[key]
             b:SetChecked(AQSV[key])
 
-            if key == "enableItemBar" then  
-                -- 装备栏的开关
-                if not AQSV.enableItemBar then
-                    SELFAQ.bar:Hide()
-                else
-                    SELFAQ.bar:Show()
-                end
+            if key == "enableSuit" then  
+                SELFAQ.renderQuickButton()
+                updateCheckbox()
             end
 
-            if key == "enableBuff" then  
-                -- 装备栏的开关
-                if not AQSV.enableBuff then
-                    SELFAQ.buff:Hide()
-                else
-                    SELFAQ.buff:Show()
-                end
-            end
-
-            if key == "locked" then
-                SELFAQ.lockItemBar()
-            end
-
-            if key == "buffLocked" then
-                SELFAQ.lockBuff()
-            end
-
-            if key == "hideBackdrop" then
-                SELFAQ.hideBackdrop()
-            end
         end)
 
         f.checkbox[key] = b
+    end
+    
+    function updateCheckbox()
+        
+        if AQSV["enableSuit"] then
+            f.checkbox["enableMembersTarget"]:Enable()
+            f.checkbox["enableTargetSuit60"]:Enable()
+            f.checkbox["enableAutoSuit60"]:Enable()
+        else
+            f.checkbox["enableMembersTarget"]:Disable()
+            f.checkbox["enableTargetSuit60"]:Disable()
+            f.checkbox["enableAutoSuit60"]:Disable()
+        end
+
     end
 
 
@@ -344,6 +350,8 @@ function SELFAQ.suitInit()
     buildCheckbox(L["Equip suit when more than 1 raid members target lv.63 elite or boss"], "enableMembersTarget", -100)
     buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -125)
     buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -150)
+
+    updateCheckbox()
 
     -- 自定义buff
     do

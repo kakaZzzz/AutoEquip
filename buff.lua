@@ -9,7 +9,12 @@ local player = SELFAQ.player
 local GetItemTexture = SELFAQ.GetItemTexture
 
 function SELFAQ.createBuffIcon()
-		-- 选择BUTTON类似，才能触发鼠标事件
+
+	if SELFAQ.buff ~= nil then
+		return
+	end
+	
+	-- 选择BUTTON类似，才能触发鼠标事件
 	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent)
 	SELFAQ.buff = f
 

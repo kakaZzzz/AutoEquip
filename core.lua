@@ -29,6 +29,7 @@ function SELFAQ.addonInit()
         SELFAQ.updateAllItems( )
 
         SELFAQ.settingInit()
+        SELFAQ.superInit()
         SELFAQ.suitInit()
 
 end
@@ -96,7 +97,13 @@ function aq_test( )
     --     print(info)
     -- end
 
-    print(GetUnitName("target"))
+    -- print(GetUnitName("target"))
+
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+
+    print(name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID)
 
 end
 
@@ -239,6 +246,9 @@ SELFAQ.checkUsable = function()
 
     SELFAQ.needSlots = new
 
+
+    SELFAQ.updateButtonSwitch()
+
 end
 
 -- 检查角色身上所有的饰品
@@ -373,18 +383,18 @@ SELFAQ.checkItems = function( )
         end
     end
 
-    loopSlots(function(slot_id)
+    -- loopSlots(function(slot_id)
 
-        -- 去掉主动饰品
-        -- SELFAQ.items[slot_id] = diff2(SELFAQ.items[slot_id], AQSV.usableItems[slot_id])
+    --     -- 去掉主动饰品
+    --     -- SELFAQ.items[slot_id] = diff2(SELFAQ.items[slot_id], AQSV.usableItems[slot_id])
 
-        -- 降幂排序，序号大的正常来看是等级高的饰品
-        table.sort(SELFAQ.items[slot_id], function(a, b)
-            -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
-            return a > b
-        end)
+    --     -- 降幂排序，序号大的正常来看是等级高的饰品
+    --     table.sort(SELFAQ.items[slot_id], function(a, b)
+    --         -- 报错：table必须是从1到n连续的，即中间不能有nil，否则会报错
+    --         return a > b
+    --     end)
 
-    end)
+    -- end)
 
     -- debug(SELFAQ.itemInBags)
 
@@ -880,6 +890,8 @@ function SELFAQ.enableAutoEuquip()
     SELFAQ.f.checkbox["enable"]:SetChecked(AQSV.enable)
     SELFAQ.menuList[1]["checked"] = AQSV.enable
 
+    SELFAQ.updateButtonSwitch()
+
     if AQSV.enable then
         chatInfo(L["AutoEquip function |cFF00FF00Enabled|r"])
         popupInfo(L["AutoEquip function |cFF00FF00Enabled|r"])
@@ -943,35 +955,40 @@ function SELFAQ.equipWait(item_id, slot_id, popup)
 
     SELFAQ.equipByID(item_id, slot_id, popup)
 
-    AQSV.slotStatus[slot_id].locked = true
-    AQSV["slot"..slot_id.."Wait"] = nil
+    SELFAQ.setLocker(slot_id)
 
-    if SELFAQ.slotFrames[slot_id] then
-        SELFAQ.slotFrames[slot_id].wait:SetTexture()
-        SELFAQ.slotFrames[slot_id].waitFrame:Hide()
-        SELFAQ.slotFrames[slot_id].locker:Show()
-    end
+    -- AQSV.slotStatus[slot_id].locked = true
+    -- AQSV["slot"..slot_id.."Wait"] = nil
+
+    -- if SELFAQ.slotFrames[slot_id] then
+    --     SELFAQ.slotFrames[slot_id].wait:SetTexture()
+    --     SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+    --     SELFAQ.slotFrames[slot_id].locker:Show()
+    -- end
 
     SELFAQ.setCDLock( rid, slot_id )
 end
 
 function SELFAQ.setLocker(slot_id)
 
-    AQSV.slotStatus[slot_id].locked = true
-    AQSV["slot"..slot_id.."Wait"] = nil
+    if tContains(SELFAQ.needSlots, slot_id) then
 
-    if SELFAQ.slotFrames[slot_id] then
-        SELFAQ.slotFrames[slot_id].wait:SetTexture()
-        SELFAQ.slotFrames[slot_id].waitFrame:Hide()
-        SELFAQ.slotFrames[slot_id].locker:Show()
+        AQSV.slotStatus[slot_id].locked = true
+        AQSV["slot"..slot_id.."Wait"] = nil
+
+        if SELFAQ.slotFrames[slot_id] then
+            SELFAQ.slotFrames[slot_id].wait:SetTexture()
+            SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+            SELFAQ.slotFrames[slot_id].locker:Show()
+        end
+
     end
 end
 
 function SELFAQ.checkAllWait()
     for k,v in pairs(SELFAQ.slots) do
         if AQSV["slot"..v.."Wait"] then
-            local one = AQSV["slot"..v.."Wait"]
-            SELFAQ.equipWait(one[1], one[2])
+            SELFAQ.equipWait(AQSV["slot"..v.."Wait"][1], AQSV["slot"..v.."Wait"][2])
         end
     end
 end

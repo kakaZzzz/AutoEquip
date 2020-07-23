@@ -502,3 +502,29 @@ SELFAQ.isNefNest = function()
         return false
     end
 end
+
+local _G = _G
+function RunSlashCmd(cmd)
+  local slash, rest = cmd:match("^(%S+)%s*(.-)$")
+  for name, func in pairs(SlashCmdList) do
+     local i, slashCmd = 1
+     repeat
+        slashCmd, i = _G["SLASH_"..name..i], i + 1
+        if slashCmd == slash then
+           return true, func(rest)
+        end
+     until not slashCmd
+  end
+  -- Okay, so it's not a slash command. It may also be an emote.
+  local i = 1
+  while _G["EMOTE" .. i .. "_TOKEN"] do
+     local j, cn = 2, _G["EMOTE" .. i .. "_CMD1"]
+     while cn do
+        if cn == slash then
+           return true, DoEmote(_G["EMOTE" .. i .. "_TOKEN"], rest);
+        end
+        j, cn = j+1, _G["EMOTE" .. i .. "_CMD" .. j]
+     end
+     i = i + 1
+  end
+end

@@ -45,7 +45,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
 	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
 	L["Show simple tooltip (only item name)"] = "显示精简提示（只有物品名）"
-	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering Nefarian's Lair"] = "进入 奈法利安的巢穴 装备|cff0070dd[奥妮克希亚鳞片披风]|r"
+	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"] = "进入|cffffffff奈法利安的巢穴|r装备|cff0070dd[奥妮克希亚鳞片披风]|r"
+	L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"] = "自动装备|cff0070dd[奥妮克希亚鳞片披风]|r后在团队频道发出提醒"
 
 	L["#Don't change clock when you are in Nefarian's Lair"] = "#进入 奈法利安的巢穴 后不会更换披风"
 
@@ -192,4 +193,28 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Default"] = "默认"
 	L["Don't equip suit when you target those boss"] = "面对以下Boss时不切换套装"
 	L["Format - BossName,BossName,BossName"] = "格式 - Boss名字,Boss名字,Boss名字"
+
+	L["Suit"] = "套装"
+	L["Suit "] = "套装"
+	L["CMD: "] = "命令行: "
+	L["AutoEquip Terms"] = "自动换装条件"
+
+	L["Equip one of the items"] = "装备以下物品之一"
+	L["Target one of the Boss"] = "目标是以下Boss之一"
+	L["Super Equip"] = "超级换装"
+	L["Leave combat every time"] = "每次脱离战斗时"
+	L["AutoEquip Rules:"] = "自动换装规则:"
+	L["Copy Current Suit"] = "复制当前装备"
+	L["Empty"] = "清空"
+	L["Save"] = "保存"
+
+	L["Enter the world"] = "进入世界"
+    L["Enter a Raid instance"] = "进入团队副本"
+    L["Enter a Party instance"] = "进入5人副本"
+    L["Enter a Battleground"] = "进入战场"
+    L["Lock equipment bar first"] = "换装前锁定装备栏"
+
+    L["Takeoff"] = "一键脱装"
+    L["AutoEquip ON/OFF"] = "自动换装开关"
+    L["Hide quick button"] = "隐藏快捷按钮"
 end

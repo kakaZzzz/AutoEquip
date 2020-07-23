@@ -10,7 +10,10 @@ local player = SELFAQ.player
 -- 设置菜单初始化
 function SELFAQ.settingInit()
 
-    
+    if SELFAQ.f ~= nil then
+        return
+    end
+
     local top = CreateFrame("Frame", nil, UIParent)
 
     local p = CreateFrame("ScrollFrame", nil, UIParent, "UIPanelScrollFrameTemplate")
@@ -485,6 +488,14 @@ function SELFAQ.settingInit()
             if key == "hideBackdrop" then
                 SELFAQ.hideBackdrop()
             end
+
+            if key == "reverseCooldownUnit" then
+                SELFAQ.renderQuickButton()
+            end
+
+            if key == "hideQuickButton" then
+                SELFAQ.renderQuickButton()
+            end
         end)
 
         f.checkbox[key] = b
@@ -644,9 +655,10 @@ function SELFAQ.settingInit()
     buildCheckbox(L["enable_swim"], "enableSwim", otherHight-50)
     buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-75)
     buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-100)
-    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering Nefarian's Lair"], "enableOnyxiaCloak", otherHight-125)
+    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-125)
+    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-150)
 
-    otherHight = otherHight-170
+    otherHight = otherHight-195
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -659,8 +671,9 @@ function SELFAQ.settingInit()
     buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-75)
     buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-100)
     buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-125)
+    buildCheckbox(L["Hide quick button"], "hideQuickButton", otherHight-150)
 
-    otherHight = otherHight - 125
+    otherHight = otherHight - 150
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
