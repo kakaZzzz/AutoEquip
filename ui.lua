@@ -863,12 +863,8 @@ SELFAQ.renderQuickButton = function()
 
 	local step = 0
 
-	for i=1,10 do
+	for i=1,9 do
 		local number = i
-
-		if number == 10 then
-			number = 0
-		end
 
 		if SUITAQ[number]['enable'] then
 			print(number, step)
@@ -1088,7 +1084,7 @@ function SELFAQ.showQBTooltip( button, word )
 
 		elseif word == 71 then
 
-			tooltip:AddLine(L["AutoEquip ON/OFF"])
+			tooltip:AddLine(L["AutoEquip |cFF00FF00ON|r/|cFFFF0000OFF|r"])
 
 		elseif word >= 60 then
 

@@ -88,7 +88,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Unidentified usable items need to be added manually by yourself"] = "未被识别的主动装备，需要自己手动添加"
 	L["Format - ItemID/BuffTime,ItemID/BuffTime"] = "格式 - 物品ID/Buff持续时间,物品ID/Buff持续时间"
 	L["Submit"] = "提交"
-	L["Submit & Reload UI"] = "提交并重载UI"
+	L["Save & Reload UI"] = "保存并重载UI"
 
 	L["Command (/aq /autoequip are valid):"] = "命令行（也可用 /aq /autoequip）:"
 	L["Advanced Settings:"] = "进阶设置:"
@@ -180,7 +180,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Hide popup addon info at the top of screen"] = "隐藏屏幕上方的插件提示"
 	L["-- Set popup info to the center of screen (default 0,320)"] = "-- 将插件提示定位到屏幕正中（默认0,320）"
 	L["|cFF00FF00Unlocked|r all equipment buttons"] = "|cFF00FF00解锁|r全部装备栏按钮"
-	L["|cFF00FF00Locked|r all equipment buttons"] = "|cFF00FF00锁定|r全部装备栏按钮"
+	L["|cFF00FF00Locked|r all equipment buttons"] = "|cFFFF0000锁定|r全部装备栏按钮"
 	L["Set threshold of member's target to "] = "将团员目标阈值设置为"
 
 	L["Block Items:"] = "屏蔽物品:"
@@ -215,6 +215,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
     L["Lock equipment bar first"] = "换装前锁定装备栏"
 
     L["Takeoff"] = "一键脱装"
-    L["AutoEquip ON/OFF"] = "自动换装开关"
+    L["AutoEquip |cFF00FF00ON|r/|cFFFF0000OFF|r"] = "自动换装|cFF00FF00开|r|cFFFF0000关|r"
     L["Hide quick button"] = "隐藏快捷按钮"
+    L["<AutoEquip> Equiped "] = "<AutoEquip>自动装备"
+    L["Raid member's target (>1)"] = "团队成员目标（大于1）"
 end

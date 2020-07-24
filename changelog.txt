@@ -1,3 +1,25 @@
+v5.0
+
+1. 新功能：超级换装，包括一键换装和自动换装规则
+2. 增加快捷按钮
+3. 修复一个可能卡死游戏的bug
+4. 优化装备栏展现
+5. 装备弹出列表按背包顺序排列
+6. 优化63+套装切换目标逻辑
+7. 开启主动队列的装备栏按钮会有图标显示
+8. 自动装备[奥妮克希亚鳞片披风]后团队频道提醒
+
+1. New feature: Super Equip, include one-key change equipments and custom auto-equip rules
+2. Add quick buttons
+3. Fix a bug that may freeze the game
+4. Beautify the equipment bar
+5. The item pop-up list is arranged in order of backpacks
+6. Optimized Suit 63+ switching target logic
+7. The equipment button which is running a usable queue will have an icon display
+8. Remind on Raid channel when auto-equiped [Onyxia Scale Cloak]
+
+---
+
 v4.15
 
 1. 增加/ae lock命令，锁定装备栏全部按钮

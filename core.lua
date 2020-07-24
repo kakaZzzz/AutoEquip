@@ -957,6 +957,10 @@ function SELFAQ.equipWait(item_id, slot_id, popup)
 
     SELFAQ.setLocker(slot_id)
 
+    AQSV["slot"..slot_id.."Wait"] = nil
+    SELFAQ.slotFrames[slot_id].wait:SetTexture()
+    SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+
     -- AQSV.slotStatus[slot_id].locked = true
     -- AQSV["slot"..slot_id.."Wait"] = nil
 
@@ -971,14 +975,11 @@ end
 
 function SELFAQ.setLocker(slot_id)
 
-    if tContains(SELFAQ.needSlots, slot_id) then
+    if tContains(SELFAQ.needSlots, slot_id) or (slot_id==14 and tContains(SELFAQ.needSlots, 13)) then
 
         AQSV.slotStatus[slot_id].locked = true
-        AQSV["slot"..slot_id.."Wait"] = nil
 
         if SELFAQ.slotFrames[slot_id] then
-            SELFAQ.slotFrames[slot_id].wait:SetTexture()
-            SELFAQ.slotFrames[slot_id].waitFrame:Hide()
             SELFAQ.slotFrames[slot_id].locker:Show()
         end
 
@@ -1023,6 +1024,8 @@ function SELFAQ.slotsCanEquip()
     return slots
 end
 
+local onyxiaAlert = false
+
 SELFAQ.equipOnyxiaCloak = function()
 
     if not AQSV.enableOnyxiaCloak then
@@ -1038,7 +1041,25 @@ SELFAQ.equipOnyxiaCloak = function()
         if GetItemCount(15138) > 0 then
             AQSV.cloakBackup = GetInventoryItemID("player", 15)
             SELFAQ.equipWait(15138, 15)
-            chatInfo(L["Equip "]..GetItemLink(15138))
+
+            if not onyxiaAlert then
+
+                onyxiaAlert = true
+
+                chatInfo(L["Equip "]..GetItemLink(15138))
+
+                -- 避免在团队频道重复多次
+                if AQSV.enableOnyxiaCloakAlert  then   
+                    SendChatMessage(L["<AutoEquip> Equiped "]..SELFAQ.GetItemLink(15138), "RAID")
+                end
+
+                C_Timer.After(5.0, function()
+                    onyxiaAlert = false
+                end)
+
+            end
+
+            
         end
 
     elseif GetInventoryItemID("player", 15) == 15138 and AQSV.cloakBackup > 0 then

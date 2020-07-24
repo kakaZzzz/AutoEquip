@@ -60,6 +60,10 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             SUITAQ = initSV(SUITAQ, {})
 
+            -- for i=1,9 do
+            --     SUITAQ[i] = initSV(SUITAQ[i], {})
+            -- end
+
             AQSV = initSV(AQSV, {})
             AQSV.usableItems = initSV(AQSV.usableItems, SELFAQ.usable)
             AQSV.usableChests = initSV(AQSV.usableChests, SELFAQ.usableChests)
@@ -84,7 +88,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.pveTrinkets = initSV(AQSV.pveTrinkets, {})
             AQSV.pvpTrinkets = initSV(AQSV.pvpTrinkets, {})
             AQSV.pvpMode = initSV(AQSV.pvpMode, false)
-            AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, false)
+            AQSV.reverseCooldownUnit = initSV(AQSV.reverseCooldownUnit, true)
 
             AQSV.carrotBackup = initSV(AQSV.carrotBackup, 0)
             AQSV.backup8 = initSV(AQSV.backup8, 0)
@@ -106,7 +110,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.slot14LockedTime = 0
 
             AQSV.xBuff = initSV(AQSV.xBuff, 200)
-            AQSV.yBuff = initSV(AQSV.yBuff, 50)
+            AQSV.yBuff = initSV(AQSV.yBuff, 80)
             AQSV.pointBuff = initSV(AQSV.pointBuff, "CENTER")
 
             AQSV.enableBuff = initSV(AQSV.enableBuff, true)
@@ -143,6 +147,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
             AQSV.enableOnyxiaCloak = initSV(AQSV.enableOnyxiaCloak, true)
+            AQSV.enableOnyxiaCloakAlert = initSV(AQSV.enableOnyxiaCloakAlert, true)
 
             AQSV.simpleTooltip = initSV(AQSV.simpleTooltip, false)
 
