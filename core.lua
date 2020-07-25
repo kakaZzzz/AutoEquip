@@ -958,8 +958,11 @@ function SELFAQ.equipWait(item_id, slot_id, popup)
     SELFAQ.setLocker(slot_id)
 
     AQSV["slot"..slot_id.."Wait"] = nil
-    SELFAQ.slotFrames[slot_id].wait:SetTexture()
-    SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+
+    if SELFAQ.slotFrames[slot_id] then
+        SELFAQ.slotFrames[slot_id].wait:SetTexture()
+        SELFAQ.slotFrames[slot_id].waitFrame:Hide()
+    end
 
     -- AQSV.slotStatus[slot_id].locked = true
     -- AQSV["slot"..slot_id.."Wait"] = nil

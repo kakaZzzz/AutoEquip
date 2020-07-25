@@ -956,11 +956,10 @@ SELFAQ.createQBOne = function(word, order, show, func)
 
 	button:SetPoint("TOPLEFT", quickButton, 20 * order , 0)
 
-	if word <  60 then
-		button:SetHighlightTexture("Interface\\AddOns\\AutoEquip\\Textures\\H.blp", "ADD")
-	else
-		button:SetHighlightTexture("Interface\\AddOns\\AutoEquip\\Textures\\H.blp", "ADD")
-	end
+
+	-- button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
+	button:SetHighlightTexture("Interface\\AddOns\\AutoEquip\\Textures\\H.blp", "ADD")
+
 
  --  	button:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
 	-- button:SetBackdropBorderColor(0,0,0,0.9)

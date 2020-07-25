@@ -1,3 +1,23 @@
+v5.2
+
+1. 修复一个锁定装备栏的bug
+2. 修改超级换装中描述错误，应该为“装备名称”
+3. “换装前锁定装备栏”默认勾选
+
+1. Fix a bug that occurred when locking the equipment bar
+2. Fix a text mistake in "Super Equip". "ItemName" is correct.
+3. "Lock equipment bar first" is selected by default
+
+---
+
+v5.1
+
+1. 修复战斗中通过装备栏换装时的bug
+
+1. Fix a bug that use equipment bar to change an item in combat
+
+---
+
 v5.0
 
 1. 新功能：超级换装，包括一键换装和自动换装规则

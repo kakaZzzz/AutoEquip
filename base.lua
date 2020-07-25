@@ -135,6 +135,10 @@ end
 SELFAQ.reverseBagSlot = function( id )
 
     local num = SELFAQ.itemInBags[id]
+
+    if num == nil then
+        return -1
+    end
     
     local bag = math.floor(num/100)
     local slot = num%100
@@ -242,7 +246,7 @@ SELFAQ.GetItemLink = function( id )
     local _, link = GetItemInfo(id)
 
     if order >0 then
-        link = link.." - "..order
+        link = link.."#"..order
     end
 
     return link
@@ -377,6 +381,10 @@ SELFAQ.equipByID = function(item_id, slot_id, popup)
 
     if item_id > 100000 then
         local bag,slot = SELFAQ.reverseBagSlot(item_id)
+
+        if bag == -1 then
+            return false
+        end
 
         ClearCursor()
         PickupContainerItem(bag,slot)

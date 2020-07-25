@@ -525,6 +525,11 @@ function SELFAQ.superInit()
                         SUITAQ[number] = {}
                     end
 
+                    -- 默认锁定
+                    if SUITAQ[number]["enableLock"] == nil then
+                        SUITAQ[number]["enableLock"] = true
+                    end
+
                 end
             end
         end
@@ -568,7 +573,7 @@ function SELFAQ.superInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Format - ItemID,ItemID,ItemID"])
+        t:SetText(L["Format - ItemName,ItemName"])
         t:SetPoint("TOPLEFT", f, 25, leftHight-35)
     end
 
@@ -608,7 +613,7 @@ function SELFAQ.superInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Format - BossName,BossName,BossName"])
+        t:SetText(L["Format - BossName,BossName"])
         t:SetPoint("TOPLEFT", f, 25, leftHight-35-35)
     end
 

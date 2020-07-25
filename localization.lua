@@ -219,4 +219,6 @@ if locale == 'zhCN' or locale == 'zhTW' then
     L["Hide quick button"] = "隐藏快捷按钮"
     L["<AutoEquip> Equiped "] = "<AutoEquip>自动装备"
     L["Raid member's target (>1)"] = "团队成员目标（大于1）"
+    L["Format - ItemName,ItemName"] = "格式 - 装备名称,装备名称"
+    L["Format - BossName,BossName"] = "格式 - Boss名字,Boss名字"
 end
