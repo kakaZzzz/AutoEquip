@@ -134,7 +134,7 @@ function SELFAQ.superInit()
 
                         local id = GetInventoryItemID("player", k)
 
-                        if id ~= SUITAQ[i]["slot"..k] then
+                        if id ~= SELFAQ.reverseId(SUITAQ[i]["slot"..k]) then
                             match = false
                         end
 

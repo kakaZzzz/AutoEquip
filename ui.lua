@@ -411,6 +411,8 @@ function SELFAQ.showDropdown(slot_id, position)
 
 	-- 显示可用饰品的下拉框
 	SELFAQ.itemDropdownTimestamp = nil
+	SELFAQ.showingSlot = slot_id
+	SELFAQ.showingPosition = position
 
 	local index = 1
 	local itemId1 = GetInventoryItemID("player", slot_id)
@@ -449,6 +451,8 @@ function SELFAQ.doHideItemDropdown()
 	   			v:Hide()
 	   		end
 	   		SELFAQ.itemDropdownTimestamp = nil
+			SELFAQ.showingSlot = nil
+			SELFAQ.showingPosition = nil
 		end
 	end
 end

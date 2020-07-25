@@ -436,6 +436,10 @@ function SELFAQ.mainInit()
 
             SELFAQ.runEquipmentRules()
 
+            if SELFAQ.showingSlot then
+                SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition)
+            end
+
         end
 
         if event == "UPDATE_BINDINGS" then
