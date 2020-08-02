@@ -87,6 +87,14 @@ function SELFAQ.superInit()
 
     SELFAQ.superEquipSuit = function(number)
 
+        if SELFAQ.playerCanEquip()  then
+
+        else
+            chatInfo(L["|cFFFF0000In combat|r"])
+            popupInfo(L["|cFFFF0000In combat|r"])
+            return
+        end
+
         if SUITAQ[number]["enable"] then
 
             if tContains(SELFAQ.matchSuit, number) then
@@ -219,7 +227,7 @@ function SELFAQ.superInit()
 
         local inInstance, instanceType = IsInInstance()
 
-        print( inInstance, instanceType)
+        -- print( inInstance, instanceType)
 
         for k,v in pairs(SUITAQ) do
 

@@ -311,7 +311,6 @@ function SELFAQ.mainInit()
         elseif msg == "60" or msg == "63" or msg == "64"   then
             -- EquipItemByName(19891, 17)
             if SELFAQ.playerCanEquip()  then
-                print(tonumber(msg))
                 SELFAQ.needSuit = tonumber(msg)
             else
                 chatInfo(L["|cFF00FF00In combat|r"])
@@ -437,7 +436,7 @@ function SELFAQ.mainInit()
             SELFAQ.runEquipmentRules()
 
             if SELFAQ.showingSlot then
-                SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition)
+                SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition, true)
             end
 
         end

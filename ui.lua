@@ -405,12 +405,15 @@ function SELFAQ.updateButtonSwitch()
     end)
 end
 
-function SELFAQ.showDropdown(slot_id, position)
+function SELFAQ.showDropdown(slot_id, position, update)
 	-- 更新物品在背包里的位置
 	-- SELFAQ.updateItemInBags()
 
 	-- 显示可用饰品的下拉框
-	SELFAQ.itemDropdownTimestamp = nil
+	if not update then
+		SELFAQ.itemDropdownTimestamp = nil
+	end
+
 	SELFAQ.showingSlot = slot_id
 	SELFAQ.showingPosition = position
 
@@ -871,7 +874,6 @@ SELFAQ.renderQuickButton = function()
 		local number = i
 
 		if SUITAQ[number]['enable'] then
-			print(number, step)
 			SELFAQ.createQBOne(i, step, true, function()
 				SlashCmdList.AQCMD(tostring(i))
 			end)

@@ -1,3 +1,13 @@
+v5.3
+
+1. 修复战斗中点换装的报错
+2. 优化物品弹出框的更新机制
+
+1. Fix a bug that change a suit in combat
+2. Optimize the update logic of the item popup list
+
+---
+
 v5.2
 
 1. 修复一个锁定装备栏的bug
