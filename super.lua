@@ -92,6 +92,7 @@ function SELFAQ.superInit()
         else
             chatInfo(L["|cFFFF0000In combat|r"])
             popupInfo(L["|cFFFF0000In combat|r"])
+            debug(number)
             return
         end
 
@@ -119,6 +120,7 @@ function SELFAQ.superInit()
         else
             chatInfo(L["Suit "]..number..L[" disabled"])
             popupInfo(L["Suit "]..number..L[" disabled"])
+
         end
 
     end
@@ -226,8 +228,6 @@ function SELFAQ.superInit()
     SELFAQ.runEnterRules = function()
 
         local inInstance, instanceType = IsInInstance()
-
-        -- print( inInstance, instanceType)
 
         for k,v in pairs(SUITAQ) do
 

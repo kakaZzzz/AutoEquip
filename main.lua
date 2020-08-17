@@ -433,7 +433,10 @@ function SELFAQ.mainInit()
                 SELFAQ.updateItemButton( v )
             end
 
-            SELFAQ.runEquipmentRules()
+             if SELFAQ.playerCanEquip()  then
+                -- 战斗中毒药减少会触发该事件
+                SELFAQ.runEquipmentRules()
+             end
 
             if SELFAQ.showingSlot then
                 SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition, true)

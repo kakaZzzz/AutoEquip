@@ -120,7 +120,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Hide black translucent border"] = "隐藏黑色半透明边框"
 	L["#Effective after ENTER"] = "#回车后生效"
 	L["Hide tooltip when the mouse moves over the button"] = "鼠标在装备栏按钮上停留时不显示提示框"
-	L["[Empty]"] = "[空]"
+	L["[Empty]"] = "[空|不更换]"
 	L['Trinket Slot '] = "饰品栏"
 	L["Equipment Bar Button"] = "装备栏按钮"
 
