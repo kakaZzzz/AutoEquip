@@ -145,7 +145,7 @@ function SELFAQ.onBuffChanged(self, elapsed)
 		local name, icon, count, debuffType, duration, expire = UnitBuff("player", index)
 
 		while name do
-			if string.find(AQSV.buffNames, name) then
+			if tContains(SELFAQ.buffs, name) then
 				name = nil
 				find = true
 			else

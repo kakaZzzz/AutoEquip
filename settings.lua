@@ -496,6 +496,10 @@ function SELFAQ.settingInit()
             if key == "hideQuickButton" then
                 SELFAQ.renderQuickButton()
             end
+
+             if key == "hideTakeoffButton" then
+                SELFAQ.renderQuickButton()
+            end
         end)
 
         f.checkbox[key] = b
@@ -671,9 +675,11 @@ function SELFAQ.settingInit()
     buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-75)
     buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-100)
     buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-125)
-    buildCheckbox(L["Hide quick button"], "hideQuickButton", otherHight-150)
+    buildCheckbox(L["Hide addon info in the chat box"], "hideChatInfo", otherHight-150)
+    buildCheckbox(L["Hide quick buttons"], "hideQuickButton", otherHight-175)
+    buildCheckbox(L["Disable the takeoff quick button"], "hideTakeoffButton", otherHight-200)
 
-    otherHight = otherHight - 150
+    otherHight = otherHight - 200
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -830,7 +836,12 @@ function SELFAQ.settingInit()
         b:SetPoint("TOPLEFT", f, 410, SELFAQ.lastHeight - 108)
         b:SetScript("OnClick", function(self)
             AQSV.buffNames = e:GetText()
+            SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)
+            debug(SELFAQ.buffs)
         end)
+
+        SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)
+        debug(SELFAQ.buffs)
     end
 
     SELFAQ.lastHeight = SELFAQ.lastHeight - 160

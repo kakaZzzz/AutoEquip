@@ -17,8 +17,15 @@ for k,v in pairs(SELFAQ.gearSlots) do
     _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = SELFAQ.slotToName[v]
 end
 
+for i=1,9 do
+    _G["BINDING_NAME_AUTOEQUIP_SUIT"..i] = L["Suit "]..i
+end
+
+_G["BINDING_NAME_AUTOEQUIP_TAKEOFF"] = L["Takeoff"]
+
 -- _G.BINDING_NAME_AUTOEQUIP_BUTTON14 = L['Trinket Slot ']..2
 _G.BINDING_HEADER_AUTOEQUIP_INVENTORYBAR_BUTTON = L["Equipment Bar Button"]
+_G.BINDING_HEADER_AUTOEQUIP_SUPER_EQUIP = L["Super Equip"]
 
 -- 注册事件
 SELFAQ.main = CreateFrame("Frame")
@@ -153,6 +160,8 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.disableMouseover = initSV(AQSV.disableMouseover, false)
             AQSV.hidePopupInfo = initSV(AQSV.hidePopupInfo, false)
+            AQSV.hideQuickButton = initSV(AQSV.hideQuickButton, false)
+            AQSV.hideTakeoffButton = initSV(AQSV.hideTakeoffButton, false)
 
             AQSV.popupX = initSV(AQSV.popupX, 0)
             AQSV.popupY = initSV(AQSV.popupY, 320)

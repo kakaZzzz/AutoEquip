@@ -107,10 +107,16 @@ function SELFAQ.superInit()
 
                 if SUITAQ[number]["slot"..k] and SUITAQ[number]["slot"..k] > 0 then
 
-                    if SUITAQ[number]["enableLock"] then
-                        SELFAQ.equipWait(SUITAQ[number]["slot"..k], k, false)
+                    if k == 15 and SELFAQ.isNefNest() then
+                        -- 奈法房间，披风位置
                     else
-                        SELFAQ.equipByID (SUITAQ[number]["slot"..k], k, false)
+
+                        if SUITAQ[number]["enableLock"] then
+                            SELFAQ.equipWait(SUITAQ[number]["slot"..k], k, false)
+                        else
+                            SELFAQ.equipByID (SUITAQ[number]["slot"..k], k, false)
+                        end
+
                     end
 
                 end

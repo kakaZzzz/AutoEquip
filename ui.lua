@@ -125,9 +125,9 @@ function SELFAQ.createItemBar()
 		f:Hide()
 	end
 
-	SELFAQ.bindingSlot( )
 	SELFAQ.createQuickButton()
 	SELFAQ.updateButtonSwitch()
+	SELFAQ.bindingSlot( )
 end
 
 function SELFAQ.hideBackdrop(  )
@@ -620,6 +620,37 @@ function SELFAQ.bindingSlot( )
 		end
 	end
 
+	for i=1,9 do
+		if SELFAQ.qbs[i] then
+			local v = SELFAQ.qbs[i]
+			ClearOverrideBindings(v)
+
+			local keys = {GetBindingKey("AUTOEQUIP_SUIT"..i)}
+
+			for k1,v1 in pairs(keys) do
+
+				if v1 and v1 ~= "" then
+					SetOverrideBindingClick(v, false, v1, "AQQB"..i)
+				end
+			end
+		end
+		
+	end
+
+	do
+		local v = SELFAQ.qbs[11]
+		ClearOverrideBindings(v)
+
+		local keys = {GetBindingKey("AUTOEQUIP_TAKEOFF")}
+
+		for k1,v1 in pairs(keys) do
+
+			if v1 and v1 ~= "" then
+				SetOverrideBindingClick(v, false, v1, "AQQB11")
+			end
+		end
+	end
+
 
 end
 
@@ -885,7 +916,9 @@ SELFAQ.renderQuickButton = function()
 	end
 
 	SELFAQ.createQBOne(11, step, true, function()
-		SlashCmdList.AQCMD("takeoff")
+		if not AQSV.hideTakeoffButton then
+			SlashCmdList.AQCMD("takeoff")
+		end
 	end)
 	step = step + 1
 
@@ -952,7 +985,7 @@ SELFAQ.createQBOne = function(word, order, show, func)
 		return
 	end
 
-	local button = CreateFrame("Button", "AQQB"..order, quickButton, "SecureActionButtonTemplate")
+	local button = CreateFrame("Button", "AQQB"..word, quickButton, "SecureActionButtonTemplate")
 
 	button.hl = false
 

@@ -16,4 +16,14 @@
 	<Binding name="AUTOEQUIP_BUTTON16" category="AutoEquip"/>
 	<Binding name="AUTOEQUIP_BUTTON17" category="AutoEquip"/>
 	<Binding name="AUTOEQUIP_BUTTON18" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT1" category="AutoEquip" header="AUTOEQUIP_SUPER_EQUIP"/>
+	<Binding name="AUTOEQUIP_SUIT2" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT3" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT4" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT5" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT6" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT7" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT8" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_SUIT9" category="AutoEquip"/>
+	<Binding name="AUTOEQUIP_TAKEOFF" category="AutoEquip"/>
 </Bindings>

@@ -220,6 +220,11 @@ SELFAQ.getCooldownText = function(rest)
 end
 
 SELFAQ.chatInfo = function(s)
+
+    if AQSV.hideChatInfo then
+        return
+    end
+
     print(L["prefix"].." "..s)
 end
 
@@ -509,4 +514,18 @@ SELFAQ.isNefNest = function()
     else
         return false
     end
+end
+
+SELFAQ.comma2Table = function(text)
+    -- 兼容全角逗号
+    local s = string.gsub(text,"，", ",")
+    local t = { strsplit(",", s) }
+
+    for k,v in pairs(t) do
+        -- 去掉两端空格
+        v= strtrim(v)
+        t[k] = v
+    end
+
+    return t
 end
