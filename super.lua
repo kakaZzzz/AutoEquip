@@ -567,21 +567,63 @@ function SELFAQ.superInit()
     end
 
     buildCheckbox(L["Enable"], "enable", -23, 180)
-    buildCheckbox(L["Lock equipment bar first"], "enableLock", -53)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Note"])
+        t:SetPoint("TOPLEFT", f, 25, -60)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Effective after ENTER"])
+        t:SetPoint("TOPLEFT", f, 210, -60)
+    end
+
+    do
+        local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(120)
+        e:SetHeight(40)
+        e:SetJustifyH("CENTER")
+        e:SetPoint("TOPLEFT", f, 73,  -47)
+        e:SetAutoFocus(false)
+        e:SetText(AQSV.barZoom)
+        e:SetCursorPosition(0)
+
+        e:SetScript("OnEnterPressed", function(self)
+            self:ClearFocus()
+
+            local v = self:GetText()
+            v = tonumber(v)
+
+            if not v then
+                v = 1
+            end
+
+            self:SetText(v)
+            AQSV.barZoom = v
+
+            SELFAQ.bar:SetScale(AQSV.barZoom)
+
+        end)
+    end
+
+    buildCheckbox(L["Lock equipment bar first"], "enableLock", -83)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["CMD: "].."/ae ".."1")
-        t:SetPoint("TOPLEFT", f, 25, -90)
+        t:SetPoint("TOPLEFT", f, 25, -120)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
         t:SetText(SELFAQ.color("FF4500", L["AutoEquip Rules:"]))
-        t:SetPoint("TOPLEFT", f, 25, -130)
+        t:SetPoint("TOPLEFT", f, 25, -160)
     end
 
-    local leftHight = -170
+    local leftHight = -200
 
     buildCheckbox(L["Equip one of the items"], "enableEquipment", leftHight)
 
@@ -620,7 +662,7 @@ function SELFAQ.superInit()
         end)
     end
 
-    leftHight = -355
+    leftHight = -395
 
     buildCheckbox(L["Target one of the Boss"], "enableTarget", leftHight)
     buildCheckbox(L["Raid member's target (>1)"], "enableTargetMember", leftHight-35)
@@ -660,7 +702,7 @@ function SELFAQ.superInit()
         end)
     end
 
-    leftHight = -540-35
+    leftHight = -540-35-30
 
     buildCheckbox(L["Leave combat every time"], "enableLeaveCombat", leftHight)
     buildCheckbox(L["Enter the world"], "enableWorld", leftHight-25)
