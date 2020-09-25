@@ -837,7 +837,7 @@ function SELFAQ.settingInit()
         b:SetScript("OnClick", function(self)
             AQSV.buffNames = e:GetText()
             SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)
-            debug(SELFAQ.buffs)
+            -- debug(SELFAQ.buffs)
         end)
 
         SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)

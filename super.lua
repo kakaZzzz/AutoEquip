@@ -448,6 +448,12 @@ function SELFAQ.superInit()
             f.checkbox["enableTargetMember"]:Disable()
         end
 
+         if SUITAQ[current]["note"] == nil then
+            SUITAQ[current]["note"] = ""
+        end
+        f.note:SetText(strtrim(SUITAQ[current]["note"]))
+        f.note:SetText(strtrim(SUITAQ[current]["note"]))
+
         if SUITAQ[current]["itemText"] == nil then
             SUITAQ[current]["itemText"] = ""
         end
@@ -582,29 +588,24 @@ function SELFAQ.superInit()
 
     do
         local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
+        f.note = e
+
         e:SetFontObject("GameFontHighlight")
-        e:SetWidth(120)
+        e:SetWidth(130)
         e:SetHeight(40)
-        e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 73,  -47)
+        e:SetMultiLine(true)
+        -- e:SetJustifyH("")
+        e:SetPoint("TOPLEFT", f, 73,  -60)
         e:SetAutoFocus(false)
-        e:SetText(AQSV.barZoom)
+        e:SetText("dfd")
         e:SetCursorPosition(0)
 
         e:SetScript("OnEnterPressed", function(self)
             self:ClearFocus()
 
             local v = self:GetText()
-            v = tonumber(v)
 
-            if not v then
-                v = 1
-            end
-
-            self:SetText(v)
-            AQSV.barZoom = v
-
-            SELFAQ.bar:SetScale(AQSV.barZoom)
+            SUITAQ[current]["note"] = strtrim(v)
 
         end)
     end

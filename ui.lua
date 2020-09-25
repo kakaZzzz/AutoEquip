@@ -1099,7 +1099,11 @@ function SELFAQ.showQBTooltip( button, word )
 		
 		if word <= 9 then
 
-			tooltip:AddLine(L["Suit "]..SELFAQ.color("00FF00", word))
+			if SUITAQ[word]["note"] ~= nil and SUITAQ[word]["note"] ~= "" then
+				tooltip:AddLine(SELFAQ.color("00FF00", SUITAQ[word]["note"]))
+			else
+				tooltip:AddLine(L["Suit "]..SELFAQ.color("00FF00", word))
+			end
 
 			for k,v in pairs(SELFAQ.items) do
 

@@ -774,12 +774,35 @@ function SELFAQ.changeTrinket()
     end
 
     -- 遍历发现没有可用的主动饰品，则更换被动饰品
-    if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
-        AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
-    end
+    -- if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
+    --     AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
+    -- end
 
-    if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
-        AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
+    -- if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
+    --     AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
+    -- end
+
+    local b1 = AQSV.slotStatus[13].backup
+    local b2 = AQSV.slotStatus[14].backup
+
+    if b1 >0 and b1 ~= slot13["id"] and b1 ~= slot14["id"] then
+         if not slot13["busy"] then
+            AddonEquipItemByName(b1, 13)
+            slot13["busy"] = true
+         elseif not slot14["busy"] then
+            AddonEquipItemByName(b1, 14)
+            slot14["busy"] = true
+         end
+    end
+    
+    if b2 >0 and b2 ~= slot13["id"] and b2 ~= slot14["id"] then
+         if not slot13["busy"] and b1 ~= slot13["id"] then
+            AddonEquipItemByName(b2, 13)
+            slot13["busy"] = true
+         elseif not slot14["busy"] and b1 ~= slot14["id"] then
+            AddonEquipItemByName(b2, 14)
+            slot14["busy"] = true
+         end
     end
 end
 
