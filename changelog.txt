@@ -9,6 +9,16 @@ Todo:
 
 ---
 
+v5.5
+
+1. 可以给套装添加备注
+2. 修改被动饰品按优先级换上，之前是固定1、2位置
+
+1. You can add note to the suit
+2. Modify the backup trinkets according to the priority change, before is fixed 1, 2 positions
+
+---
+
 v5.4
 
 1. 增加隐藏聊天框插件提示的选项
