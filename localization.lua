@@ -222,4 +222,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
     L["Format - ItemName,ItemName"] = "格式 - 装备名称,装备名称"
     L["Format - BossName,BossName"] = "格式 - Boss名字,Boss名字"
     L["|cFFFF0000In combat|r"] = "|cFFFF0000战斗中|r"
+
+    L["Hide addon info in the chat box"] = "隐藏聊天框里的插件通告"
+    L["Hide quick buttons"] = "隐藏快捷按钮"
+    L["Disable the takeoff quick button"] = "禁用一键脱装按钮"
 end
