@@ -13,6 +13,13 @@ function SELFAQ.createBuffIcon()
 	if SELFAQ.buff ~= nil then
 		return
 	end
+
+	-- 注册事件的frame
+	local timerf = CreateFrame("Frame")
+	timerf.TimeSinceLastUpdate = 0
+	-- 函数执行间隔时间
+	timerf.Interval = 0.2
+	timerf:SetScript("OnUpdate", SELFAQ.onBuffChanged)
 	
 	-- 选择BUTTON类似，才能触发鼠标事件
 	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent)
@@ -84,7 +91,13 @@ function SELFAQ.createBuffIcon()
 
 	f:RegisterForClicks("RightButtonDown");
 	f:SetScript('OnClick', function(self, button)
-	    EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
+		if AQSV.buffLocked then
+			if not UnitAffectingCombat("player") then
+				CancelUnitBuff("player", f.spellIndex)
+			end
+		else
+			EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
+		end
 	end)
 
 	-- 定位判断
@@ -94,15 +107,10 @@ function SELFAQ.createBuffIcon()
 	f:SetScript("OnDragStart", f.StartMoving)
 	f:SetScript("OnDragStop", f.StopMovingOrSizing)
 
-  	f:SetFrameLevel(1)
+  	f:SetFrameLevel(2)
 
   	-- 初始化位置
 	f:SetPoint(AQSV.pointBuff, AQSV.xBuff, AQSV.yBuff)
-
-	f.TimeSinceLastUpdate = 0
-	-- 函数执行间隔时间
-	f.Interval = 0.2
-	f:SetScript("OnUpdate", SELFAQ.onBuffChanged)
 
 	if AQSV.enableBuff then
 		f:Show()
@@ -110,13 +118,28 @@ function SELFAQ.createBuffIcon()
 		f:Hide()
 	end
 
+	for k,v in pairs(AQSV.usableItems) do
+        for k1,v1 in pairs(v) do
+
+            local spellName = GetItemSpell(v1)
+
+            if spellName and not tContains(SELFAQ.buffs, spellName) then
+                tinsert(SELFAQ.buffs, spellName)
+            end
+
+        end
+    end
+
+    debug(SELFAQ.buffs)
+
 end
 
 function SELFAQ.lockBuff()
 
 	SELFAQ.buff.menuList[1]["checked"] = AQSV.buffLocked
 	
-	SELFAQ.buff:EnableMouse(not AQSV.buffLocked)
+	-- SELFAQ.buff:EnableMouse(not AQSV.buffLocked)
+	SELFAQ.buff:EnableMouse(true)
 	SELFAQ.buff:SetMovable(not AQSV.buffLocked)
 	SELFAQ.buff:RegisterForDrag("LeftButton")
 
@@ -124,11 +147,13 @@ function SELFAQ.lockBuff()
 
 	if AQSV.buffLocked then
 		SELFAQ.buff.drag:Hide()
-		SELFAQ.buff:SetAlpha(0)
+		SELFAQ.buff:Hide()
+		-- SELFAQ.buff:SetAlpha(0)
 		SELFAQ.buff:SetBackdropColor(0,0,0,0)
 	else
 		SELFAQ.buff.drag:Show()
-		SELFAQ.buff:SetAlpha(1)
+		SELFAQ.buff:Show()
+		-- SELFAQ.buff:SetAlpha(1)
 		SELFAQ.buff:SetBackdropColor(0,0,0,1)
 	end
 end
@@ -155,21 +180,24 @@ function SELFAQ.onBuffChanged(self, elapsed)
 		end
 
 		if find then
+			SELFAQ.buff.spellIndex = index
+
 			local buffTime = math.floor(expire - GetTime())
 			if buffTime > 60 then
 				buffTime = math.ceil(buffTime / 60).."m"
 			end
 			SELFAQ.buff.texture:SetTexture(icon)
-			SELFAQ.buff:SetAlpha(1)
+			SELFAQ.buff:Show()
 			SELFAQ.buff.buffTime:SetText(buffTime)
 			if count > 0 then
 				SELFAQ.buff.count:SetText(count)
 			end
 		else
+			SELFAQ.buff.spellIndex = nil
 			SELFAQ.buff.texture:SetTexture()
 			SELFAQ.buff.count:SetText()
 			if AQSV.buffLocked then
-				SELFAQ.buff:SetAlpha(0)
+				SELFAQ.buff:Hide()
 			end
 			SELFAQ.buff.buffTime:SetText()
 		end

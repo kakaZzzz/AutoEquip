@@ -99,11 +99,14 @@ function aq_test( )
 
     -- print(GetUnitName("target"))
 
-    local name, type, difficultyIndex, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+    -- local name, type, difficultyIndex, difficultyName, maxPlayers,
+    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
-    print(name, type, difficultyIndex, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceMapId, lfgID)
+    -- print(name, type, difficultyIndex, difficultyName, maxPlayers,
+    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID)
+
+    print(GetItemCooldown(21180))
+    print(GetSpellInfo(25891))
 
 end
 
@@ -245,7 +248,6 @@ SELFAQ.checkUsable = function()
     end
 
     SELFAQ.needSlots = new
-
 
     SELFAQ.updateButtonSwitch()
 
@@ -486,6 +488,37 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
         slot["busy"] = false
         -- 饰品使用后，取消锁定
         SELFAQ.cancelLocker( slot_id )
+    end
+
+    -- 饰品已经使用
+    if slot["duration"] > 30 and slot["buff"] <= SELFAQ.buffTime[slot["id"]] then
+
+        local spellName = GetItemSpell(slot["id"])
+
+        if spellName then
+
+            local index = 1
+            local find = false
+            local name, icon, count, debuffType, duration, expire = UnitBuff("player", index)
+
+            while name do
+                if spellName == name then
+                    name = nil
+                    find = true
+                else
+                    index = index + 1
+                    name, icon, count, debuffType, duration, expire = UnitBuff("player", index)
+                end
+            end
+
+            -- 找不到buff名称
+            if not find then
+                slot["busy"] = false
+                SELFAQ.cancelLocker( slot_id )
+            end
+
+        end
+
     end
 
     -- 使用busy属性，控制饰品槽是否参与更换逻辑
