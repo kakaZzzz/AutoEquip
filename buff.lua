@@ -60,7 +60,7 @@ function SELFAQ.createBuffIcon()
 
 	local text = f:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	text:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE")
-	text:SetText(L["DRAG"])
+	text:SetText(L["Buff Alert"])
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
     text:SetPoint("CENTER", f, 2, 0)
@@ -98,6 +98,14 @@ function SELFAQ.createBuffIcon()
 		else
 			EasyMenu(menu, menuFrame, "cursor", 0 , 0, "MENU")
 		end
+	end)
+
+	f:SetScript("OnEnter", function(self)
+		SELFAQ.showBuffTooltip()
+	end)
+
+	f:SetScript("OnLeave", function(self)
+		SELFAQ.hideTooltip()
 	end)
 
 	-- 定位判断
@@ -202,4 +210,28 @@ function SELFAQ.onBuffChanged(self, elapsed)
 			SELFAQ.buff.buffTime:SetText()
 		end
 	end
+end
+
+function SELFAQ.showBuffTooltip()
+
+	if not AQSV.buffLocked then
+
+		local tooltip = _G["GameTooltip"]
+	    tooltip:ClearLines()
+
+
+		tooltip:SetOwner(SELFAQ.buff, "ANCHOR_NONE")
+		tooltip:SetPoint("BOTTOM", SELFAQ.buff, "TOP" )
+		-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
+		
+		tooltip:AddLine(SELFAQ.color("00FF00",L["Auto-detect trinket buff"]))
+		tooltip:AddLine(SELFAQ.color("FFFFFF",L["Unlock:"]))
+		tooltip:AddLine(L["Right-Click: Lock Position"])
+		tooltip:AddLine(L["Left-Drag: Move Frame"])
+		tooltip:AddLine(SELFAQ.color("FFFFFF",L["Locked:"]))
+		tooltip:AddLine(L["Right-Click: Cancel Aura"])
+		
+	    tooltip:Show()
+	end
+
 end

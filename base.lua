@@ -225,7 +225,7 @@ SELFAQ.chatInfo = function(s)
         return
     end
 
-    print(L["prefix"].." "..s)
+    print(L["prefix"]..s)
 end
 
 SELFAQ.initSV = function( v, init )
@@ -332,6 +332,10 @@ end
 
 SELFAQ.AddonEquipItemByName = function( item_id, slot_id )
 
+    if not SELFAQ.playerCanEquip() then
+        return
+    end
+
     EquipItemByName(item_id, slot_id)
 
     local link = SELFAQ.GetItemLink(item_id)
@@ -380,6 +384,10 @@ end
 
 SELFAQ.equipByID = function(item_id, slot_id, popup)
 
+    if not SELFAQ.playerCanEquip() then
+        return
+    end
+
     if popup == nil then
         popup = true
     end
@@ -406,7 +414,7 @@ SELFAQ.equipByID = function(item_id, slot_id, popup)
     local link = SELFAQ.GetItemLink(rid)
 
     if popup then
-        SELFAQ.popupInfo(L["Equip "]..link)
+        SELFAQ.popupInfo(link)
     end
 
 end

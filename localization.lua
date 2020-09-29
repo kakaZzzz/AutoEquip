@@ -30,11 +30,11 @@ L[60] = color("00FF00", "General")
 L[64] = color("FF0000", "Lv.?? Boss")
 L[63] = color("FF4500", "Lv.63 Elite")
 
-L["prefix"] = "|cFFFFFF00<AutoEquip>|r"
+L["prefix"] = "|cFFBF6B31<|r|cFFFFFF00AE|r|cFFBF6B31>|r"
 
 if locale == 'zhCN' or locale == 'zhTW' then
 
-	L["Loaded"] = " 加载完毕"
+	L["Loaded"] = "加载完毕"
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP queue in Battleground"] = "战场中自动切换到PVP队列"
@@ -59,6 +59,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Resident Trinkets:"] = "常驻饰品:"
 
 	L["No. "] = "优先级"
+	L["Priority "] = "优先"
 	L["Slot "] = "饰品栏"
 
 	L["Trinkets"] = "饰品"
@@ -226,4 +227,17 @@ if locale == 'zhCN' or locale == 'zhTW' then
     L["Hide addon info in the chat box"] = "隐藏聊天框里的插件通告"
     L["Hide quick buttons"] = "隐藏快捷按钮"
     L["Disable the takeoff quick button"] = "禁用一键脱装按钮"
+    L["|cFF00FF00Takeoff|r all equipments"] = "|cFF00FF00一键脱装|r"
+
+    L["Fixed position: Priority 1 = Slot 1, Priority 2 = Slot 2"] = "固定位置: 优先1=饰品栏1, 优先2=饰品栏2"
+    L["Trinket Slot:"] = "饰品栏:"
+
+   	L["Unlock:"] = "未锁定:"
+	L["Right-Click: Lock Position"] = "右键点击: 锁定位置"
+	L["Left-Drag: Move Frame"] = "左键拖拽: 移动框体"
+	L["Locked:"] = "锁定:"
+	L["Right-Click: Cancel Aura"] = "右键点击: 取消光环"
+	L["Auto-detect trinket buff"] = "自动识别饰品Buff"	
+	L["Buff Alert"] = "Buff提醒"
+	L["-- Reset equipment bar position"] = "重置装备栏位置"
 end

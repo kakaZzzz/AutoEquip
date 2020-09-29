@@ -239,7 +239,7 @@ function SELFAQ.settingInit()
         if slot_id == 13 then
             do
                 local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-                t:SetText(L["Slot:"])
+                t:SetText(L["Trinket Slot:"])
                 t:SetPoint("TOPLEFT", queueFrame, 509, SELFAQ.lastHeightQueue)
             end
         end
@@ -419,7 +419,16 @@ function SELFAQ.settingInit()
             f.resident[dropdown.slot] = dropdown
 
             local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-            l:SetText(SELFAQ.slotToName[dropdown.slot])
+
+            if dropdown.slot == 13 then
+                l:SetText(L["Priority "]..1)
+            elseif dropdown.slot  == 14 then
+                l:SetText(L["Priority "]..2)
+            else
+                l:SetText(L["Priority "])
+            end
+
+            
             l:SetPoint("TOPLEFT", queueFrame, 25, SELFAQ.lastHeightQueue-(45 + k*35))
 
             UIDropDownMenu_SetButtonWidth(dropdown, 130)
@@ -432,6 +441,23 @@ function SELFAQ.settingInit()
             
             UIDropDownMenu_SetWidth(dropdown, 130)
             UIDropDownMenu_JustifyText(dropdown, "LEFT")
+
+            -- 固定模式选项
+            if dropdown.slot == 13 then
+                do
+                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                    b:SetPoint("TOPLEFT", 280, SELFAQ.lastHeightQueue -(38 + k*35))
+                    b:SetChecked(AQSV.enableFixedPosition)
+
+                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                    b.text:SetText(L["Fixed position: Priority 1 = Slot 1, Priority 2 = Slot 2"])
+                    b.text:SetFont(STANDARD_TEXT_FONT, 12)
+                    b:SetScript("OnClick", function()
+                        AQSV.enableFixedPosition = not AQSV.enableFixedPosition
+                    end)
+                end
+            end
 
             height = SELFAQ.lastHeightQueue-(45 + k*35)
         end
@@ -1060,6 +1086,18 @@ function SELFAQ.settingInit()
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["-- Set threshold of member's target to 3 (default 1)"])
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 350)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/ae resetp"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 370)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Reset equipment bar position"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 370)
     end
 
     SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 335

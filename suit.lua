@@ -269,8 +269,8 @@ function SELFAQ.suitInit()
         if res or SELFAQ.bossCount > 3 then
 
             if AQSV.currentSuit ~= boss then
-                SELFAQ.popupInfo(L["Equip "]..L["Suit "..L[boss]])
-                SELFAQ.chatInfo(L["Equip "]..L["Suit "..L[boss]])
+                SELFAQ.popupInfo(L["Suit "..L[boss]])
+                SELFAQ.chatInfo(L["Suit "..L[boss]])
             end
 
             if SELFAQ.qbs[AQSV.currentSuit] then

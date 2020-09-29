@@ -171,6 +171,8 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.enableRaidQueue = initSV(AQSV.enableRaidQueue, false)
 
+            AQSV.enableFixedPosition = initSV(AQSV.enableFixedPosition, false)
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do
@@ -420,6 +422,13 @@ function SELFAQ.mainInit()
                 AQSV.hideItemQueue = false
                 chatInfo(L["|cFF00FF00Show|r item queue"])
             end
+
+        elseif strfind(msg, "resetp") then
+
+            AQSV.x = 200
+            AQSV.y = 0
+            AQSV.point = "CENTER"
+            C_UI.Reload()
 
         end
     end

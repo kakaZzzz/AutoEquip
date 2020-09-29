@@ -1,7 +1,6 @@
 Todo:
 人物界面直接换装
 区分不同附魔的同名装备
-自动识别主动物品的buff
 支持默认的冷却动画
 物品列表显示银行装备
 换装支持银行装备
@@ -9,6 +8,24 @@ Todo:
 快捷按钮单独移动位置
 沙虫buff显示bug
 根据怪物类型换饰品（naxx	）
+
+---
+
+v5.6
+
+1. 优化buff提醒，现在可以自动识别饰品buff
+2. 右键点击buff图标，取消buff
+3. 增加选项：固定位置: 优先1=饰品栏1, 优先2=饰品栏2
+4. buff消失时，饰品会自动换下
+5. 增加/修改一些饰品数据
+6. 增加命令行：/ae resetp  -- 重置装备栏位置
+
+1. Optimize buff alert, that can auto-detect trinket buff now.
+2. Right-click buff alert icon will cancel the buff aura.
+3. Add an option: Fixed position: Priority 1 = Slot 1, Priority 2 = Slot 2
+4. When buff disappears, usable trinket is automatically replaced
+5. Add/modify some usable trinket data.
+6. Add command: /ae resetp  -- Reset equipment bar position
 
 ---
 

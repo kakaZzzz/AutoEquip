@@ -162,8 +162,16 @@ function SELFAQ.superInit()
                     if not SELFAQ.qbs[i]['hl'] then
                         SELFAQ.qbs[i]:LockHighlight()
                         SELFAQ.qbs[i]['hl'] = true
-                        chatInfo(L["Equip "]..color("00FF00", L["Suit "]..i))
-                        popupInfo(L["Equip "]..color("00FF00", L["Suit "]..i))
+
+                        if SUITAQ[i]["note"] ~= "" and SUITAQ[i]["note"] ~= nil then
+                            chatInfo(color("00FF00", SUITAQ[i]["note"]))
+                            popupInfo(color("00FF00", SUITAQ[i]["note"]))
+                        else
+                            chatInfo(color("00FF00", L["Suit "]..i))
+                            popupInfo(color("00FF00", L["Suit "]..i))
+                        end
+
+                        
                     end
                     table.insert(SELFAQ.matchSuit, i)
                 else

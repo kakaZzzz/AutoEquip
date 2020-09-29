@@ -125,9 +125,51 @@ function SELFAQ.createItemBar()
 		f:Hide()
 	end
 
+	-- 暂时不开放
+	-- SELFAQ.buildCharactor()
+
 	SELFAQ.createQuickButton()
 	SELFAQ.updateButtonSwitch()
 	SELFAQ.bindingSlot( )
+end
+
+function SELFAQ.buildCharactor()
+
+	SELFAQ.cSlots = {}
+	SELFAQ.cSlots[1] = _G["CharacterHeadSlot"]
+	SELFAQ.cSlots[2] = _G["CharacterNeckSlot"]
+	SELFAQ.cSlots[3] = _G["CharacterShoulderSlot"]
+	SELFAQ.cSlots[5] = _G["CharacterChestSlot"]
+	SELFAQ.cSlots[6] = _G["CharacterWaistSlot"]
+	SELFAQ.cSlots[7] = _G["CharacterLegsSlot"]
+	SELFAQ.cSlots[8] = _G["CharacterFeetSlot"]
+	SELFAQ.cSlots[9] = _G["CharacterWristSlot"]
+	SELFAQ.cSlots[10] = _G["CharacterHandsSlot"]
+	SELFAQ.cSlots[11] = _G["CharacterFinger0Slot"]
+	SELFAQ.cSlots[12] = _G["CharacterFinger1Slot"]
+	SELFAQ.cSlots[13] = _G["CharacterTrinket0Slot"]
+	SELFAQ.cSlots[14] = _G["CharacterTrinket1Slot"]
+	SELFAQ.cSlots[15] = _G["CharacterBackSlot"]
+	SELFAQ.cSlots[16] = _G["CharacterMainHandSlot"]
+	SELFAQ.cSlots[17] = _G["CharacterSecondaryHandSlot"]
+	SELFAQ.cSlots[18] = _G["CharacterRangedSlot"]
+
+
+	for k,v in pairs(SELFAQ.cSlots) do
+		
+		v:SetScript("OnEnter", function(self)
+			SELFAQ.showCharactorTooltip(self, k)
+			SELFAQ.showDropdown(k+100, 1)
+		end)
+
+		v:SetScript("OnLeave", function(self)
+			SELFAQ.hideTooltip()
+			SELFAQ.hideItemDropdown( 0.5 )
+		end)
+
+	end
+
+	
 end
 
 function SELFAQ.hideBackdrop(  )
@@ -409,6 +451,12 @@ function SELFAQ.showDropdown(slot_id, position, update)
 	-- 更新物品在背包里的位置
 	-- SELFAQ.updateItemInBags()
 
+	local pass_id = slot_id
+
+	if slot_id > 100 then
+		slot_id = slot_id - 100
+	end
+
 	-- 显示可用饰品的下拉框
 	if not update then
 		SELFAQ.itemDropdownTimestamp = nil
@@ -426,7 +474,8 @@ function SELFAQ.showDropdown(slot_id, position, update)
 		local rid = SELFAQ.reverseId(v)
 		
 		if v ~= itemId1 and v ~= itemId2 and v > 0 then
-			SELFAQ.createItemDropdown(v, (40 + AQSV.buttonSpacingNew) * (position - 1), index, slot_id)
+			-- 把位置信息传递过去
+			SELFAQ.createItemDropdown(v, (40 + AQSV.buttonSpacingNew) * (position - 1), index, pass_id)
 			index = index + 1
 		elseif SELFAQ.itemButtons[v] then
 			SELFAQ.itemButtons[v]:Hide()
@@ -467,6 +516,12 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 		return
 	end
 
+	local pass_id = slot_id
+
+	if slot_id > 100 then
+		slot_id = slot_id - 100
+	end
+
 	local rid = SELFAQ.reverseId(item_id)
 	-- print(rid)
 
@@ -477,24 +532,64 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 	local newY = position % AQSV.itemsPerColumn + 1
 
 	-- 如果已经创建过物品图层，只修改位置
-	if SELFAQ.itemButtons[item_id] then
-		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
-		SELFAQ.itemButtons[item_id]:Show()
-		-- 点击图标是获取正确的slot
-		SELFAQ.itemButtons[item_id].inSlot = slot_id
-		return
+	-- if SELFAQ.itemButtons[item_id] then
+
+	-- 	if pass_id > 100 then
+	-- 		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.cSlots[slot_id], x + newY * (40 + AQSV.buttonSpacingNew), (40 + AQSV.buttonSpacingNew) * newX)
+	-- 		SELFAQ.itemButtons[item_id]:SetScale(1)
+	-- 	else
+	-- 		SELFAQ.itemButtons[item_id]:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
+	-- 		SELFAQ.itemButtons[item_id]:SetScale(AQSV.barZoom)
+	-- 	end
+
+		
+	-- 	SELFAQ.itemButtons[item_id]:Show()
+	-- 	-- 点击图标是获取正确的slot
+	-- 	SELFAQ.itemButtons[item_id].inSlot = slot_id
+	-- 	return
+	-- end
+
+	-- local button = CreateFrame("Button", nil, UIParent)
+
+	-- if pass_id > 100 then
+	-- 	button:SetPoint("TOPLEFT", SELFAQ.cSlots[slot_id], x + newY * (40 + AQSV.buttonSpacingNew), (40 + AQSV.buttonSpacingNew) * newX)
+	-- 	button:SetScale(1)
+	-- else
+	-- 	button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
+	-- 	button:SetScale(AQSV.barZoom)
+	-- end
+
+ --   	button:Show()
+
+
+   	local button
+
+   	if SELFAQ.itemButtons[item_id] then
+   		button = SELFAQ.itemButtons[item_id]
+   	else
+   		button = CreateFrame("Button", nil, UIParent)
+   	end
+
+   	if pass_id > 100 then
+   		if pass_id > 115 then
+   			button:SetPoint("TOPLEFT", SELFAQ.cSlots[slot_id], x + newX * (40 + AQSV.buttonSpacingNew) -2, 2+(40 + AQSV.buttonSpacingNew) * newY)
+   		else
+   			button:SetPoint("TOPLEFT", SELFAQ.cSlots[slot_id], x + newY * (40 + AQSV.buttonSpacingNew) + 1, (40 + AQSV.buttonSpacingNew) * - newX + 1)
+   		end
+		
+		button:SetScale(1)
+	else
+		button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
+		button:SetScale(AQSV.barZoom)
 	end
 
-	local button
+   	button:Show()
 
-	-- if slot_id == 16 or slot_id == 17 or slot_id == 18 then
-	-- 	button = CreateFrame("Button", nil, SELFAQ.bar, "SecureActionButtonTemplate")
-	-- 	button:SetAttribute("type", "item")
-	-- 	-- 饰品切换后自动匹配点击功能
-	--     button:SetAttribute("item", item_id)
-	-- else
-		button = CreateFrame("Button", nil, SELFAQ.bar)
-	-- end
+   	if SELFAQ.itemButtons[item_id] then
+   		SELFAQ.itemButtons[item_id].inSlot = slot_id
+		return
+   	end
+
 	
 	button:SetFrameStrata("HIGH")
 
@@ -534,8 +629,7 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
 	-- 按钮定位
-   	button:SetPoint("TOPLEFT", SELFAQ.bar, x + newX * (40 + AQSV.buttonSpacingNew), 5+(40 + AQSV.buttonSpacingNew) * newY)
-   	button:Show()
+   	
 
    	button:SetScript("OnEnter", function(self)
    		-- 停掉隐藏下拉框的计时器
@@ -682,6 +776,20 @@ function SELFAQ.createCooldownUnit( item_id, position )
 	-- f:Show()
 
 	return f
+end
+
+function SELFAQ.showCharactorTooltip(button, slot_id)
+	
+	local tooltip = _G["GameTooltip"]
+	tooltip:ClearLines()
+
+	-- tooltip:SetOwner(button,"ANCHOR_NONE")
+	tooltip:SetOwner(UIParent)
+	GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+	-- tooltip:SetOwner(button, ANCHOR_LEFT, 0, -35)
+
+	tooltip:SetInventoryItem("player", slot_id)
+	tooltip:Show()
 end
 
 function SELFAQ.showTooltip( button, t, item_id, arg1, arg2 )
