@@ -681,14 +681,27 @@ function SELFAQ.settingInit()
     otherHight = otherHight-25
 
     buildCheckbox(L["Automatic switch to PVP queue in Battleground"], "enableBattleground", otherHight)
-    buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight-25)
-    buildCheckbox(L["enable_swim"], "enableSwim", otherHight-50)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-75)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-100)
-    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-125)
-    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-150)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-25)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-50)
+    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-75)
+    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-100)
 
-    otherHight = otherHight-195
+    otherHight = otherHight-145
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["Auto Accelerate Function:"])
+        t:SetPoint("TOPLEFT", f, 25, otherHight)
+    end
+
+    otherHight = otherHight-25
+
+    buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight)
+    buildCheckbox(L["enable_swim"], "enableSwim", otherHight-25)
+    buildCheckbox(L["Enable those 2 functions in Instance and Battleground"], "enableAccInstance", otherHight-50)
+    buildCheckbox(L["Enable Riding Acceleration function in TAQ"], "enableAccTAQ", otherHight-75)
+
+    otherHight = otherHight-75-45
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

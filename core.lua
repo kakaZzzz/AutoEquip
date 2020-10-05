@@ -99,11 +99,11 @@ function aq_test( )
 
     -- print(GetUnitName("target"))
 
-    -- local name, type, difficultyIndex, difficultyName, maxPlayers,
-    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
-    -- print(name, type, difficultyIndex, difficultyName, maxPlayers,
-    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID)
+    print(name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID)
 
     print(GetItemCooldown(21180))
     print(GetSpellInfo(25891))
@@ -536,7 +536,14 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
 
             -- 战场判断放这里，不然进战场不会换下
             -- 副本里也不使用
-            if not SELFAQ.inInstance() then
+            -- if not SELFAQ.inInstance() then
+
+            if (not SELFAQ.inInstance()) -- 不在副本里
+            or enableAccInstance -- 副本生效
+            or (enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
+            then
+
+
                 if slot["id"] ~= SELFAQ.carrot then
                     AQSV.carrotBackup = slot["id"]
                     AddonEquipItemByName(SELFAQ.carrot, 14)
@@ -861,6 +868,8 @@ function SELFAQ.changeItem(slot_id)
     -- if #queue == 0 then
     --     return
     -- end
+
+    
 
     -- 强制优先级处理
     if AQSV.forcePriority then

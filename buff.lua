@@ -167,6 +167,12 @@ function SELFAQ.lockBuff()
 end
 
 function SELFAQ.onBuffChanged(self, elapsed)
+
+	if not AQSV.enableBuff then
+		SELFAQ.buff:Hide()
+		return
+	end
+
 	self.TimeSinceLastUpdate = self.TimeSinceLastUpdate + elapsed;  
 
     if (self.TimeSinceLastUpdate > self.Interval) then

@@ -11,6 +11,16 @@ Todo:
 
 ---
 
+v5.7/5.8
+
+1. 修复bug：关闭buff提醒功能依然显示
+2. 修复bug：主动物品数据错乱
+
+1. fix bug: Disable buff alert function, but it still work
+2. fix bug: usable item data is out of order
+
+---
+
 v5.6
 
 1. 优化buff提醒，现在可以自动识别饰品buff

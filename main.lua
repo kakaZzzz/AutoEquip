@@ -173,6 +173,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.enableFixedPosition = initSV(AQSV.enableFixedPosition, false)
 
+            AQSV.enableAccInstance = initSV(AQSV.enableAccInstance, false)
+            AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, false)
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do

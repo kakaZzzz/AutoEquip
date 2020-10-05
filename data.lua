@@ -110,12 +110,7 @@ buffTime[7734] = 0						-- 六魔包
 buffTime[10716] = 0						-- 侏儒缩小射线
 buffTime[10720] = 0						-- 侏儒撒网器
 buffTime[4397] = 10						-- 侏儒隐形装置
-buffTime[7189] = 20						-- 地精火箭靴
-buffTime[10724] = 20					-- 侏儒火箭靴
-buffTime[10588] = 0						-- 地精火箭头盔
-buffTime[10726] = 20					-- 侏儒洗脑帽
-buffTime[16768] = 10					-- 熊怪医疗包
-buffTime[4984] = 10						-- 末日颅骨
+
 
 
 
@@ -134,17 +129,71 @@ SELFAQ.buffTime = buffTime
 
 -- 衣服5
 
--- local tempBuffTime = {}
--- tempBuffTime[14152] = 0				-- 大法师之袍
+local tempBuffTime = {}
+tempBuffTime[14152] = 0				-- 大法师之袍
 
--- -- 可使用的胸甲集合
--- SELFAQ.usable[5] = {}
+-- 可使用的胸甲集合
+SELFAQ.usable[5] = {}
 
--- for k,v in pairs(tempBuffTime) do
--- 	table.insert(SELFAQ.usable[5], k)
--- end
+for k,v in pairs(tempBuffTime) do
+	table.insert(SELFAQ.usable[5], k)
+	SELFAQ.buffTime[k] = v
+end
 
--- SELFAQ.buffTime = merge(SELFAQ.buffTime, tempBuffTime)
+-- 鞋子8
+
+wipe(tempBuffTime)
+tempBuffTime[7189] = 20						-- 地精火箭靴
+tempBuffTime[10724] = 20						-- 侏儒火箭靴
+
+SELFAQ.usable[8] = {}
+
+for k,v in pairs(tempBuffTime) do
+	table.insert(SELFAQ.usable[8], k)
+	SELFAQ.buffTime[k] = v
+end
+
+-- 副手17
+
+wipe(tempBuffTime)
+tempBuffTime[16768] = 10						-- 熊怪医疗包
+tempBuffTime[4984] = 10						-- 末日颅骨
+tempBuffTime[17067] = 0						-- 上古角石魔典
+
+
+SELFAQ.usable[17] = {}
+
+for k,v in pairs(tempBuffTime) do
+	table.insert(SELFAQ.usable[17], k)
+	SELFAQ.buffTime[k] = v
+end
+
+-- 头部1
+
+wipe(tempBuffTime)
+tempBuffTime[10588] = 0						-- 地精火箭头盔
+tempBuffTime[10726] = 20						-- 侏儒洗脑帽
+
+SELFAQ.usable[1] = {}
+
+for k,v in pairs(tempBuffTime) do
+	table.insert(SELFAQ.usable[1], k)
+	SELFAQ.buffTime[k] = v
+end
+
+-- 腿部7
+
+wipe(tempBuffTime)
+tempBuffTime[14554] = 30						-- 踏云腿甲
+
+SELFAQ.usable[7] = {}
+
+for k,v in pairs(tempBuffTime) do
+	table.insert(SELFAQ.usable[7], k)
+	SELFAQ.buffTime[k] = v
+end
+
+-----------------------
 
 -- 联盟、部落各个职业的徽记
 SELFAQ.pvpSet = {

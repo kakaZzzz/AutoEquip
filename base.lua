@@ -537,3 +537,14 @@ SELFAQ.comma2Table = function(text)
 
     return t
 end
+
+SELFAQ.inTAQ = function()
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+
+    if instanceMapId == 531 then
+        return true
+    else
+        return false
+    end
+end
