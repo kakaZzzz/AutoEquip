@@ -239,5 +239,12 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Right-Click: Cancel Aura"] = "右键点击: 取消光环"
 	L["Auto-detect trinket buff"] = "自动识别饰品Buff"	
 	L["Buff Alert"] = "Buff提醒"
-	L["-- Reset equipment bar position"] = "重置装备栏位置"
+	L["-- Reset equipment bar position"] = "-- 重置装备栏位置"
+
+	L["Auto Acceleration Function:"] = "自动加速功能:"
+	L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"] = "当|cffffffff自己|r选中敌对目标时脱下[加速装备]"
+	L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"] = "当|cffffffff团队成员|r选中敌对目标时脱下[加速装备]"
+	L["When equipment bar is locked, those 2 functions also take effect"] = "当装备栏锁定时，以上2个功能也生效"
+	L["In Instance and Battleground, enable those 2 functions"] = "在副本和战场中，启用以上2个功能"
+	L["In TAQ, enable Riding Acceleration function"] = "在TAQ副本，启用以上2个功能"
 end

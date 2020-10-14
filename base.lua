@@ -340,7 +340,7 @@ SELFAQ.AddonEquipItemByName = function( item_id, slot_id )
 
     local link = SELFAQ.GetItemLink(item_id)
     
-    SELFAQ.popupInfo(L["Equip "]..link)
+    SELFAQ.popupInfo(link)
 end
 
 SELFAQ.findCarrot = function( id, slot_id, link )

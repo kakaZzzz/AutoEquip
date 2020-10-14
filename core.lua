@@ -530,17 +530,26 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换萝卜
-    if slot_id == 14 and not AQSV.slotStatus[14].locked and AQSV.enableCarrot and SELFAQ.carrot > 0 then
+    if slot_id == 14 
+        and (not AQSV.slotStatus[14].locked or AQSV.forceAcc) 
+        and AQSV.enableCarrot 
+        and SELFAQ.carrot > 0 
+        then
+
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
-        if(IsMounted() and not UnitOnTaxi("player")) then
+        if(IsMounted() 
+            and not UnitOnTaxi("player")
+            and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
+            ) then
 
             -- 战场判断放这里，不然进战场不会换下
             -- 副本里也不使用
             -- if not SELFAQ.inInstance() then
 
             if (not SELFAQ.inInstance()) -- 不在副本里
-            or enableAccInstance -- 副本生效
-            or (enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
+            or AQSV.enableAccInstance -- 副本生效
+            or (AQSV.enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
             then
 
 
@@ -554,7 +563,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif slot["id"] == SELFAQ.carrot and (AQSV.disableSlot14 or (#queue== 0 and AQSV.slotStatus[14].backup == 0)) then
+        elseif slot["id"] == SELFAQ.carrot and (AQSV.disableSlot14 or AQSV.slotStatus[14].locked or (#queue== 0 and AQSV.slotStatus[14].backup == 0)) then
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
             if AQSV.carrotBackup == SELFAQ.carrot then
@@ -575,17 +584,24 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换手套或靴子
-    if tContains({8,10}, slot_id) and SELFAQ["ride"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableCarrot  then
+    if tContains({8,10}, slot_id) and SELFAQ["ride"..slot_id] >0 and (not AQSV.slotStatus[slot_id].locked or AQSV.forceAcc) and AQSV.enableCarrot  then
 
         local link = GetInventoryItemLink("player",slot_id)
         local enchantId = GetEnchanitID(link)
 
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
-        if(IsMounted() and not UnitOnTaxi("player")) then
+        if(IsMounted() 
+            and not UnitOnTaxi("player")
+            and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
+            ) then
 
             -- 战场判断放这里，不然进战场不会换下
             -- 副本里也不使用
-            if not SELFAQ.inInstance() then
+            if (not SELFAQ.inInstance()) -- 不在副本里
+            or AQSV.enableAccInstance -- 副本生效
+            or (AQSV.enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
+            then
 
                 if enchantId ~= "930" and enchantId ~= "464" and SELFAQ["ride"..slot_id] > 0 then
 
@@ -601,7 +617,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
+        elseif AQSV["backup"..slot_id] > 0 and (AQSV.slotStatus[slot_id].locked or (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0)) then
             -- print( AQSV["backup"..slot_id], SELFAQ["ride"..slot_id])
             -- 禁用14的时候，主动饰品是空的时候，需要追加换下萝卜的逻辑
             -- 避免不停更换萝卜
@@ -620,12 +636,19 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
     end
 
     -- 自动换水藤
-    if tContains({1,6,16}, slot_id) and SELFAQ["swim"..slot_id] >0 and not AQSV.slotStatus[slot_id].locked and AQSV.enableSwim  then
+    if tContains({1,6,16}, slot_id) and SELFAQ["swim"..slot_id] >0 and (not AQSV.slotStatus[slot_id].locked or AQSV.forceAcc) and AQSV.enableSwim  then
 
         -- 不用处理下马逻辑，因为更换主动饰品逻辑直接起效
-        if IsSwimming() then
+        if 
+            IsSwimming() 
+            and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
+        then
 
-            if not SELFAQ.inInstance() then
+            if (not SELFAQ.inInstance()) -- 不在副本里
+            or AQSV.enableAccInstance -- 副本生效
+            or (AQSV.enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
+            then
 
                 if slot["id"] ~= SELFAQ["swim"..slot_id] and SELFAQ["swim"..slot_id] > 0 then
 
@@ -653,7 +676,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
                 slot["priority"] = 0
             end
 
-        elseif AQSV["backup"..slot_id] > 0 and (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0) then
+        elseif AQSV["backup"..slot_id] > 0 and (AQSV.forceAcc or (#queue== 0 and AQSV.slotStatus[slot_id].backup == 0)) then
 
                      
             if AQSV["backup"..slot_id] > 0 then
@@ -1148,3 +1171,140 @@ SELFAQ.equipOnyxiaCloak = function()
     end
 
 end
+
+
+-- 团队目标规则
+
+function SELFAQ.runTargetMemberRules()
+
+        -- 必须在副本中
+        if not SELFAQ.inInstance() then
+            return
+        end
+
+        -- 玩家在团队里
+        if not UnitInRaid("player") then
+            return
+        end
+
+        if not SELFAQ.haveTargetMember      -- 超级换装
+            and not AQSV.pauseAccWhenTargetMember         -- 自动骑乘
+            and not (AQSV.enableSuit and AQSV.enableMembersTarget)       -- boss套装
+        then
+
+            return
+        end
+
+        -- wipe(SELFAQ.memberTargets)
+
+        local level63 = 0
+        local level64 = 0
+        local enemy = 0
+        local boss = ""
+
+        SELFAQ.targetEnemyMember = false
+
+        -- print(SELFAQ.needSuit)
+        
+        if UnitInRaid("player") then
+
+            for i=1,MAX_RAID_MEMBERS  do
+                
+                local name = GetRaidRosterInfo(i)
+                local target = "raid"..i.."target"
+
+                local bName = GetUnitName(target)
+
+                local level = UnitLevel(target)
+
+                -- 如果有成员
+                -- boss和63判断
+                if name and (level == -1 or level == 63) and not UnitIsDead(target)  then
+
+                    -- 目标是boss
+                    if level == -1 then
+
+                        -- 记录boss名字
+                        -- if SELFAQ.memberTargets[boss] == nil then
+                        --     SELFAQ.memberTargets[boss] = 1
+                        -- else
+                        --     SELFAQ.memberTargets[boss] = SELFAQ.memberTargets[boss] + 1
+                        -- end
+                        boss = bName
+
+                        -- 统计boss目标人数
+                        level64 = level64 + 1
+                    end
+
+                    
+                    -- 目标是63
+                    if level == 63 then
+                        level63 = level63 + 1
+                    end
+
+                end
+
+
+                -- 敌人判断
+                if name and not UnitIsDead(target) and not UnitIsFriend("player", target) then
+                    enemy = enemy + 1
+                end
+
+            end
+
+        end
+
+        -- 超级换装检查boss名字
+        -- for k,v in pairs(SELFAQ.memberTargets) do
+        if SELFAQ.haveTargetMember and boss ~= "" then
+            
+            -- 团员目标大于1
+            if level64 > AQSV.raidTargetThreshold then
+
+                -- 检查换装规则
+                local pass = false
+                for k1,v1 in pairs(SUITAQ) do
+                    
+                    if not pass and v1["enable"] and v1["enableTarget"] and v1["enableTargetMember"] then
+                            
+                            if strfind(v1["bossText"], boss) then
+
+                                -- debug(k)
+                                -- debug(v)
+                                -- debug(k1)
+                                
+                                SELFAQ.superEquipSuit(k1)
+
+                                pass = true
+
+                                -- return k1
+                            end
+
+                    end
+
+                end
+
+            end
+
+        end
+
+        -- 自动骑乘检查
+        if AQSV.pauseAccWhenTargetMember and enemy > AQSV.raidTargetThreshold then
+            SELFAQ.targetEnemyMember = true
+        end
+
+        -- boss套装检查
+        if (AQSV.enableSuit and AQSV.enableMembersTarget) then
+            if level63 > AQSV.raidTargetThreshold and level63 > level64 then
+                SELFAQ.needSuit = 63
+            end
+
+            if level64 > AQSV.raidTargetThreshold and level64 > level63 then
+                -- 不在排除列表里
+                if not string.find(AQSV.ignoreBoss, boss) then
+                    SELFAQ.needSuit = 64
+                end
+            end
+        end
+
+    end

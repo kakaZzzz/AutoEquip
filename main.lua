@@ -174,7 +174,10 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableFixedPosition = initSV(AQSV.enableFixedPosition, false)
 
             AQSV.enableAccInstance = initSV(AQSV.enableAccInstance, false)
-            AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, false)
+            AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, true)
+            AQSV.forceAcc = initSV(AQSV.forceAcc, true)
+            AQSV.pauseAccWhenTarget = initSV(AQSV.pauseAccWhenTarget, true)
+            AQSV.pauseAccWhenTargetMember = initSV(AQSV.pauseAccWhenTargetMember, false)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -255,11 +258,11 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         -- 自动换奥妮克希亚披风
         SELFAQ.equipOnyxiaCloak()
 
-        SELFAQ.updateMembersTarget()
+        -- SELFAQ.updateMembersTarget()
 
         SELFAQ.changeSuit()
 
-        -- 超级换装团员目标
+        -- 整合团队目标处理
         SELFAQ.runTargetMemberRules()
 
         -- 自动更换饰品
@@ -438,7 +441,11 @@ function SELFAQ.mainInit()
 
     SELFAQ.main:RegisterEvent("UNIT_INVENTORY_CHANGED")
     SELFAQ.main:RegisterEvent("UPDATE_BINDINGS")
+
     SELFAQ.main:RegisterEvent("PLAYER_REGEN_ENABLED")
+    SELFAQ.main:RegisterEvent("PLAYER_ALIVE")                       -- 未释放复活
+    SELFAQ.main:RegisterEvent("PLAYER_UNGHOST")                 -- 从鬼混复活
+
     SELFAQ.main:RegisterEvent("PLAYER_TARGET_CHANGED") 
     -- SELFAQ.main:RegisterEvent("UNIT_TARGET") 
 
@@ -480,7 +487,8 @@ function SELFAQ.mainInit()
         end
 
         -- 脱离战斗的事件
-        if event == "PLAYER_REGEN_ENABLED" then
+        -- 复活也是脱战事件
+        if event == "PLAYER_REGEN_ENABLED" or event == "PLAYER_ALIVE" or event == "PLAYER_UNGHOST" then
 
             -- 脱战也要判断一下其他状态
             if not SELFAQ.playerCanEquip() then
@@ -549,6 +557,23 @@ function SELFAQ.mainInit()
             if not SELFAQ.playerCanEquip() then
                 return 
             end
+
+            -- 自动骑乘判断
+            if AQSV.pauseAccWhenTarget then
+
+                if not UnitIsDead("target") and not UnitIsFriend("player", "target") then
+                    SELFAQ.targetEnemy = true
+                else
+                    SELFAQ.targetEnemy = false
+                end
+
+                if GetUnitName("target") == nil then
+                    SELFAQ.targetEnemy = false
+                end
+
+
+            end
+
 
             -- 超级换装
             local number = SELFAQ.checkTargetRules("target")

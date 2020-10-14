@@ -548,22 +548,35 @@ function SELFAQ.settingInit()
         f.checkbox[key] = b
     end
 
+    function buildLine( y )
+        local line = CreateFrame("Button", nil, f)
+
+        line:SetWidth(10)
+        line:SetHeight(1)
+        line:SetPoint("TOPLEFT", f, 53, y)
+
+        line:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+        line:SetBackdropColor(0.8,0.8,0.8,0.8);
+    end
+
     buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
 
-    buildCheckbox(L["Enable Equipment Bar"], "enableItemBar", -85)
-    buildCheckbox(L["Lock frame"], "locked", -85, 190)
-    buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110, 190)
+    buildLine(-95+3)
+
+    buildCheckbox(L["Enable Equipment Bar"], "enableItemBar", -85-10)
+    buildCheckbox(L["Lock frame"], "locked", -85-10, 190)
+    buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110-10, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 320, -93)
+        t:SetPoint("TOPLEFT", f, 320, -93-10)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#Effective after ENTER"])
-        t:SetPoint("TOPLEFT", f, 430, -93)
+        t:SetPoint("TOPLEFT", f, 430, -93-10)
     end
 
     do
@@ -572,7 +585,7 @@ function SELFAQ.settingInit()
         e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 370,  -80)
+        e:SetPoint("TOPLEFT", f, 370,  -80-10)
         e:SetAutoFocus(false)
         e:SetText(AQSV.barZoom)
         e:SetCursorPosition(0)
@@ -595,7 +608,7 @@ function SELFAQ.settingInit()
         end)
     end
 
-    local slotCheckbosHeight = -115-25
+    local slotCheckbosHeight = -115-25-10
 
     buildSlotCheckbox(L["MainHand"], 16, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["OffHand"], 17, slotCheckbosHeight, 155)
@@ -603,7 +616,7 @@ function SELFAQ.settingInit()
     buildSlotCheckbox(L["Head"], 1, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Neck"], 2, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -140-25
+    slotCheckbosHeight = -140-25-10
 
     buildSlotCheckbox(L["Shoulder"], 3, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Chest"], 5, slotCheckbosHeight, 155)
@@ -611,7 +624,7 @@ function SELFAQ.settingInit()
     buildSlotCheckbox(L["Legs"], 7, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Feet"], 8, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -165-25
+    slotCheckbosHeight = -165-25-10
 
     buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
@@ -622,10 +635,13 @@ function SELFAQ.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#The above selections will take effect after reloading UI"])
-        t:SetPoint("TOPLEFT", f, 53, -200-25)
+        t:SetPoint("TOPLEFT", f, 53, -200-25-10)
     end
 
-    local otherHight = -245
+    local otherHight = -245-10-10
+
+    buildLine(otherHight+3)
+
     buildCheckbox(L["Enable Buff Alert"], "enableBuff", otherHight)
     buildCheckbox(L["Lock frame"], "buffLocked", otherHight, 190)
 
@@ -670,7 +686,7 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = -290
+    otherHight = -290-10-10
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -681,16 +697,22 @@ function SELFAQ.settingInit()
     otherHight = otherHight-25
 
     buildCheckbox(L["Automatic switch to PVP queue in Battleground"], "enableBattleground", otherHight)
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-25)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-50)
-    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-75)
-    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-100)
 
-    otherHight = otherHight-145
+    buildLine(otherHight - 32)
+
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-35)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-60)
+
+    buildLine(otherHight - 92)
+
+    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-95)
+    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-120)
+
+    otherHight = otherHight-120-45
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Auto Accelerate Function:"])
+        t:SetText(L["Auto Acceleration Function:"])
         t:SetPoint("TOPLEFT", f, 25, otherHight)
     end
 
@@ -698,10 +720,22 @@ function SELFAQ.settingInit()
 
     buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight)
     buildCheckbox(L["enable_swim"], "enableSwim", otherHight-25)
-    buildCheckbox(L["Enable those 2 functions in Instance and Battleground"], "enableAccInstance", otherHight-50)
-    buildCheckbox(L["Enable Riding Acceleration function in TAQ"], "enableAccTAQ", otherHight-75)
 
-    otherHight = otherHight-75-45
+    buildLine(otherHight-60+3)
+
+    buildCheckbox(L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"], "pauseAccWhenTarget", otherHight-60)
+    buildCheckbox(L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"], "pauseAccWhenTargetMember", otherHight-85)
+
+    buildLine(otherHight-120+3)
+
+    buildCheckbox(L["When equipment bar is locked, those 2 functions also take effect"], "forceAcc", otherHight-120)
+
+    buildLine(otherHight-155+3)
+
+    buildCheckbox(L["In Instance and Battleground, enable those 2 functions"], "enableAccInstance", otherHight-155)
+    buildCheckbox(L["In TAQ, enable Riding Acceleration function"], "enableAccTAQ", otherHight-180)
+
+    otherHight = otherHight-180-45
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -711,14 +745,23 @@ function SELFAQ.settingInit()
 
     buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-25)
     buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-50)
-    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-75)
-    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-100)
-    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-125)
-    buildCheckbox(L["Hide addon info in the chat box"], "hideChatInfo", otherHight-150)
-    buildCheckbox(L["Hide quick buttons"], "hideQuickButton", otherHight-175)
-    buildCheckbox(L["Disable the takeoff quick button"], "hideTakeoffButton", otherHight-200)
 
-    otherHight = otherHight - 200
+    buildLine(otherHight-85+3)
+
+    buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-85)
+    buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-110)
+
+    buildLine(otherHight-145+3)
+
+    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-145)
+    buildCheckbox(L["Hide addon info in the chat box"], "hideChatInfo", otherHight-170)
+
+    buildLine(otherHight-205+3)
+
+    buildCheckbox(L["Hide quick buttons"], "hideQuickButton", otherHight-205)
+    buildCheckbox(L["Disable the takeoff quick button"], "hideTakeoffButton", otherHight-230)
+
+    otherHight = otherHight - 230
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
