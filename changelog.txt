@@ -11,6 +11,20 @@ Todo:
 
 ---
 
+v5.9
+
+1. 副本/战场/TAQ可用骑马自动加速
+2. 自己/团队成员目标是敌对目标时脱下加速装备
+3. 装备栏锁定时也可以自动换加速装备
+4. 分离快捷按钮并可单独移动位置
+
+1. Enable Auto Acceleration function in Instance/Battleground/TAQ
+2. Takeoff acceleration items when you or raid members target enemies
+3. Auto equip acceleration items when equipment bar is locked
+3. Separate Quick Button and move it separately
+
+---
+
 v5.7/5.8
 
 1. 修复bug：关闭buff提醒功能依然显示

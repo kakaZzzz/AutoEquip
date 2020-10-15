@@ -982,10 +982,24 @@ SELFAQ.createQuickButton = function()
 	
 	local f = SELFAQ.bar
 
+	if AQSV.splitQuickButton then
+		f = UIParent
+	end
+
 	local quickButton = CreateFrame("Frame", "AutoEquip_QuickButton", f)
 
-	quickButton:SetSize(20, 20)
+	quickButton:SetSize(20, 35)
 	quickButton:Show()
+
+	local t = quickButton:CreateTexture(nil, "BACKGROUND")
+    quickButton.texture = t
+    -- 有材质才能设置颜色和透明度
+	t:SetTexture("Interface\\Tooltips\\UI-Tooltip-Background")
+
+	-- 尺寸和位置覆盖
+	t:SetAllPoints(quickButton)
+
+	quickButton.texture = t
 
 	SELFAQ.quickButton = quickButton
 	SELFAQ.qbs = {}
@@ -1001,10 +1015,50 @@ SELFAQ.renderQuickButton = function()
 		SELFAQ.quickButton:Hide()
 	end
 
-	if AQSV.reverseCooldownUnit then
-		SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -45)
+	if AQSV.splitQuickButton then
+
+		local f = SELFAQ.quickButton
+		local t = f.texture
+
+		f.split = true
+
+		f:SetPoint(AQSV.quickButtonPosition, AQSV.quickButtonX , AQSV.quickButtonY)
+
+		f:SetScale(AQSV.quickButtonZoom)
+		
+		-- 实现拖动
+		f:SetScript("OnDragStart", f.StartMoving)
+		f:SetScript("OnDragStop",f.StopMovingOrSizing)
+
+	  	-- 可以使用鼠标
+		f:EnableMouse(true)
+
+		f:SetMovable(not AQSV.quickButtonLocked)
+
+		if AQSV.quickButtonLocked then
+			f:RegisterForDrag("")
+			t:SetVertexColor(0, 0, 0, 0)
+		else
+			f:RegisterForDrag("LeftButton")
+			t:SetVertexColor(0, 0, 0, 0.9)
+		end
+
+	  	f:SetScript("OnEnter", function(self)
+			SELFAQ.showQBMoveTooltip()
+		end)
+
+		f:SetScript("OnLeave", function(self)
+			SELFAQ.hideTooltip()
+		end)
+
 	else
-		SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , 30)
+		if AQSV.reverseCooldownUnit then
+			SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , -45)
+		else
+			SELFAQ.quickButton:SetPoint("TOPLEFT", SELFAQ.bar, 0 , 30)
+		end
+
+		SELFAQ.quickButton.texture:SetVertexColor(0, 0, 0, 0)
 	end
 
 	local step = 0
@@ -1080,9 +1134,15 @@ SELFAQ.createQBOne = function(word, order, show, func)
 	local f = SELFAQ.bar
 	local quickButton = SELFAQ.quickButton
 
+	local position = "TOPLEFT"
+
+	if AQSV.splitQuickButton then
+		position = "BOTTOMLEFT"
+	end
+
 	if SELFAQ.qbs[word] then
 		if show then
-			SELFAQ.qbs[word]:SetPoint("TOPLEFT", quickButton, 20 * order , 0)
+			SELFAQ.qbs[word]:SetPoint(position, quickButton, 20 * order , 0)
 			SELFAQ.qbs[word]:Show()
 		else
 			SELFAQ.qbs[word]:Hide()
@@ -1101,7 +1161,7 @@ SELFAQ.createQBOne = function(word, order, show, func)
 
 	button:SetSize(20, 20)
 
-	button:SetPoint("TOPLEFT", quickButton, 20 * order , 0)
+	button:SetPoint(position, quickButton, 20 * order , 0)
 
 
 	-- button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
@@ -1129,36 +1189,6 @@ SELFAQ.createQBOne = function(word, order, show, func)
 
     local t = button:CreateTexture(nil, "BACKGROUND")
 	t:SetTexture("Interface\\AddOns\\AutoEquip\\Textures\\B.blp")
-
-	-- if word == 64 then
-	-- 	t:SetTexCoord(0, 0.125, 0, 0.5)
-	-- elseif word == 63 then
-	-- 	t:SetTexCoord(0.25, 0.375, 0, 0.5)
-	-- elseif word == 60 then
-	-- 	t:SetTexCoord(0.125, 0.25, 0, 0.5)
-	-- elseif word == "undress" then
-	-- 	t:SetTexCoord(0, 0.125, 0.5, 1)
-	-- elseif word == 1 then
-	-- 	t:SetTexCoord(0.375, 0.5, 0, 0.5)
-	-- elseif word == 2 then
-	-- 	t:SetTexCoord(0.5, 0.625, 0, 0.5)
-	-- elseif word == 3 then
-	-- 	t:SetTexCoord(0.625, 0.75, 0, 0.5)
-	-- elseif word == 4 then
-	-- 	t:SetTexCoord(0.75, 0.875, 0, 0.5)
-	-- elseif word == 5 then
-	-- 	t:SetTexCoord(0.875, 1, 0, 0.5)
-	-- elseif word == 6 then
-	-- 	t:SetTexCoord(0.125, 0.25, 0.5, 1)
-	-- elseif word == 7 then
-	-- 	t:SetTexCoord(0.25, 0.375, 0.5, 1)
-	-- elseif word == 8 then
-	-- 	t:SetTexCoord(0.375, 0.5, 0.5, 1)
-	-- elseif word == 9 then
-	-- 	t:SetTexCoord(0.5, 0.625, 0.5, 1)
-	-- elseif word == 0 then
-	-- 	t:SetTexCoord(0.625, 0.75, 0.5, 1)
-	-- end
 
 	if word == 64 then
 		t:SetTexCoord(0, 0.125, 0, 0.5)
@@ -1260,3 +1290,22 @@ function SELFAQ.showQBTooltip( button, word )
 end
 
 
+function SELFAQ.showQBMoveTooltip()
+
+	if not AQSV.quickButtonLocked then
+
+		local tooltip = _G["GameTooltip"]
+	    tooltip:ClearLines()
+
+
+		tooltip:SetOwner(SELFAQ.quickButton, "ANCHOR_NONE")
+		tooltip:SetPoint("BOTTOM", SELFAQ.quickButton, "TOP" )
+		-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
+		
+		tooltip:AddLine(L["Left-Drag: Move Frame"])
+		tooltip:AddLine(SELFAQ.color("FFFFFF",L["Lock frame in Settings"]))
+		
+	    tooltip:Show()
+	end
+
+end

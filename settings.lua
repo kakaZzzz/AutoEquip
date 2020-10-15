@@ -523,7 +523,11 @@ function SELFAQ.settingInit()
                 SELFAQ.renderQuickButton()
             end
 
-             if key == "hideTakeoffButton" then
+            if key == "hideTakeoffButton" then
+                SELFAQ.renderQuickButton()
+            end
+
+            if key == "quickButtonLocked" then
                 SELFAQ.renderQuickButton()
             end
         end)
@@ -686,7 +690,57 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = -290-10-10
+    otherHight = -300
+
+    buildCheckbox(L["Separate Quick Button and move it separately (Nedd reload UI)"], "splitQuickButton", otherHight)
+    buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight-25)
+
+    buildLine(-298)
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["Zoom"])
+        t:SetPoint("TOPLEFT", f, 320-130, otherHight-25-8)
+    end
+
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["#Effective after ENTER"])
+        t:SetPoint("TOPLEFT", f, 430-130, otherHight-25-8)
+    end
+
+    do
+        local e = CreateFrame("EditBox", nil, f, "InputBoxTemplate")
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(50)
+        e:SetHeight(40)
+        e:SetJustifyH("CENTER")
+        e:SetPoint("TOPLEFT", f, 370-130,  otherHight-25+5)
+        e:SetAutoFocus(false)
+        e:SetText(AQSV.quickButtonZoom)
+        e:SetCursorPosition(0)
+
+        e:SetScript("OnEnterPressed", function(self)
+            self:ClearFocus()
+
+            local v = self:GetText()
+            v = tonumber(v)
+
+            if not v then
+                v = 1
+            end
+
+            self:SetText(v)
+            AQSV.quickButtonZoom = v
+
+            if SELFAQ.quickButton.split then
+                SELFAQ.quickButton:SetScale(AQSV.quickButtonZoom)
+            end
+
+        end)
+    end
+
+    otherHight = otherHight - 45 - 25
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

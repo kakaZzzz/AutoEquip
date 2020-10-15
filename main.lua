@@ -179,6 +179,13 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.pauseAccWhenTarget = initSV(AQSV.pauseAccWhenTarget, true)
             AQSV.pauseAccWhenTargetMember = initSV(AQSV.pauseAccWhenTargetMember, false)
 
+            AQSV.quickButtonZoom = initSV(AQSV.quickButtonZoom, 1)
+            AQSV.quickButtonLocked = initSV(AQSV.quickButtonLocked, false)
+            AQSV.splitQuickButton = initSV(AQSV.splitQuickButton, false)
+            AQSV.quickButtonX = initSV(AQSV.quickButtonX, 0)
+            AQSV.quickButtonY = initSV(AQSV.quickButtonY, 0)
+            AQSV.quickButtonPosition = initSV(AQSV.quickButtonPosition, "CENTER")
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do
@@ -208,19 +215,15 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.x = xOfs
             AQSV.y = yOfs
             AQSV.point = point
+        end
 
-            -- 副本外隐藏装备栏
-            -- if AQSV.hideEquipmentBarOutsideInstance and SELFAQ.playerCanEquip() then
-
-            --     if not SELFAQ.inInstance() then
-            --         SELFAQ.bar:Hide()
-            --     else
-            --         SELFAQ.bar:Show()
-            --     end
-            -- else
-            --     SELFAQ.bar:Show()
-            -- end
-            
+        -- 记录快捷按钮位置
+        -- 已经分离才记录位置
+        if SELFAQ.quickButton and SELFAQ.quickButton.split then
+            local point, relativeTo, relativePoint, xOfs, yOfs = SELFAQ.quickButton:GetPoint()
+            AQSV.quickButtonX = xOfs
+            AQSV.quickButtonY = yOfs
+            AQSV.quickButtonPosition = point
         end
 
         -- 记录buff提醒位置

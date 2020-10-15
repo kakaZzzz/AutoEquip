@@ -1246,7 +1246,7 @@ function SELFAQ.runTargetMemberRules()
 
 
                 -- 敌人判断
-                if name and not UnitIsDead(target) and not UnitIsFriend("player", target) then
+                if name and bName and not UnitIsDead(target) and not UnitIsFriend("player", target) then
                     enemy = enemy + 1
                 end
 

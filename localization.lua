@@ -245,6 +245,9 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"] = "当|cffffffff自己|r选中敌对目标时脱下[加速装备]"
 	L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"] = "当|cffffffff团队成员|r选中敌对目标时脱下[加速装备]"
 	L["When equipment bar is locked, those 2 functions also take effect"] = "当装备栏锁定时，以上2个功能也生效"
-	L["In Instance and Battleground, enable those 2 functions"] = "在副本和战场中，启用以上2个功能"
+	L["In Instance and Battleground, enable those 2 functions"] = "在所有副本/战场中，启用以上2个功能"
 	L["In TAQ, enable Riding Acceleration function"] = "在TAQ副本，启用以上2个功能"
+
+	L["Separate Quick Button and move it separately (Nedd reload UI)"] = "分离快捷按钮，可以单独移动位置（需要重载UI）"
+	L["Lock frame in Settings"] = "设置里锁定框架"
 end

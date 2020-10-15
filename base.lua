@@ -187,7 +187,7 @@ SELFAQ.shortKey = function(v)
 end
 
 -- 调试函数
-SELFAQ.debug = function( t )
+SELFAQ.debug = function(t)
     if not SELFAQ.enableDebug then
         return
     end
@@ -252,6 +252,10 @@ SELFAQ.GetItemLink = function( id )
 
     if order >0 then
         link = link.."#"..order
+    end
+
+    if link == nil then
+        return ""
     end
 
     return link
@@ -426,6 +430,10 @@ SELFAQ.infoTexts = {}
 SELFAQ.popupInfo = function(text)
 
     if AQSV.hidePopupInfo then
+        return
+    end
+
+    if text == nil then
         return
     end
 
