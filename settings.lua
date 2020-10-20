@@ -1106,7 +1106,19 @@ function SELFAQ.settingInit()
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 185)
     end
 
-    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 20
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText("/ae takeoff")
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 205)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Takeoff all equipments"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 205)
+    end
+
+    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 20 - 20
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -1210,7 +1222,19 @@ function SELFAQ.settingInit()
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 370)
     end
 
-    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 335
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["/ae resetpb"])
+        t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 390)
+    end
+
+    do
+        local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+        t:SetText(L["-- Reset quick button position after separation"])
+        t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 390)
+    end
+
+    SELFAQ.lastHeightHelp = SELFAQ.lastHeightHelp - 335 - 40
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

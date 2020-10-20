@@ -638,7 +638,7 @@ function SELFAQ.superInit()
     leftHight = -540-35-30
 
     buildCheckbox(L["Leave combat every time"], "enableLeaveCombat", leftHight)
-    buildCheckbox(L["Enter the world"], "enableWorld", leftHight-25)
+    buildCheckbox(L["Enter the World / Leave Instance"], "enableWorld", leftHight-25)
     buildCheckbox(L["Enter a Raid instance"], "enableRaid", leftHight-50)
     buildCheckbox(L["Enter a Party instance"], "enableParty", leftHight-75)
     buildCheckbox(L["Enter a Battleground"], "enableBattleground", leftHight-100)
@@ -684,9 +684,9 @@ function SELFAQ.superInit()
         UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
         
         -- 检查保存的装备是否在身上
-        if not tContains(v, SUITAQ[current]["slot"..k]) then
-            SUITAQ[current]["slot"..k] = 0
-        end
+        -- if not tContains(v, SUITAQ[current]["slot"..k]) then
+        --     SUITAQ[current]["slot"..k] = 0
+        -- end
 
         UIDropDownMenu_SetSelectedValue(dropdown, SUITAQ[current]["slot"..k], 0)
         UIDropDownMenu_SetText(dropdown, GetItemLink(SUITAQ[current]["slot"..k])) 

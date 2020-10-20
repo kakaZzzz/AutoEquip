@@ -458,9 +458,9 @@ function SELFAQ.suitInit()
         UIDropDownMenu_Initialize(dropdown, DropDown_Initialize)
         
         -- 检查保存的装备是否在身上
-        if not tContains(v, AQSV.suit[boss][k]) then
-            AQSV.suit[boss][k] = 0
-        end
+        -- if not tContains(v, AQSV.suit[boss][k]) then
+        --     AQSV.suit[boss][k] = 0
+        -- end
 
         UIDropDownMenu_SetSelectedValue(dropdown, AQSV.suit[boss][k], 0)
         UIDropDownMenu_SetText(dropdown, GetItemLink(AQSV.suit[boss][k])) 

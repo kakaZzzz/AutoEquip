@@ -160,7 +160,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Equip Suit "] = "-- 装备套装"
 	L["-- Set 5 items per column in dropdown list (default 4)"] = "-- 设置物品下拉框每列显示5件物品（默认4）"
 
-	L["Help"] = "帮助"
+	L["Help"] = "帮助(必看)"
 	L["#The above selections will take effect after reloading UI"] = "#重载UI后以上的选择生效"
 
 	L["Go to 'General' page and add the unidentified usable items manually"] = "前往“常规设置”页面手动添加未被识别的主动装备"
@@ -209,7 +209,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Empty"] = "清空"
 	L["Save"] = "保存"
 
-	L["Enter the world"] = "进入世界"
+	L["Enter the World / Leave Instance"] = "进入世界/离开副本"
     L["Enter a Raid instance"] = "进入团队副本"
     L["Enter a Party instance"] = "进入5人副本"
     L["Enter a Battleground"] = "进入战场"
@@ -250,4 +250,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Separate Quick Button and move it separately (Nedd reload UI)"] = "分离快捷按钮，可以单独移动位置（需要重载UI）"
 	L["Lock frame in Settings"] = "设置里锁定框架"
+
+	L["-- Takeoff all equipments"] = "-- 一键脱装"
+	L["-- Reset quick button position after separation"] = "-- 重置分离后的快捷按钮位置"
 end

@@ -177,7 +177,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, true)
             AQSV.forceAcc = initSV(AQSV.forceAcc, true)
             AQSV.pauseAccWhenTarget = initSV(AQSV.pauseAccWhenTarget, true)
-            AQSV.pauseAccWhenTargetMember = initSV(AQSV.pauseAccWhenTargetMember, false)
+            AQSV.pauseAccWhenTargetMember = initSV(AQSV.pauseAccWhenTargetMember, true)
 
             AQSV.quickButtonZoom = initSV(AQSV.quickButtonZoom, 1)
             AQSV.quickButtonLocked = initSV(AQSV.quickButtonLocked, false)
@@ -437,6 +437,13 @@ function SELFAQ.mainInit()
             AQSV.x = 200
             AQSV.y = 0
             AQSV.point = "CENTER"
+            C_UI.Reload()
+
+        elseif strfind(msg, "resetpb") then
+
+            AQSV.quickButtonX  = 0
+            AQSV.quickButtonY  = 0
+            AQSV.quickButtonPosition  = "CENTER"
             C_UI.Reload()
 
         end

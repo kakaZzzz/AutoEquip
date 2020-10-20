@@ -11,6 +11,14 @@ Todo:
 
 ---
 
+v5.10
+
+1. 修复超级换装套装1丢失装备的bug
+
+1. Fix a bug: Suit 1 lost some equipments
+
+---
+
 v5.9
 
 1. 副本/战场/TAQ可用骑马自动加速
@@ -21,7 +29,7 @@ v5.9
 1. Enable Auto Acceleration function in Instance/Battleground/TAQ
 2. Takeoff acceleration items when you or raid members target enemies
 3. Auto equip acceleration items when equipment bar is locked
-3. Separate Quick Button and move it separately
+4. Separate Quick Button and move it separately
 
 ---
 
