@@ -556,3 +556,18 @@ SELFAQ.inTAQ = function()
         return false
     end
 end
+
+SELFAQ.getItemLevel = function(item_id)
+    local itemName, itemLink, itemRarity, itemLevel = GetItemInfo(item_id)
+
+    if itemRarity == 4 then
+        return "|cffa335ee"..itemLevel.."|r"
+    elseif itemRarity == 3 then
+        return "|cff0070dd"..itemLevel.."|r"
+    elseif itemRarity == 2 then
+        return "|cff1eff00"..itemLevel.."|r"
+    else
+        return "|cffffffff"..itemLevel.."|r"
+    end
+
+end

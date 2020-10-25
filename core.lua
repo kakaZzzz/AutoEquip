@@ -99,14 +99,16 @@ function aq_test( )
 
     -- print(GetUnitName("target"))
 
-    local name, type, difficultyIndex, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+    -- local name, type, difficultyIndex, difficultyName, maxPlayers,
+    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
-    print(name, type, difficultyIndex, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceMapId, lfgID)
+    -- print(name, type, difficultyIndex, difficultyName, maxPlayers,
+    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID)
 
-    print(GetItemCooldown(21180))
-    print(GetSpellInfo(25891))
+    -- print(GetItemCooldown(21180))
+    -- print(GetSpellInfo(25891))
+
+    print(SELFAQ.getItemLevel(21180))
 
 end
 

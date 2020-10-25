@@ -978,7 +978,7 @@ function SELFAQ.settingInit()
         end)
 
         SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)
-        debug(SELFAQ.buffs)
+        -- debug(SELFAQ.buffs)
     end
 
     SELFAQ.lastHeight = SELFAQ.lastHeight - 160

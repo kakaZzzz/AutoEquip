@@ -138,7 +138,7 @@ function SELFAQ.createBuffIcon()
         end
     end
 
-    debug(SELFAQ.buffs)
+    -- debug(SELFAQ.buffs)
 
 end
 

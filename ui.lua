@@ -628,6 +628,20 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
     
     button.text = text
 
+    -- 装备等级
+	local lf = CreateFrame("Frame", nil, button)
+	lf:SetAllPoints(button)
+	lf:SetFrameLevel(101)
+
+	local level = lf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+	level:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
+	-- text:SetShadowColor(0, 0, 0, 1)
+	-- text:SetShadowOffset(1, -1)
+    level:SetPoint("BOTTOMLEFT", button, 1,1)
+    level:SetJustifyH("LEFT")
+    level:SetText(SELFAQ.getItemLevel(rid))
+
+
 	-- 按钮定位
    	
 
@@ -651,20 +665,32 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 
    	button:EnableMouse(true)
    	button:RegisterForClicks("AnyDown");
-	button:SetScript('OnClick', function(self)
+	button:SetScript('OnClick', function(self, b)
+
+		debug(b)
 
 		-- 点击后立即隐藏下拉框
 	    for k,v in pairs(SELFAQ.itemButtons) do
    			v:Hide()
    		end
 
+   		local slot = button.inSlot
+
+   		if button.inSlot == 13 and b == "RightButton" then
+   			slot = 14
+   		end
+
+   		if button.inSlot == 11 and b == "RightButton" then
+   			slot = 12
+   		end
+
         if not SELFAQ.playerCanEquip() then
         	-- 缓存起来
-        	SELFAQ.setWait(item_id, button.inSlot)
+        	SELFAQ.setWait(item_id, slot)
             return 
         else
         	-- 立即装备
-        	SELFAQ.equipWait(item_id, button.inSlot)
+        	SELFAQ.equipWait(item_id, slot)
         end
        
 	end)
@@ -1303,7 +1329,7 @@ function SELFAQ.showQBMoveTooltip()
 		-- tooltip:SetPoint("BOTTOMLEFT",button,0,-20)
 		
 		tooltip:AddLine(L["Left-Drag: Move Frame"])
-		tooltip:AddLine(SELFAQ.color("FFFFFF",L["Lock frame in Settings"]))
+		tooltip:AddLine(SELFAQ.color("FFFFFF", L["Lock frame in Settings"]))
 		
 	    tooltip:Show()
 	end
