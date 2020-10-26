@@ -11,6 +11,20 @@ Todo:
 
 ---
 
+v5.11
+
+1. 角色面板快速换装
+2. 新增选项：左键点击装备到饰品栏1，右键饰品栏2
+3. 装备弹出列表显示装备等级
+
+1. Quick Equip on charactor panel
+2. Add an option: Click Left button to equip trinket 1, Right button trinket 2
+3. Show item level on item popup list
+
+1. Fix a bug: Suit 1 lost some equipments
+
+---
+
 v5.10
 
 1. 修复超级换装套装1丢失装备的bug

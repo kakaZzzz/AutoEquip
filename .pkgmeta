@@ -1,5 +1,0 @@
-package-as: AutoEquip
-enable-nolib-creation: no
-
-move-folders:
-    *: AutoEquip # This moves KillerCupcakes/Modules/Fire to the same level as KillerCupcakes, as KillerCupCakesOnFire

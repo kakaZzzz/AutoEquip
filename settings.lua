@@ -642,7 +642,7 @@ function SELFAQ.settingInit()
         t:SetPoint("TOPLEFT", f, 53, -200-25-10)
     end
 
-    local otherHight = -245-10-10
+    local otherHight = -330
 
     buildLine(otherHight+3)
 
@@ -690,12 +690,12 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = -300
+    otherHight = -265
 
     buildCheckbox(L["Separate Quick Button and move it separately (Nedd reload UI)"], "splitQuickButton", otherHight)
     buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight-25)
 
-    buildLine(-298)
+    buildLine(-262)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -740,7 +740,12 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = otherHight - 45 - 25
+    otherHight = -365
+
+    buildCheckbox(L["Enable Quick Equip on charactor panel (Nedd reload UI)"], "enableQuickEquip", otherHight)
+    buildLine(otherHight+3)
+
+    otherHight = otherHight - 45 - 15
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -793,7 +798,7 @@ function SELFAQ.settingInit()
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Display:"])
+        t:SetText(L["Equipment Bar:"])
         t:SetPoint("TOPLEFT", f, 25, otherHight)
     end
 
@@ -805,17 +810,27 @@ function SELFAQ.settingInit()
     buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-85)
     buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-110)
 
-    buildLine(otherHight-145+3)
+    buildLine(otherHight-145+2)
 
-    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-145)
-    buildCheckbox(L["Hide addon info in the chat box"], "hideChatInfo", otherHight-170)
+    buildCheckbox(L["Click Left button to equip trinket 1, Right button trinket 2"], "enableLR", otherHight-145)
 
-    buildLine(otherHight-205+3)
+    otherHight = otherHight-145-45
 
-    buildCheckbox(L["Hide quick buttons"], "hideQuickButton", otherHight-205)
-    buildCheckbox(L["Disable the takeoff quick button"], "hideTakeoffButton", otherHight-230)
+    do
+        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+        t:SetText(L["More:"])
+        t:SetPoint("TOPLEFT", f, 25, otherHight)
+    end
 
-    otherHight = otherHight - 230
+    buildCheckbox(L["Hide popup addon info at the top of screen"], "hidePopupInfo", otherHight-25)
+    buildCheckbox(L["Hide addon info in the chat box"], "hideChatInfo", otherHight-50)
+
+    buildLine(otherHight-85+3)
+
+    buildCheckbox(L["Hide quick buttons"], "hideQuickButton", otherHight-85)
+    buildCheckbox(L["Disable the takeoff quick button"], "hideTakeoffButton", otherHight-110)
+
+    otherHight = otherHight - 110
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

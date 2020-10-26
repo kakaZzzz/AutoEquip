@@ -126,7 +126,9 @@ function SELFAQ.createItemBar()
 	end
 
 	-- 暂时不开放
-	-- SELFAQ.buildCharactor()
+	if AQSV.enableQuickEquip then
+		SELFAQ.buildCharactor()
+	end
 
 	SELFAQ.createQuickButton()
 	SELFAQ.updateButtonSwitch()
@@ -153,6 +155,7 @@ function SELFAQ.buildCharactor()
 	SELFAQ.cSlots[16] = _G["CharacterMainHandSlot"]
 	SELFAQ.cSlots[17] = _G["CharacterSecondaryHandSlot"]
 	SELFAQ.cSlots[18] = _G["CharacterRangedSlot"]
+
 
 
 	for k,v in pairs(SELFAQ.cSlots) do
@@ -405,6 +408,7 @@ function SELFAQ.createItemButton( slot_id, position )
 
    	-- 显示tooltip
    	button:SetScript("OnEnter", function(self)
+   		
 		SELFAQ.showTooltip(self, "inventory", button.itemId, slot_id)
 
 		if AQSV.disableMouseover then
@@ -414,7 +418,6 @@ function SELFAQ.createItemButton( slot_id, position )
 		if UnitAffectingCombat("player") and AQSV.shiftLeftShowDropdown then
 			return
 		end
-
 		SELFAQ.showDropdown(slot_id, position)
 
 	end)
@@ -464,6 +467,10 @@ function SELFAQ.showDropdown(slot_id, position, update)
 
 	SELFAQ.showingSlot = slot_id
 	SELFAQ.showingPosition = position
+
+	if AQSV.enableLR and pass_id == 14 then
+		position = position -1 
+	end
 
 	local index = 1
 	local itemId1 = GetInventoryItemID("player", slot_id)
@@ -570,6 +577,8 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
    		button = CreateFrame("Button", nil, UIParent)
    	end
 
+   	button.pass_id = pass_id
+
    	if pass_id > 100 then
    		if pass_id > 115 then
    			button:SetPoint("TOPLEFT", SELFAQ.cSlots[slot_id], x + newX * (40 + AQSV.buttonSpacingNew) -2, 2+(40 + AQSV.buttonSpacingNew) * newY)
@@ -653,7 +662,7 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 
 		-- print(item_id, bag, slot)
 
-		SELFAQ.showTooltip( self, "bag", item_id, bag, slot)
+		SELFAQ.showTooltip( self, "bag", item_id, bag, slot, button.pass_id)
 	end)
    	button:SetScript("OnLeave", function( self )
    		-- 开启隐藏计时
@@ -667,8 +676,6 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
    	button:RegisterForClicks("AnyDown");
 	button:SetScript('OnClick', function(self, b)
 
-		debug(b)
-
 		-- 点击后立即隐藏下拉框
 	    for k,v in pairs(SELFAQ.itemButtons) do
    			v:Hide()
@@ -676,12 +683,13 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
 
    		local slot = button.inSlot
 
-   		if button.inSlot == 13 and b == "RightButton" then
-   			slot = 14
-   		end
-
-   		if button.inSlot == 11 and b == "RightButton" then
-   			slot = 12
+   		if AQSV.enableLR and (button.inSlot == 13 or button.inSlot == 14) then
+   			if b == "RightButton" then
+   				slot = 14
+   			end
+   			if b == "LeftButton" then
+   				slot = 13
+   			end
    		end
 
         if not SELFAQ.playerCanEquip() then
@@ -807,18 +815,20 @@ end
 function SELFAQ.showCharactorTooltip(button, slot_id)
 	
 	local tooltip = _G["GameTooltip"]
-	tooltip:ClearLines()
+	-- local tooltip = CreateFrame( "GameTooltip", "MyScanningTooltip", nil, "GameTooltipTemplate" )
+	-- tooltip:ClearLines()
 
-	-- tooltip:SetOwner(button,"ANCHOR_NONE")
-	tooltip:SetOwner(UIParent)
-	GameTooltip_SetDefaultAnchor(tooltip, UIParent)
-	-- tooltip:SetOwner(button, ANCHOR_LEFT, 0, -35)
+	tooltip:SetOwner(button,"ANCHOR_RIGHT")
+	-- tooltip:SetPoint("TOPRIGHT", button)
+	-- tooltip:SetOwner(button)
+	-- GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+	-- tooltip:SetOwner(button, ANCHOR_LEFT, 0,0)
 
 	tooltip:SetInventoryItem("player", slot_id)
-	tooltip:Show()
+	-- tooltip:Show()
 end
 
-function SELFAQ.showTooltip( button, t, item_id, arg1, arg2 )
+function SELFAQ.showTooltip( button, t, item_id, arg1, arg2, pass_id )
 
 	if not AQSV.hideTooltip then
 		local tooltip = _G["GameTooltip"]
@@ -834,8 +844,13 @@ function SELFAQ.showTooltip( button, t, item_id, arg1, arg2 )
 			tooltip:SetText(link)
 
 	    else
-	    	tooltip:SetOwner(UIParent)
-			GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+	    	if pass_id and pass_id > 100 then
+				tooltip:SetOwner(button, "ANCHOR_RIGHT")
+				-- GameTooltip_SetDefaultAnchor(tooltip, button)
+			else
+		    	tooltip:SetOwner(UIParent)
+				GameTooltip_SetDefaultAnchor(tooltip, UIParent)
+			end
 
 			if t == "inventory" then
 				tooltip:SetInventoryItem("player", arg1)

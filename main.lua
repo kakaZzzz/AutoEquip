@@ -186,6 +186,9 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.quickButtonY = initSV(AQSV.quickButtonY, 0)
             AQSV.quickButtonPosition = initSV(AQSV.quickButtonPosition, "CENTER")
 
+            AQSV.enableLR = initSV(AQSV.enableLR, false)
+            AQSV.enableQuickEquip = initSV(AQSV.enableQuickEquip, true)
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do
@@ -476,9 +479,9 @@ function SELFAQ.mainInit()
                 SELFAQ.runEquipmentRules()
              end
 
-            if SELFAQ.showingSlot then
-                SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition, true)
-            end
+            -- if SELFAQ.showingSlot then
+            --     SELFAQ.showDropdown(SELFAQ.showingSlot, SELFAQ.showingPosition, true)
+            -- end
 
         end
 

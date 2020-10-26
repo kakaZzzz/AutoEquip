@@ -253,4 +253,7 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["-- Takeoff all equipments"] = "-- 一键脱装"
 	L["-- Reset quick button position after separation"] = "-- 重置分离后的快捷按钮位置"
+
+	L["Click Left button to equip trinket 1, Right button trinket 2"] = "左键点击装备到饰品栏1，右键饰品栏2"
+	L["Enable Quick Equip on charactor panel (Nedd reload UI)"] = "启用角色面板快速换装（需要重载UI）"
 end
