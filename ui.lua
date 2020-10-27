@@ -273,7 +273,11 @@ function SELFAQ.createItemButton( slot_id, position )
     -- 右键解锁
     button:SetAttribute("type2", "unlockSlot")
     button.unlockSlot = function( ... )
-    	SELFAQ.cancelLocker(slot_id)
+    	if AQSV.slotStatus[slot_id].locked then
+    		SELFAQ.cancelLocker(slot_id)
+    	else
+    		SELFAQ.setLocker(slot_id)
+    	end
     end
 
     -- 右键解锁

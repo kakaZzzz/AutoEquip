@@ -21,8 +21,6 @@ v5.11
 2. Add an option: Click Left button to equip trinket 1, Right button trinket 2
 3. Show item level on item popup list
 
-1. Fix a bug: Suit 1 lost some equipments
-
 ---
 
 v5.10
