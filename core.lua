@@ -108,7 +108,9 @@ function aq_test( )
     -- print(GetItemCooldown(21180))
     -- print(GetSpellInfo(25891))
 
-    print(SELFAQ.getItemLevel(21180))
+    -- print(SELFAQ.getItemLevel(21180))
+    SELFAQ.putSuit2Bank(4)
+    -- debug(GetNumBankSlots())
 
 end
 

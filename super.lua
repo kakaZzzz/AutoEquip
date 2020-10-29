@@ -64,12 +64,14 @@ function SELFAQ.superInit()
                 local index = i*100 +s
 
                 if not GetContainerItemInfo(i,s) and not hold[index] then
-                    debug(slot)
+                    
                     PickupInventoryItem(slot)
+
                     if i == 0 then
                         PutItemInBackpack();
                     else
-                        PutItemInBag(i + 19);
+                        local bagID = ContainerIDToInventoryID(i)
+                        PutItemInBag(bagID);
                     end
 
                     hold[index] = true
@@ -81,6 +83,76 @@ function SELFAQ.superInit()
                     return
                 end
             end
+        end
+
+    end
+
+    SELFAQ.putSuit2Bank = function(number)
+        if SUITAQ[number]["enable"] then
+
+            for k,v in pairs(SELFAQ.items) do
+
+                if SUITAQ[number]["slot"..k] and SUITAQ[number]["slot"..k] > 0 then
+
+                    SELFAQ.putOne2Bank(SUITAQ[number]["slot"..k])
+
+                end
+
+            end
+
+        end
+    end
+
+
+    SELFAQ.putOne2Bank = function( item_id )
+        local bag,slot = SELFAQ.reverseBagSlot(item_id)
+
+        if bag == -1 then
+            return false
+        end
+
+        -- 判断是否打开银行，银行第一个背包格的个数
+        if GetContainerNumSlots(10) == 0 then
+            return
+        end
+
+        local bank = {-1, 5,6,7,8,9,10}
+            
+        for k,i in pairs(bank) do
+            local count = GetContainerNumSlots(i)
+
+            if count and count > 0 then
+
+                for s=1,count do
+
+                    local index = i*100 +s
+                    print(GetContainerItemInfo(i,s))
+
+                    if not GetContainerItemInfo(i,s) and not hold[index] then
+                        print(s)
+                        ClearCursor()
+                        PickupContainerItem(bag,slot)
+
+                        if i == 0 then
+                            PutItemInBackpack()
+                        elseif i == -1 then
+                            -- 银行自带格子48-71
+                            PutItemInBag(47+s)
+                        else
+                            PutItemInBag(ContainerIDToInventoryID(i))
+                        end
+
+                        hold[index] = true
+
+                        C_Timer.After(1.0, function()
+                            hold[index] = nil
+                        end)
+
+                        return
+                    end
+                end
+            end
+
         end
 
     end
