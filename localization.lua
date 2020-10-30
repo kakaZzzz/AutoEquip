@@ -43,7 +43,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
-	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
+	L["In combat |cFF00FF00shift + left-click|r equipment button to display the item list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
+	L["Hide item level on the item list (Need reload UI)"] = "隐藏装备列表上的物品等级（需要重载UI）"
 	L["Show simple tooltip (only item name)"] = "显示精简提示（只有物品名）"
 	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"] = "进入|cffffffff奈法利安的巢穴|r装备|cff0070dd[奥妮克希亚鳞片披风]|r"
 	L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"] = "自动装备|cff0070dd[奥妮克希亚鳞片披风]|r后在团队频道发出提醒"
@@ -148,8 +149,8 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Suit for 63+"] = "63+套装"
 	L["Usable Queue"] = "主动队列"
 
-	L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"] = "[启用]当目标为63级精英或??级Boss时，装备自定义的套装"
-	L["Equip suit when more than 1 raid members target lv.63 elite or boss"] = "当团队中超过1人目标是63级精英或者Boss时，装备套装"
+	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"] = "[启用]当|cffffffff自己|r目标是63级精英或??级Boss时，装备对应套装"
+	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"] = "当|cffffffff团队成员|r超过1人目标是63级精英或者Boss时，装备对应套装"
 	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
 	L["#The following options only take effect in instance"] = "#以下选项只在副本中生效"
 	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "当目标为63级以下的敌方单位，装备"..L[60].."套装"
@@ -242,18 +243,25 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["-- Reset equipment bar position"] = "-- 重置装备栏位置"
 
 	L["Auto Acceleration Function:"] = "自动加速功能:"
-	L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"] = "当|cffffffff自己|r选中敌对目标时脱下[加速装备]"
-	L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"] = "当|cffffffff团队成员|r选中敌对目标时脱下[加速装备]"
-	L["When equipment bar is locked, those 2 functions also take effect"] = "当装备栏锁定时，以上2个功能也生效"
-	L["In Instance and Battleground, enable those 2 functions"] = "在所有副本/战场中，启用以上2个功能"
-	L["In TAQ, enable Riding Acceleration function"] = "在TAQ副本，启用以上2个功能"
+	L["When |cffffffffYou|r target an |cFFFF0000enemy|r, takeoff acceleration items"] = "当|cffffffff自己|r选中|cFFFF0000敌对|r目标时脱下加速装备"
+	L["When |cffffffffYou|r target a |cFF00FF00friend|r, takeoff acceleration items"] = "当|cffffffff自己|r选中|cFF00FF00友善|r目标时脱下加速装备"
+	L["When |cffffffffRaid members|r target |cFFFF0000enemies|r, takeoff acceleration items"] = "当|cffffffff团队成员|r选中|cFFFF0000敌对|r目标时脱下加速装备"
+	L["When equipment bar is locked, Auto Acceleration function also takes effect"] = "当装备栏锁定时，自动加速功能也生效"
+	L["In Instance and Battleground, enable Auto Acceleration function"] = "在所有副本/战场中，启用自动加速功能"
+	L["In TAQ, enable Auto Acceleration function"] = "在TAQ副本，启用自动加速功能"
 
-	L["Separate Quick Button and move it separately (Nedd reload UI)"] = "分离快捷按钮，可以单独移动位置（需要重载UI）"
+	L["Separate Quick Button and move it separately (Need reload UI)"] = "分离快捷按钮，可以单独移动位置（需要重载UI）"
 	L["Lock frame in Settings"] = "设置里锁定框架"
 
 	L["-- Takeoff all equipments"] = "-- 一键脱装"
 	L["-- Reset quick button position after separation"] = "-- 重置分离后的快捷按钮位置"
 
 	L["Click Left button to equip trinket 1, Right button trinket 2"] = "左键点击装备到饰品栏1，右键饰品栏2"
-	L["Enable Quick Equip on charactor panel (Nedd reload UI)"] = "启用角色面板快速换装（需要重载UI）"
+	L["Enable Quick Equip on charactor panel (Need reload UI)"] = "启用角色面板快速换装（需要重载UI）"
+
+	L["Tutorial:"] = "使用教程(中文):"
+	L["Press Ctrl+C to copy the link. Paste it into browser and open it."] = "按Ctrl+C复制链接，粘贴到浏览器中打开。"
+
+	L["Equipment Bar:"] = "装备栏:"
+	L["More:"] = "更多:"
 end

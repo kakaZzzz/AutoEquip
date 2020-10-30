@@ -13,6 +13,30 @@ local popupInfo = SELFAQ.popupInfo
 
 -- 主函数 --
 
+-- 小地图按钮
+local icon = LibStub("LibDBIcon-1.0")
+
+local MiniIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("AutoEquip", {
+        type = "data source",
+        text = "AutoEquip",
+        icon = 136115,
+        OnClick = function()
+            InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
+            InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
+        end,
+        OnEnter = function(owner)
+            local anchor = owner:GetBottom() < GetScreenHeight() / 2 and 'ANCHOR_TOP' or 'ANCHOR_BOTTOM'
+            GameTooltip:SetOwner(owner, anchor)
+            GameTooltip:SetText(L["AutoEquip "]..SELFAQ.version)
+            GameTooltip:AddDoubleLine("|cffffffffClick: Open settings|r")
+            GameTooltip:Show()
+        end,
+        OnLeave = GameTooltip_Hide,
+})
+
+icon:Register("MiniIcon", MiniIconLDB)
+
+-- 注入按键设置页面
 for k,v in pairs(SELFAQ.gearSlots) do
     _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = SELFAQ.slotToName[v]
 end
@@ -177,6 +201,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, true)
             AQSV.forceAcc = initSV(AQSV.forceAcc, true)
             AQSV.pauseAccWhenTarget = initSV(AQSV.pauseAccWhenTarget, true)
+            AQSV.pauseAccWhenTargetFriend = initSV(AQSV.pauseAccWhenTargetFriend, true)
             AQSV.pauseAccWhenTargetMember = initSV(AQSV.pauseAccWhenTargetMember, true)
 
             AQSV.quickButtonZoom = initSV(AQSV.quickButtonZoom, 1)
@@ -188,6 +213,8 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.enableLR = initSV(AQSV.enableLR, false)
             AQSV.enableQuickEquip = initSV(AQSV.enableQuickEquip, true)
+
+            AQSV.hideItemLevel = initSV(AQSV.hideItemLevel, false)
 
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
@@ -303,8 +330,8 @@ function SELFAQ.mainInit()
             SELFAQ.enableAutoEuquip()
 
         elseif msg == "settings" then
-             InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
-             InterfaceOptionsFrame_OpenToCategory(SELFAQ.general);
+             InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
+             InterfaceOptionsFrame_OpenToCategory(SELFAQ.top);
 
         elseif msg == "pvp" then
             SELFAQ. enablePvpMode()
@@ -583,8 +610,23 @@ function SELFAQ.mainInit()
                 if GetUnitName("target") == nil then
                     SELFAQ.targetEnemy = false
                 end
+            else
+                SELFAQ.targetEnemy = false
+            end
 
+            if AQSV.pauseAccWhenTargetFriend then
 
+                if not UnitIsDead("target") and UnitIsFriend("player", "target") then
+                    SELFAQ.targetFriend = true
+                else
+                    SELFAQ.targetFriend = false
+                end
+
+                if GetUnitName("target") == nil then
+                    SELFAQ.targetFriend = false
+                end
+            else
+                SELFAQ.targetFriend = false
             end
 
 

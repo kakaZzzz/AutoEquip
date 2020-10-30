@@ -346,8 +346,8 @@ function SELFAQ.suitInit()
         t:SetPoint("TOPLEFT", f, 52, -78)
     end
 
-    buildCheckbox(L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"], "enableSuit", -25)
-    buildCheckbox(L["Equip suit when more than 1 raid members target lv.63 elite or boss"], "enableMembersTarget", -100)
+    buildCheckbox(L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"], "enableSuit", -25)
+    buildCheckbox(L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"], "enableMembersTarget", -100)
     buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -125)
     buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -150)
 

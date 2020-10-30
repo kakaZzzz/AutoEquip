@@ -26,6 +26,7 @@ function SELFAQ.settingInit()
     local helpFrame = CreateFrame("Frame", nil, helpOption)
     
     SELFAQ.general = p
+    SELFAQ.top = top
     SELFAQ.f = f
 
     SELFAQ.queueOption = queueOption
@@ -86,26 +87,26 @@ function SELFAQ.settingInit()
 
     do
         local t = top:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-        t:SetText(L["Feedback and Bug report:"])
+        t:SetText(L["Tutorial:"])
         t:SetPoint("TOPLEFT", top, 25, -115)
     end
 
-    do
+     do
         local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["NGA: https://bbs.nga.cn/read.php?tid=21494303"])
-        t:SetPoint("TOPLEFT", top, 25, -140)
+        t:SetText(L["Press Ctrl+C to copy the link. Paste it into browser and open it."])
+        t:SetPoint("TOPLEFT", top, 25, -135)
     end
 
     do
-        local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["Github: https://github.com/lanyu7/AutoEquip"])
-        t:SetPoint("TOPLEFT", top, 25, -165)
-    end
-
-    do
-        local t = top:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["CurseForge:  https://curseforge.com/wow/addons/autoequip-classic"])
-        t:SetPoint("TOPLEFT", top, 25, -190)
+        local e = CreateFrame("EditBox", nil, top, "InputBoxTemplate")
+        e:SetFontObject("GameFontHighlight")
+        e:SetWidth(350)
+        e:SetHeight(60)
+        e:SetAutoFocus(false)
+        -- e:SetJustifyH("CENTER")
+        e:SetPoint("TOPLEFT", top, 30,  -145)
+        e:SetText("https://www.bilibili.com/read/cv8152125")
+        e:SetCursorPosition(0)
     end
 
     -- 构建主动饰品组
@@ -692,7 +693,7 @@ function SELFAQ.settingInit()
 
     otherHight = -265
 
-    buildCheckbox(L["Separate Quick Button and move it separately (Nedd reload UI)"], "splitQuickButton", otherHight)
+    buildCheckbox(L["Separate Quick Button and move it separately (Need reload UI)"], "splitQuickButton", otherHight)
     buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight-25)
 
     buildLine(-262)
@@ -742,7 +743,7 @@ function SELFAQ.settingInit()
 
     otherHight = -365
 
-    buildCheckbox(L["Enable Quick Equip on charactor panel (Nedd reload UI)"], "enableQuickEquip", otherHight)
+    buildCheckbox(L["Enable Quick Equip on charactor panel (Need reload UI)"], "enableQuickEquip", otherHight)
     buildLine(otherHight+3)
 
     otherHight = otherHight - 45 - 15
@@ -782,19 +783,20 @@ function SELFAQ.settingInit()
 
     buildLine(otherHight-60+3)
 
-    buildCheckbox(L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"], "pauseAccWhenTarget", otherHight-60)
-    buildCheckbox(L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"], "pauseAccWhenTargetMember", otherHight-85)
+    buildCheckbox(L["When |cffffffffYou|r target an |cFFFF0000enemy|r, takeoff acceleration items"], "pauseAccWhenTarget", otherHight-60)
+    buildCheckbox(L["When |cffffffffYou|r target a |cFF00FF00friend|r, takeoff acceleration items"], "pauseAccWhenTargetFriend", otherHight-60-25)
+    buildCheckbox(L["When |cffffffffRaid members|r target |cFFFF0000enemies|r, takeoff acceleration items"], "pauseAccWhenTargetMember", otherHight-85-25)
 
-    buildLine(otherHight-120+3)
+    buildLine(otherHight-120+3-25)
 
-    buildCheckbox(L["When equipment bar is locked, those 2 functions also take effect"], "forceAcc", otherHight-120)
+    buildCheckbox(L["When equipment bar is locked, Auto Acceleration function also takes effect"], "forceAcc", otherHight-120-25)
 
-    buildLine(otherHight-155+3)
+    buildLine(otherHight-155+3-25)
 
-    buildCheckbox(L["In Instance and Battleground, enable those 2 functions"], "enableAccInstance", otherHight-155)
-    buildCheckbox(L["In TAQ, enable Riding Acceleration function"], "enableAccTAQ", otherHight-180)
+    buildCheckbox(L["In Instance and Battleground, enable Auto Acceleration function"], "enableAccInstance", otherHight-155-25)
+    buildCheckbox(L["In TAQ, enable Auto Acceleration function"], "enableAccTAQ", otherHight-180-25)
 
-    otherHight = otherHight-180-45
+    otherHight = otherHight-180-45-25
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -803,18 +805,19 @@ function SELFAQ.settingInit()
     end
 
     buildCheckbox(L["Item queue is displayed above the Equipment Bar"], "reverseCooldownUnit", otherHight-25)
-    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"], "shiftLeftShowDropdown", otherHight-50)
+    buildCheckbox(L["In combat |cFF00FF00shift + left-click|r equipment button to display the item list"], "shiftLeftShowDropdown", otherHight-50)
 
     buildLine(otherHight-85+3)
 
     buildCheckbox(L["Hide tooltip when the mouse moves over the button"], "hideTooltip", otherHight-85)
     buildCheckbox(L["Show simple tooltip (only item name)"], "simpleTooltip", otherHight-110)
+    buildCheckbox(L["Hide item level on the item list (Need reload UI)"], "hideItemLevel", otherHight-135)
 
-    buildLine(otherHight-145+2)
+    buildLine(otherHight-145+2-25)
 
-    buildCheckbox(L["Click Left button to equip trinket 1, Right button trinket 2"], "enableLR", otherHight-145)
+    buildCheckbox(L["Click Left button to equip trinket 1, Right button trinket 2"], "enableLR", otherHight-145-25)
 
-    otherHight = otherHight-145-45
+    otherHight = otherHight-145-45-25
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")

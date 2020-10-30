@@ -642,18 +642,19 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
     button.text = text
 
     -- 装备等级
-	local lf = CreateFrame("Frame", nil, button)
-	lf:SetAllPoints(button)
-	lf:SetFrameLevel(101)
+    if not AQSV.hideItemLevel then
+		local lf = CreateFrame("Frame", nil, button)
+		lf:SetAllPoints(button)
+		lf:SetFrameLevel(101)
 
-	local level = lf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-	level:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
-	-- text:SetShadowColor(0, 0, 0, 1)
-	-- text:SetShadowOffset(1, -1)
-    level:SetPoint("BOTTOMLEFT", button, 1,1)
-    level:SetJustifyH("LEFT")
-    level:SetText(SELFAQ.getItemLevel(rid))
-
+		local level = lf:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
+		level:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
+		-- text:SetShadowColor(0, 0, 0, 1)
+		-- text:SetShadowOffset(1, -1)
+	    level:SetPoint("BOTTOMLEFT", button, 1,1)
+	    level:SetJustifyH("LEFT")
+	    level:SetText(SELFAQ.getItemLevel(rid))
+	end
 
 	-- 按钮定位
    	

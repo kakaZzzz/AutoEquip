@@ -109,7 +109,8 @@ function aq_test( )
     -- print(GetSpellInfo(25891))
 
     -- print(SELFAQ.getItemLevel(21180))
-    SELFAQ.putSuit2Bank(4)
+    -- SELFAQ.putSuit2Bank(4)
+    print(GetItemTexture(19339))
     -- debug(GetNumBankSlots())
 
 end
@@ -544,6 +545,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
         if(IsMounted() 
             and not UnitOnTaxi("player")
             and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetFriend and SELFAQ.targetFriend)
             and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
             ) then
 
@@ -597,6 +599,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
         if(IsMounted() 
             and not UnitOnTaxi("player")
             and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetFriend and SELFAQ.targetFriend)
             and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
             ) then
 
@@ -646,6 +649,7 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
         if 
             IsSwimming() 
             and not (AQSV.pauseAccWhenTarget and SELFAQ.targetEnemy)
+            and not (AQSV.pauseAccWhenTargetFriend and SELFAQ.targetFriend)
             and not (AQSV.pauseAccWhenTargetMember and SELFAQ.targetEnemyMember)
         then
 

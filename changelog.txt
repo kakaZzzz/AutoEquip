@@ -11,6 +11,20 @@ Todo:
 
 ---
 
+v5.12
+
+1. 右键点击装备栏可以加锁
+2. 增加选项：当自己选中友善目标时脱下加速装备
+3. 新增小地图按钮，点击打开设置
+4. 增加选项：隐藏装备列表上的物品等级
+
+1. Right-click the equipment bar will lock the button
+2. Add a option: When You target a friend, takeoff acceleration items
+3. Add minimap icon. Click it to open setttins.
+4. Add a option: Hide item level on the item list
+
+---
+
 v5.11
 
 1. 角色面板快速换装
