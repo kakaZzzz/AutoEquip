@@ -36,6 +36,7 @@ local MiniIconLDB = LibStub("LibDataBroker-1.1"):NewDataObject("AutoEquip", {
 
 icon:Register("MiniIcon", MiniIconLDB)
 
+
 -- 注入按键设置页面
 for k,v in pairs(SELFAQ.gearSlots) do
     _G["BINDING_NAME_AUTOEQUIP_BUTTON"..v] = SELFAQ.slotToName[v]
@@ -216,6 +217,15 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
             AQSV.hideItemLevel = initSV(AQSV.hideItemLevel, false)
 
+            AQSV.enableMinimapIcon = initSV(AQSV.enableMinimapIcon, true)
+
+            AQSV.enableTargetUndead = initSV(AQSV.enableTargetUndead, true)
+            AQSV.enableInUndeadInstance = initSV(AQSV.enableInUndeadInstance, true)
+
+            if not AQSV.enableMinimapIcon then
+                icon:Hide("MiniIcon")
+            end
+
             if AQSV.slotStatus == nil then
                 AQSV.slotStatus = {}
                 for k,v in pairs(SELFAQ.slotToName) do
@@ -277,6 +287,7 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
         SELFAQ.checkAllWait()
         SELFAQ.checkSuperSuit()
+        SELFAQ.checkSelfTarget()
 
         -- 插件整体开关，以角色为单位
         if not AQSV.enable then
@@ -598,60 +609,91 @@ function SELFAQ.mainInit()
                 return 
             end
 
-            -- 自动骑乘判断
-            if AQSV.pauseAccWhenTarget then
-
-                if not UnitIsDead("target") and not UnitIsFriend("player", "target") then
-                    SELFAQ.targetEnemy = true
-                else
-                    SELFAQ.targetEnemy = false
-                end
-
-                if GetUnitName("target") == nil then
-                    SELFAQ.targetEnemy = false
-                end
-            else
-                SELFAQ.targetEnemy = false
-            end
-
-            if AQSV.pauseAccWhenTargetFriend then
-
-                if not UnitIsDead("target") and UnitIsFriend("player", "target") then
-                    SELFAQ.targetFriend = true
-                else
-                    SELFAQ.targetFriend = false
-                end
-
-                if GetUnitName("target") == nil then
-                    SELFAQ.targetFriend = false
-                end
-            else
-                SELFAQ.targetFriend = false
-            end
-
-
-            -- 超级换装
-            local number = SELFAQ.checkTargetRules("target")
-
-            if number then
-                SELFAQ.superEquipSuit(number)
-            end
-
-            -- 63+套装
-            if not AQSV.enable then
-                return
-            end
-
-            if not SELFAQ.inInstance() then
-                return
-            end
-
-            SELFAQ.checkAndFireChangeSuit("target")
+            SELFAQ.checkSelfTarget()
 
         end
 
     end)
 end
 
+SELFAQ.checkSelfTarget = function()
+    
+    -- 自动骑乘判断
+    if AQSV.pauseAccWhenTarget then
+
+        if not UnitIsDead("target") and not UnitIsFriend("player", "target") then
+            SELFAQ.targetEnemy = true
+        else
+            SELFAQ.targetEnemy = false
+        end
+
+        if GetUnitName("target") == nil then
+            SELFAQ.targetEnemy = false
+        end
+    else
+        SELFAQ.targetEnemy = false
+    end
+
+    if AQSV.pauseAccWhenTargetFriend then
+
+        if not UnitIsDead("target") and UnitIsFriend("player", "target") then
+            SELFAQ.targetFriend = true
+        else
+            SELFAQ.targetFriend = false
+        end
+
+        if GetUnitName("target") == nil then
+            SELFAQ.targetFriend = false
+        end
+    else
+        SELFAQ.targetFriend = false
+    end
+
+    -- 目标是亡灵
+    if true then
+        if not UnitIsDead("target") and UnitCreatureType("target") == "亡灵" then
+            SELFAQ.targetUndead = true
+        else
+            SELFAQ.targetUndead = false
+        end
+
+        if GetUnitName("target") == nil then
+            SELFAQ.targetUndead = false
+        end
+    end
+
+    -- 目标不是亡灵
+    if true then
+        -- 目标活着，并且不是友善的，不是亡灵
+        if not UnitIsDead("target") and not UnitIsFriend("player", "target") and not (UnitCreatureType("target") == "亡灵") then
+            SELFAQ.targetNotUndead = true
+        else
+            SELFAQ.targetNotUndead = false
+        end
+
+        if GetUnitName("target") == nil then
+            SELFAQ.targetNotUndead = false
+        end
+    end
+
+
+    -- 超级换装
+    local number = SELFAQ.checkTargetRules("target")
+
+    if number then
+        SELFAQ.superEquipSuit(number)
+    end
+
+    -- 63+套装
+    if not AQSV.enable then
+        return
+    end
+
+    if not SELFAQ.inInstance() then
+        return
+    end
+
+    SELFAQ.checkAndFireChangeSuit("target")
+end
 
 SELFAQ.main:SetScript("OnUpdate", SELFAQ.onMainUpdate)

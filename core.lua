@@ -35,9 +35,17 @@ function SELFAQ.addonInit()
 end
 
 function SELFAQ.updateAllItems( )
+    -- 检查pvp饰品
     for k,v in pairs(SELFAQ.pvpSet) do
         if GetItemCount(v) > 0 then
             table.insert(SELFAQ.pvp, v)
+        end
+    end
+
+    SELFAQ.undeadTrinket = 0
+    for k,v in pairs({13209, 19812}) do
+        if GetItemCount(v) > 0 then
+            SELFAQ.undeadTrinket = v
         end
     end
     
@@ -48,7 +56,7 @@ function SELFAQ.updateAllItems( )
     SELFAQ.checkItems()
 end
 
-function aq_test( )
+function aetest( )
 
     -- local t1 = loadstring("function t2() print(1234) end")
 
@@ -99,20 +107,21 @@ function aq_test( )
 
     -- print(GetUnitName("target"))
 
-    -- local name, type, difficultyIndex, difficultyName, maxPlayers,
-    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
-    -- print(name, type, difficultyIndex, difficultyName, maxPlayers,
-    -- dynamicDifficulty, isDynamic, instanceMapId, lfgID)
+    print(name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID)
 
     -- print(GetItemCooldown(21180))
-    -- print(GetSpellInfo(25891))
+    -- print(GetSpellInfo(1973))
 
     -- print(SELFAQ.getItemLevel(21180))
     -- SELFAQ.putSuit2Bank(4)
-    print(GetItemTexture(19339))
+    -- print(GetItemTexture(19339))
     -- debug(GetNumBankSlots())
 
+    -- debug(UnitCreatureType("target"))
 end
 
 SELFAQ.buildBlockTable =function()
@@ -481,7 +490,9 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
 
     -- 如果当前饰品可用，或者剩余时间30秒之内，取消CD锁
     -- 主动换饰品后，延迟5秒判断，避免出现实际判断的是上一个饰品
-    if (slot["duration"] <= 30 or slot["rest"] <30) and (GetTime() - AQSV.slotStatus[slot_id].lockedTime) > 5  then
+    -- 增加cd锁判断，避免一直取消cd锁
+    if (slot["duration"] <= 30 or slot["rest"] <30) and (GetTime() - AQSV.slotStatus[slot_id].lockedTime) > 5 and AQSV.slotStatus[slot_id].lockedCD then
+        debug("unlock cd")
         AQSV.slotStatus[slot_id].lockedCD = false
         AQSV.slotStatus[slot_id].lockedTime = 0
     end
@@ -846,6 +857,25 @@ function SELFAQ.changeTrinket()
         end
     end
 
+    -- 处理银色黎明饰品
+    -- if SELFAQ.targetUndead then
+
+    --     if slot13["id"] ~= 13209 or slot14["id"] ~= 13209 then
+
+    --         if not slot13["busy"] and 13209 ~= slot13["id"] then
+    --             AddonEquipItemByName(13209, 13)
+    --             slot13["busy"] = true
+    --         end
+
+    --         if not slot14["busy"] and 13209 ~= slot14["id"] then
+    --             AddonEquipItemByName(13209, 14)
+    --             slot14["busy"] = true
+    --         end
+
+    --     end
+
+    -- end
+
     -- 遍历发现没有可用的主动饰品，则更换被动饰品
 
     if AQSV.enableFixedPosition then
@@ -854,14 +884,31 @@ function SELFAQ.changeTrinket()
             AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
         end
 
-        if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
-            AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
+        if (AQSV.enableTargetUndead and SELFAQ.targetUndead 
+            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxxStsmTL() and not SELFAQ.targetNotUndead) ) 
+            and SELFAQ.undeadTrinket > 0 then
+            if not slot14["busy"] and SELFAQ.undeadTrinket ~= slot14["id"] then
+                AddonEquipItemByName(SELFAQ.undeadTrinket, 14)
+            end
+        else
+            if not slot14["busy"] and AQSV.slotStatus[14].backup ~= slot14["id"] and AQSV.slotStatus[14].backup >0 then
+                AddonEquipItemByName(AQSV.slotStatus[14].backup, 14)
+            end
         end
 
     else
         -- 备选饰品优先级模式
         local b1 = AQSV.slotStatus[13].backup
         local b2 = AQSV.slotStatus[14].backup
+
+        -- 银色黎明自动换
+        if (AQSV.enableTargetUndead and SELFAQ.targetUndead 
+            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxxStsmTL() and not SELFAQ.targetNotUndead) ) 
+            and SELFAQ.undeadTrinket > 0 then
+
+            b2 = b1
+            b1 = SELFAQ.undeadTrinket
+        end
 
         if b1 >0 and b1 ~= slot13["id"] and b1 ~= slot14["id"] then
              if not slot13["busy"] then

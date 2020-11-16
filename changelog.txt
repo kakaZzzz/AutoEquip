@@ -11,6 +11,16 @@ Todo:
 
 ---
 
+v5.13
+
+1. 修复一个小地图图标的报错，并且添加隐藏选项
+2. 修复一些小Bug
+
+1. Fix a bug about minimap icon, and add an option to hide the icon
+2. Fix some minor bugs
+
+---
+
 v5.12
 
 1. 右键点击装备栏可以加锁

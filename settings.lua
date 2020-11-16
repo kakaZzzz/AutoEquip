@@ -463,6 +463,74 @@ function SELFAQ.settingInit()
             height = SELFAQ.lastHeightQueue-(45 + k*35)
         end
 
+        -- naxx
+        if slot_id == 13 then
+
+            height = height - 43
+
+            do
+                local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
+                t:SetText(L["NAXX / Argent Dawn:"] )
+                t:SetPoint("TOPLEFT", queueFrame, 25, height)
+            end
+
+            if SELFAQ.undeadTrinket == 0 then
+
+                do
+                    local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                    l:SetText(L["<There is no suitable trinkets>"])
+                    l:SetPoint("TOPLEFT", queueFrame, 25, height - 35)
+                end
+
+                height = height - 35
+
+            else
+
+                do
+                    local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
+                    l:SetText(L["Insert "]..GetItemLink(SELFAQ.undeadTrinket))
+                    l:SetPoint("TOPLEFT", queueFrame, 25, height-  35)
+                end
+
+                -- 副本里
+                do
+                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                    b:SetPoint("TOPLEFT", queueFrame, 20, height - 60)
+                    b:SetChecked(AQSV.enableInUndeadInstance)
+
+                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                    b.text:SetText(L["Enable Raid checkbox / Automatic switch to Raid queue in Instance"])
+                    b:SetScript("OnClick", function()
+                        
+                        AQSV.enableInUndeadInstance = not AQSV.enableInUndeadInstance
+                        b:SetChecked(AQSV.enableInUndeadInstance)
+
+                        for k,v in pairs(f.raidCheckbox) do
+
+                            for k1,v1 in pairs(v) do
+                                
+                                if AQSV.enableRaidQueue then
+                                    v1:Enable()
+                                    v1.dtext:Hide()
+                                    v1.text:Show()
+                                else
+                                    v1:Disable()
+                                    v1.dtext:Show()
+                                    v1.text:Hide()
+                                end
+
+                            end
+                        end
+
+
+                    end)
+                end
+
+            end
+
+        end
+
         SELFAQ.lastHeightQueue = height - 43
 
     end
@@ -564,11 +632,11 @@ function SELFAQ.settingInit()
         line:SetBackdropColor(0.8,0.8,0.8,0.8);
     end
 
-    buildCheckbox(L["Enable AutoEquip function"], "enable", -60)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable AutoEquip function"]), "enable", -60)
 
     buildLine(-95+3)
 
-    buildCheckbox(L["Enable Equipment Bar"], "enableItemBar", -85-10)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Equipment Bar"]), "enableItemBar", -85-10)
     buildCheckbox(L["Lock frame"], "locked", -85-10, 190)
     buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110-10, 190)
 
@@ -647,7 +715,7 @@ function SELFAQ.settingInit()
 
     buildLine(otherHight+3)
 
-    buildCheckbox(L["Enable Buff Alert"], "enableBuff", otherHight)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Buff Alert"]), "enableBuff", otherHight)
     buildCheckbox(L["Lock frame"], "buffLocked", otherHight, 190)
 
     do
@@ -693,7 +761,7 @@ function SELFAQ.settingInit()
 
     otherHight = -265
 
-    buildCheckbox(L["Separate Quick Button and move it separately (Need reload UI)"], "splitQuickButton", otherHight)
+    buildCheckbox(SELFAQ.color("FF4500", L["Separate Quick Button and move it separately (Need reload UI)"]), "splitQuickButton", otherHight)
     buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight-25)
 
     buildLine(-262)
@@ -743,10 +811,11 @@ function SELFAQ.settingInit()
 
     otherHight = -365
 
-    buildCheckbox(L["Enable Quick Equip on charactor panel (Need reload UI)"], "enableQuickEquip", otherHight)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Quick Equip on charactor panel (Need reload UI)"]), "enableQuickEquip", otherHight)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Minimap Icon (Need reload UI)"]), "enableMinimapIcon", otherHight-25)
     buildLine(otherHight+3)
 
-    otherHight = otherHight - 45 - 15
+    otherHight = otherHight - 45 - 15 -25
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -778,8 +847,8 @@ function SELFAQ.settingInit()
 
     otherHight = otherHight-25
 
-    buildCheckbox(L["enable_carrot"], "enableCarrot", otherHight)
-    buildCheckbox(L["enable_swim"], "enableSwim", otherHight-25)
+    buildCheckbox(SELFAQ.color("FF4500", L["enable_carrot"]), "enableCarrot", otherHight)
+    buildCheckbox(SELFAQ.color("FF4500", L["enable_swim"]), "enableSwim", otherHight-25)
 
     buildLine(otherHight-60+3)
 
@@ -996,7 +1065,6 @@ function SELFAQ.settingInit()
         end)
 
         SELFAQ.buffs = SELFAQ.comma2Table(AQSV.buffNames)
-        -- debug(SELFAQ.buffs)
     end
 
     SELFAQ.lastHeight = SELFAQ.lastHeight - 160

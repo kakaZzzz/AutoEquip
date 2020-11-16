@@ -566,8 +566,22 @@ SELFAQ.getItemLevel = function(item_id)
         return "|cff0070dd"..itemLevel.."|r"
     elseif itemRarity == 2 then
         return "|cff1eff00"..itemLevel.."|r"
-    else
+    elseif itemRarity == 1 then
         return "|cffffffff"..itemLevel.."|r"
+    else
+        return ""
     end
 
+end
+
+SELFAQ.inNaxxStsmTL = function()
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+
+    -- naxx应该是533，待验证
+    if instanceMapId == 329 or instanceMapId == 1007 or instanceMapId == 533 then
+        return true
+    else
+        return false
+    end
 end

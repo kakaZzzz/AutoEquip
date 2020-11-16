@@ -322,11 +322,12 @@ function SELFAQ.createItemButton( slot_id, position )
     -- 显示快捷键
 
 	local stext = tf:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-	stext:SetFont(STANDARD_TEXT_FONT, 13, "OUTLINE")
+	stext:SetFont(STANDARD_TEXT_FONT, 12, "OUTLINE")
 	-- stext:SetTextColor(255,255,255)
 	-- text:SetShadowColor(0, 0, 0, 1)
 	-- text:SetShadowOffset(1, -1)
-	stext:SetText("ASJ")
+	-- stext:SetText("ASJ")
+    -- stext:SetFrameLevel(7)
     stext:SetPoint("BOTTOMLEFT", button, 1, 1)
     stext:Hide()
     
@@ -387,7 +388,7 @@ function SELFAQ.createItemButton( slot_id, position )
 	-- 自动队列开关显示
     local icon = CreateFrame("Frame", nil, button)
     -- 设0不成功
-    icon:SetSize(15, 15)
+    icon:SetSize(12, 12)
     icon:SetPoint("BOTTOMRIGHT", button, 0, 2)
     icon:SetFrameLevel(4)
 

@@ -1,11 +1,10 @@
 
 assert(LibStub, "LibDataBroker-1.1 requires LibStub")
 assert(LibStub:GetLibrary("CallbackHandler-1.0", true), "LibDataBroker-1.1 requires CallbackHandler-1.0")
-print(23232)
+
 local lib, oldminor = LibStub:NewLibrary("LibDataBroker-1.1", 4)
 if not lib then return end
 oldminor = oldminor or 0
-print(1213)
 
 lib.callbacks = lib.callbacks or LibStub:GetLibrary("CallbackHandler-1.0"):New(lib)
 lib.attributestorage, lib.namestorage, lib.proxystorage = lib.attributestorage or {}, lib.namestorage or {}, lib.proxystorage or {}
