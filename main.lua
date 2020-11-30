@@ -222,6 +222,8 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableTargetUndead = initSV(AQSV.enableTargetUndead, true)
             AQSV.enableInUndeadInstance = initSV(AQSV.enableInUndeadInstance, true)
 
+            AQSV.undeadPosition = initSV(AQSV.undeadPosition, 1)
+
             if not AQSV.enableMinimapIcon then
                 icon:Hide("MiniIcon")
             end

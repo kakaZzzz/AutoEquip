@@ -574,12 +574,24 @@ SELFAQ.getItemLevel = function(item_id)
 
 end
 
-SELFAQ.inNaxxStsmTL = function()
+SELFAQ.inNaxx = function()
     local name, type, difficultyIndex, difficultyName, maxPlayers,
     dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
     -- naxx应该是533，待验证
-    if instanceMapId == 329 or instanceMapId == 1007 or instanceMapId == 533 then
+    if instanceMapId == 533 then
+        return true
+    else
+        return false
+    end
+end
+
+SELFAQ.inStsmTL = function()
+    local name, type, difficultyIndex, difficultyName, maxPlayers,
+    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
+    
+    -- naxx应该是533，待验证
+    if instanceMapId == 329 or instanceMapId == 289 then
         return true
     else
         return false

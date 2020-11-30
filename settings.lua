@@ -470,7 +470,7 @@ function SELFAQ.settingInit()
 
             do
                 local t = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-                t:SetText(L["NAXX / Argent Dawn:"] )
+                t:SetText(L["NAXX / Argent Dawn Trinket:"] )
                 t:SetPoint("TOPLEFT", queueFrame, 25, height)
             end
 
@@ -487,45 +487,91 @@ function SELFAQ.settingInit()
             else
 
                 do
+
+                    function Undead_Init(self,level)
+                        level = level or 1;
+                        if (level == 1) then
+                            for i=1,2 do
+                                
+                                local number = i
+
+                                local info = UIDropDownMenu_CreateInfo();
+                               info.text = L["Priority "]..number
+                               info.value = number
+
+                               info.func = function( frame )
+                                    current = number
+                                    UIDropDownMenu_SetSelectedValue(queueFrame.undeadDropdown, number, 0)
+                                    UIDropDownMenu_SetText(queueFrame.undeadDropdown, L["Priority "]..number) 
+
+                                    -- 更新页面中的数据
+                                    AQSV.undeadPosition = number
+                               end
+
+                               UIDropDownMenu_AddButton(info, level)
+
+                            end
+                        end
+                    end
+
+                    local dropdown = CreateFrame("Frame", nil, queueFrame, "UIDropDownMenuTemplate")
+
+                    dropdown:SetPoint("TOPLEFT", 6, height-  30)
+
+                    queueFrame.undeadDropdown = dropdown
+
+                    UIDropDownMenu_SetButtonWidth(dropdown, 70)
+                    UIDropDownMenu_Initialize(dropdown, Undead_Init)
+
+                    -- 默认显示第一套
+                    UIDropDownMenu_SetSelectedValue(dropdown, AQSV.undeadPosition, 0)
+                    UIDropDownMenu_SetText(dropdown, L["Priority "]..AQSV.undeadPosition)
+                    
+                    UIDropDownMenu_SetWidth(dropdown, 70)
+                    UIDropDownMenu_JustifyText(dropdown, "LEFT")
+
+                end
+
+                do
                     local l = queueFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-                    l:SetText(L["Insert "]..GetItemLink(SELFAQ.undeadTrinket))
-                    l:SetPoint("TOPLEFT", queueFrame, 25, height-  35)
+                    l:SetText(L["Select the position to insert "]..GetItemLink(SELFAQ.undeadTrinket))
+                    l:SetPoint("TOPLEFT", queueFrame, 120, height-  35)
                 end
 
                 -- 副本里
                 do
                     local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
-                    b:SetPoint("TOPLEFT", queueFrame, 20, height - 60)
+                    b:SetPoint("TOPLEFT", queueFrame, 25, height - 65)
                     b:SetChecked(AQSV.enableInUndeadInstance)
 
                     b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
                     b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
-                    b.text:SetText(L["Enable Raid checkbox / Automatic switch to Raid queue in Instance"])
+                    b.text:SetText(L["Enable in Naxxramas / Scholomance / Stratholme"])
+                    b.text1 = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text1:SetPoint("LEFT", b, "RIGHT", 0, -20)
+                    b.text1:SetText(L["(Disable automatically when the target is not undead is NAXX)"])
                     b:SetScript("OnClick", function()
-                        
                         AQSV.enableInUndeadInstance = not AQSV.enableInUndeadInstance
                         b:SetChecked(AQSV.enableInUndeadInstance)
-
-                        for k,v in pairs(f.raidCheckbox) do
-
-                            for k1,v1 in pairs(v) do
-                                
-                                if AQSV.enableRaidQueue then
-                                    v1:Enable()
-                                    v1.dtext:Hide()
-                                    v1.text:Show()
-                                else
-                                    v1:Disable()
-                                    v1.dtext:Show()
-                                    v1.text:Hide()
-                                end
-
-                            end
-                        end
-
-
                     end)
                 end
+
+                -- 副本外
+                do
+                    local b = CreateFrame("CheckButton", nil, queueFrame, "UICheckButtonTemplate")
+                    b:SetPoint("TOPLEFT", queueFrame, 25, height - 110)
+                    b:SetChecked(AQSV.enableTargetUndead)
+
+                    b.text = b:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+                    b.text:SetPoint("LEFT", b, "RIGHT", 0, 0)
+                    b.text:SetText(L["Enable when the target is undead out of instance"])
+                    b:SetScript("OnClick", function()
+                        AQSV.enableTargetUndead = not AQSV.enableTargetUndead
+                        b:SetChecked(AQSV.enableTargetUndead)
+                    end)
+                end
+
+                height = height - 120
 
             end
 

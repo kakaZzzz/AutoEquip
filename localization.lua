@@ -266,6 +266,12 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["More:"] = "更多:"
 
 	L["Enable Minimap Icon (Need reload UI)"] = "启用小地图图标（需要重载UI）"
+
+	L["Enable in Naxxramas / Scholomance / Stratholme"] = "在 NAXX / STSM / TL 中启用"
+	L["(Disable automatically when the target is not undead is NAXX)"] = "(NAXX中目标不是亡灵时自动停用)"
+	L["Enable when the target is undead out of instance"] = "副本外目标是亡灵时启用"
+	L["Select the position to insert "] = "选择位置插入"
+	L["NAXX / Argent Dawn Trinket:"] = "NAXX/银色黎明饰品:"
 end
 
 if locale == 'koKR' then

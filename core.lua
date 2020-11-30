@@ -43,7 +43,7 @@ function SELFAQ.updateAllItems( )
     end
 
     SELFAQ.undeadTrinket = 0
-    for k,v in pairs({13209, 19812}) do
+    for k,v in pairs({13209, 19812, 23206, 23207}) do
         if GetItemCount(v) > 0 then
             SELFAQ.undeadTrinket = v
         end
@@ -880,13 +880,31 @@ function SELFAQ.changeTrinket()
 
     if AQSV.enableFixedPosition then
         -- 备选饰品固定位置
-        if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
-            AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
+        -- if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
+        --     AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
+        -- end
+
+        if (AQSV.enableTargetUndead and SELFAQ.targetUndead 
+            or (AQSV.enableInUndeadInstance and SELFAQ.inStsmTL() )
+            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxx() and not SELFAQ.targetNotUndead) ) 
+            and SELFAQ.undeadTrinket > 0 
+            and AQSV.undeadPosition == 1
+            then
+            if not slot13["busy"] and SELFAQ.undeadTrinket ~= slot13["id"] then
+                AddonEquipItemByName(SELFAQ.undeadTrinket, 13)
+            end
+        else
+            if not slot13["busy"] and AQSV.slotStatus[13].backup ~= slot13["id"] and AQSV.slotStatus[13].backup >0 then
+                AddonEquipItemByName(AQSV.slotStatus[13].backup, 13)
+            end
         end
 
         if (AQSV.enableTargetUndead and SELFAQ.targetUndead 
-            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxxStsmTL() and not SELFAQ.targetNotUndead) ) 
-            and SELFAQ.undeadTrinket > 0 then
+            or (AQSV.enableInUndeadInstance and SELFAQ.inStsmTL() )
+            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxx() and not SELFAQ.targetNotUndead) ) 
+            and SELFAQ.undeadTrinket > 0 
+            and AQSV.undeadPosition == 2 
+            then
             if not slot14["busy"] and SELFAQ.undeadTrinket ~= slot14["id"] then
                 AddonEquipItemByName(SELFAQ.undeadTrinket, 14)
             end
@@ -900,14 +918,23 @@ function SELFAQ.changeTrinket()
         -- 备选饰品优先级模式
         local b1 = AQSV.slotStatus[13].backup
         local b2 = AQSV.slotStatus[14].backup
+        -- debug( SELFAQ.inStsmTL())
 
         -- 银色黎明自动换
         if (AQSV.enableTargetUndead and SELFAQ.targetUndead 
-            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxxStsmTL() and not SELFAQ.targetNotUndead) ) 
+            or (AQSV.enableInUndeadInstance and SELFAQ.inStsmTL() )
+            or (AQSV.enableInUndeadInstance and SELFAQ.inNaxx() and not SELFAQ.targetNotUndead) ) 
             and SELFAQ.undeadTrinket > 0 then
 
-            b2 = b1
-            b1 = SELFAQ.undeadTrinket
+            if AQSV.undeadPosition == 1 then
+                b2 = b1
+                b1 = SELFAQ.undeadTrinket
+            end
+
+            if AQSV.undeadPosition == 2 then
+                b2 = SELFAQ.undeadTrinket
+            end
+
         end
 
         if b1 >0 and b1 ~= slot13["id"] and b1 ~= slot14["id"] then

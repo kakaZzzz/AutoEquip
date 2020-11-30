@@ -6,7 +6,7 @@ local L = SELFAQ.L
 
 -- 配置 --
 
-SELFAQ.version = "v5.13"
+SELFAQ.version = "v5.14"
 
 -- SELFAQ.enableDebug = true          -- 调试开关
 SELFAQ.enableDebug = false          -- 调试开关

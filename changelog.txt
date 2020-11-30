@@ -11,6 +11,14 @@ Todo:
 
 ---
 
+v5.14
+
+1. 自动装备naxx/银色黎明饰品
+
+1. Auot-equip Naxx / Argent Dawn trinket
+
+---
+
 v5.13
 
 1. 修复一个小地图图标的报错，并且添加隐藏选项
