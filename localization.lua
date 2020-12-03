@@ -280,18 +280,19 @@ if locale == 'koKR' then
 	L["Enable"] = "사용"
 	L["Enable AutoEquip function"] = "자동 전환 기능 켜기"
 	L["Automatic switch to PVP queue in Battleground"] = "전장에서 PVP 대기열로 자동 전환"
-	L["enable_carrot"] = "말타기 장비|cff1eff00[당근 달린 지팡이]|r|cff1eff00[미스릴 박차]|r|cffffffff[조련술-마부]|r（전장 / 던전에서 효과적이지 않음）"
-	L["enable_swim"] = "수영 장비|cff0070dd[수력지팡이]|r|cff1eff00[감청색 비단 허리띠]|r|cff1eff00[고급 잠수용 보호모]|r（전장 / 던전에서 효과적이지 않음）"
+	L["enable_carrot"] = "말타기 장비|cff1eff00[당근 달린 지팡이]|r|cff1eff00[미스릴 박차]|r|cffffffff[조련술-마부]|r (인던 비적용）"
+	L["enable_swim"] = "수영 장비|cff0070dd[수력지팡이]|r|cff1eff00[감청색 비단 허리띠]|r|cff1eff00[고급 잠수용 보호모]|r（인던 비적용）"
 	L["Disable Slot 2"] = "장신구2 비활성화 (최고탬을 고정으로 사용할때, 예시>\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[넬타리온의 눈물]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "현재 장착 된 아이템이 있더라도 우선 순위에 따라 아이템을 장착해야합니다."
 	L["Item queue is displayed above the Equipment Bar"] = "장비 바 위에 아이템 대기열이 표시됩니다"
-	L["In combat |cFF00FF00shift + left-click|r equipment button to display the items list"] = "전투중|cFF00FF00장비 버튼을 Shift+좌클릭|r하여 이이탬 록록 표시"
+	L["In combat |cFF00FF00shift + left-click|r equipment button to display the item list"] = "전투중|cFF00FF00장비 버튼을 Shift+좌클릭|r하여 이이탬 목록이 표시"
+	L["Hide item level on the item list (Need reload UI)"] = "장비 목록에서 아이템 레벨 숨기기（UI리로드 필요）"
 	L["Show simple tooltip (only item name)"] = "간단한 툴팁 표시（아이템 이름만）"
 	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"] = "|cffffffff<네파리안의 둥지>|r에 들어갈 때 |cff0070dd[오닉시아 비늘 망토]|r 착용"
 	L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"] = "|cff0070dd[오닉시아 비늘 망토]|r자동장착시 공격대 채널에서 알림"
 
-	L["#Don't change cloak when you are in Nefarian's Lair"] = "#네파리안의 둥지에 들어가면 망토 바꾸지 않는다"
-
+	L["#Don't change cloak when you are in Nefarian's Lair"] = "#네파리안의 둥지에 들어가면 망토는 바꾸지 않는다"
+	
 	L["Expand Settings"] = "설정옵션목록"
 
 	L["Reload UI"] = "리로드 UI"
@@ -300,12 +301,12 @@ if locale == 'koKR' then
 	L["Usable Trinkets:"] = "사용 장신구:"
 	L["Resident Trinkets:"] = "고정 장신구:"
 	
-	L["No. "] = "우선순위"
-	L["Priority "] = "선순위"
-	L["Slot "] = "장신구 자리"
+	L["No. "] = "No. "
+	L["Priority "] = "우선순위 "
+	L["Slot "] = "장신구자리 "
 
 	L["Trinkets"] = "장신구"
-	L["Usable "] = "사용효과"
+	L["Usable "] = "사용효과 "
 	L["Backup (Be equiped when usable items are all on CD):"] = "백업 (사용 가능한 항목이 모두 CD에있을 때 장착):"
 
 	L["<There is no suitable trinkets>"] = "<적합한 장신구 없음>"
@@ -379,7 +380,7 @@ if locale == 'koKR' then
 	L["Finger "] = "반지"
 	L["Trinket "] = "장신구"
 	L["Back"] = "망토"
-	L["MainHand"] = "장장비"
+	L["MainHand"] = "주장비"
 	L["OffHand"] = "보조장비"
 	L["Ranged"] = "원거리"
 
@@ -390,8 +391,8 @@ if locale == 'koKR' then
 	L["Suit for 63+"] = "63+세트"
 	L["Usable Queue"] = "능동 대열"
 
-	L["[Enable] Equip customized suit when you target lv.63 elite or lv.?? boss"] = "[사용]목표가 63 레벨 엘리트 또는 보스 인 경우 사용자세팅 장비를 착용합니다."
-	L["Equip suit when more than 1 raid members target lv.63 elite or boss"] = "팀원 중 1 명 이상이 레벨 63 엘리트 또는 보스를 목표로 할 때 장비 세트를 착용하십시오."
+	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"] = "[사용]|cffffffff당신이|rlv.63 엘리트 또는 lv.??Boss를 목표로 할 때, 대응장비세트"
+	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"] = "1인 이상의|cffffffff구성원이|r lv.63 엘리트 또는 Boss 를 타겟으로 할 때, 대응장비세트"
 	L["Automatic equip Suit "..L[60].." when you leave combat"] = "전장으로 떠날때 "..L[60].."장비 세트 장착"
 	L["#The following options only take effect in instance"] = "#다음 옵션은 인던에서만 적용됩니다."
 	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "Lv.63 이하 적을 목표로 할 때"..L[60].."착용 세트"
@@ -461,7 +462,7 @@ if locale == 'koKR' then
     L["AutoEquip |cFF00FF00ON|r/|cFFFF0000OFF|r"] = "자동 변경|cFF00FF00켜기|r/|cFFFF0000끄기|r"
     L["Hide quick button"] = "단축 버튼 숨기기"
     L["<AutoEquip> Equiped "] = "<AutoEquip> 설치됨"
-    L["Raid member's target (>1)"] = true
+    L["Raid member's target (>1)"] = "레이드 맴버 타겟지정 (>1)"
     L["Format - ItemName,ItemName"] = "형식 - 장비명,장비명"
     L["Format - BossName,BossName"] = "형식 - 보스이름,보스이름"
     L["|cFFFF0000In combat|r"] = "|cFFFF0000전투중|r"
@@ -471,7 +472,7 @@ if locale == 'koKR' then
     L["Disable the takeoff quick button"] = "원클릭 장비벗기 버튼 사용안함"
     L["|cFF00FF00Takeoff|r all equipments"] = "|cFF00FF00모든 장비 벗기|r"
 
-    L["Fixed position: Priority 1 = Slot 1, Priority 2 = Slot 2"] = "고정 위치: 우선순위 1 = 장신구 1, 우선순위 2 = 장신구 2"
+    L["Fixed position: Priority 1 = Slot 1, Priority 2 = Slot 2"] = "고정위치: 우선1 = 장신구1, 우선2 = 장신구2"
     L["Trinket Slot:"] = "장신구 자리"
 
    	L["Unlock:"] = "잠금해제:"
@@ -483,19 +484,34 @@ if locale == 'koKR' then
 	L["Buff Alert"] = "버프 알림"
 	L["-- Reset equipment bar position"] = "-- 장비 슬롯 위치 재설정"
 
-	L["Auto Acceleration Function:"] = "이속장비 자동착용 기능:"
-	L["Takeoff [Acceleration Items] when |cffffffffYou|r target an enemy"] = "|cffffffff자신이|r 적대적인 목표를 타겟으로하면 [이속아이템]을 벗는다."
-	L["Takeoff [Acceleration Items] when |cffffffffRaid members|r target enemies"] = "|cffffffff레이드 팀원이|r 적을 목표로하면 [이속 아이템]을 벗는다."
-	L["When equipment bar is locked, those 2 functions also take effect"] = "장비 바가 잠기도 위의 두 기능도 적용."
-	L["In Instance and Battleground, enable those 2 functions"] = "인던 및 전장에서 이 두 기능을 적용."
-	L["In TAQ, enable Riding Acceleration function"] = "안퀴라즈 던전에서 위의 2 가지 기능을 적용."
+	L["Auto Acceleration Function:"] = "[이속아이템] 자동착용 기능:"
+	L["When |cffffffffYou|r target an |cFFFF0000enemy|r, takeoff acceleration items"] = "|cffffffff당신이|r |cFFFF0000공격할 수 있는 적을|r 타겟하면 [이속아이템]을 교체한다."
+	L["When |cffffffffYou|r target a |cFF00FF00friend|r, takeoff acceleration items"] = "|cffffffff당신이|r |cFF00FF00아군를|r 타겟하면 [이속아이템]을 교체한다."
+	L["When |cffffffffRaid members|r target |cFFFF0000enemies|r, takeoff acceleration items"] = "|cffffffff레이드 팀원이|r |cFFFF0000적을|r대상(타겟)으로 지정할 때, [이속아이템]을 교체한다."
+	L["When equipment bar is locked, Auto Acceleration function also takes effect"] = "장비 바가 잠기면,자동 가속 기능도 적용됨."
+	L["In Instance and Battleground, enable Auto Acceleration function"] = "인던 및 전장에서 [이속아이탬] 자동교체 사용."
+	L["In TAQ, enable Auto Acceleration function"] = "안퀴라즈 던전안에서 [이속아이탬] 자동교체 사용"
 
-	L["Separate Quick Button and move it separately (Nedd reload UI)"] = "[퀵 버튼]을 분리하여 사용할 수 있습니다. |cffffffff(UI 리로드 필요)|r"
+	L["Separate Quick Button and move it separately (Need reload UI)"] = "[퀵 버튼] 을 분리 하여 사용할수 있습니다. (UI 리로드 필요)"
 	L["Lock frame in Settings"] = "설정 프레임을 잠금"
 
 	L["-- Takeoff all equipments"] = "-- 모든장비 벗기"
 	L["-- Reset quick button position after separation"] = "-- 분리된 단축 버튼 위치 재설정"
 
 	L["Click Left button to equip trinket 1, Right button trinket 2"] = "왼쪽 버튼 클릭으로 장신구 1, 오른쪽 버튼 장신구 2 착용 합니다."
-	L["Enable Quick Equip on charactor panel (Nedd reload UI)"] = " 특정패널을 가동하여 빠른 장착 사용.|cffffffff(UI 리로드 필요)|r"
+	L["Enable Quick Equip on charactor panel (Need reload UI)"] = "특정패널을 가동하여 빠른 장착 사용.(UI 리로드 필요)"
+	
+	L["Tutorial:"] = "튜토리얼 (중국어-구글 번역기능 활용):"
+	L["Press Ctrl+C to copy the link. Paste it into browser and open it."] = "Ctrl + C를 눌러 링크를 복사하고 브라우저에 붙여 넣어 엽니다.\n\n  ※ 구글로 접속 후 한글 번역하여 보면 친절한 설명이 보입니다."
+
+	L["Equipment Bar:"] = "장비 바:"
+	L["More:"] = "더보기"
+
+	L["Enable Minimap Icon (Need reload UI)"] = "미니맵아이콘 사용（UI 리로드 필요）"
+
+	L["Enable in Naxxramas / Scholomance / Stratholme"] = "낙스라마스 / 스트라솔름 / 스칼로맨스 에서 사용함"
+	L["(Disable automatically when the target is not undead is NAXX)"] = "(낙스라마스에서는 대상이 언데드가 아닌 경우 변경 안됨.)"
+	L["Enable when the target is undead out of instance"] = "인던 안에서 타겟이 언데드 일경우 장비 변경"
+	L["Select the position to insert "] = "착용 할 위치 선택"
+	L["NAXX / Argent Dawn Trinket:"] = "낙스라마스 / 은빛 여명회 장신구:"
 end

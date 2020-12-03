@@ -11,6 +11,16 @@ Todo:
 
 ---
 
+v5.15
+
+1. 支持1.13.6
+2. 更新韩语本地化文件
+
+1. Support 1.13.6
+2. Update Korean localization files
+
+---
+
 v5.14
 
 1. 自动装备naxx/银色黎明饰品
