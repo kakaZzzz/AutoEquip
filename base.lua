@@ -102,7 +102,7 @@ SELFAQ.findItemsOrder = function( id )
         for index=1,count do
 
             if not find then
-                local fid = (index-1)*100000 + id
+                local fid = (index-1)*1000000 + id
                 -- print(SELFAQ.itemInBags[fid])
 
                 if SELFAQ.itemInBags[fid] == nil then
@@ -115,7 +115,7 @@ SELFAQ.findItemsOrder = function( id )
 
     end
 
-    return 100000*(order-1) + id
+    return 1000000*(order-1) + id
 
 end
 
@@ -125,8 +125,8 @@ SELFAQ.reverseId = function( id )
         return 0,0
     end
     
-    local order = math.floor(id/100000)
-    local rid = id%100000
+    local order = math.floor(id/1000000)
+    local rid = id%1000000
 
     return rid, order
 
@@ -250,12 +250,12 @@ SELFAQ.GetItemLink = function( id )
     end
     local _, link = GetItemInfo(id)
 
-    if order >0 then
-        link = link.."#"..order
-    end
-
     if link == nil then
         return ""
+    end
+
+    if order >0 then
+        link = link.."#"..order
     end
 
     return link
@@ -396,7 +396,7 @@ SELFAQ.equipByID = function(item_id, slot_id, popup)
         popup = true
     end
 
-    if item_id > 100000 then
+    if item_id > 1000000 then
         local bag,slot = SELFAQ.reverseBagSlot(item_id)
 
         if bag == -1 then

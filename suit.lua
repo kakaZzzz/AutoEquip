@@ -229,7 +229,7 @@ function SELFAQ.suitInit()
                         if v == 12 or v == 14 or v == 17 then
                             -- 保存60装备，只能取到item id，因此判断多槽位，如果id一样，则取到第二个
                             if wait60 == AQSV.suit[60][v-1] then
-                                order = 100000
+                                order = 1000000
                             end
 
                         end

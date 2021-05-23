@@ -6,7 +6,7 @@ local L = SELFAQ.L
 
 -- 配置 --
 
-SELFAQ.version = "v5.14"
+SELFAQ.version = "v5.16"
 
 -- SELFAQ.enableDebug = true          -- 调试开关
 SELFAQ.enableDebug = false          -- 调试开关
@@ -16,9 +16,9 @@ SELFAQ.init = false
 -- 获取当前角色名字
 SELFAQ.player = UnitName("player")
 
-if SELFAQ.player == "卡法" or SELFAQ.player == "卡卡咔" or SELFAQ.player == "水猎"  then
-	SELFAQ.enableDebug = true          -- 调试开关
-end
+-- if SELFAQ.player == "卡法" or SELFAQ.player == "卡卡咔" or SELFAQ.player == "水猎" or SELFAQ.player == "砍大山"  then
+-- 	SELFAQ.enableDebug = true          -- 调试开关
+-- end
 
 -- 构建下拉框组时，记录纵坐标
 
