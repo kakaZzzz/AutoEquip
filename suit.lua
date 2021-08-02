@@ -23,12 +23,12 @@ function SELFAQ.suitInit()
     SELFAQ.suitOption = f
     f.checkbox = {}
     f.dropdown = {
-        [63] = {},
-        [64] = {},
-        [60] = {}
+        [73] = {},
+        [74] = {},
+        [70] = {}
     }
 
-    p.name = L["Suit for 63+"]
+    p.name = L["Suit for 73+"]
     p.parent = "AutoEquip"
 
 
@@ -51,8 +51,8 @@ function SELFAQ.suitInit()
         end
 
         local count = 0
-        local level63 = 0
-        local level64 = 0
+        local level73 = 0
+        local level74 = 0
 
         -- print(SELFAQ.needSuit)
         
@@ -70,14 +70,14 @@ function SELFAQ.suitInit()
 
                     local level = UnitLevel(target)
 
-                    if level == 63 and not UnitIsFriend("player", target)  then
-                    -- if level == 60 or level == 62 or level == 61 then
-                       level63 = level63 + 1
+                    if level == 73 and not UnitIsFriend("player", target)  then
+                    -- if level == 70 or level == 72 or level == 71 then
+                       level73 = level73 + 1
                    end
                     
                     if level == -1 and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
-                    -- elseif level == 61 then
-                        level64 = level64 + 1
+                    -- elseif level == 71 then
+                        level74 = level74 + 1
                     end
 
                 end
@@ -87,25 +87,25 @@ function SELFAQ.suitInit()
         end
 
 
-        -- local ratio63 = 0
-        -- local ratio64 = 0
+        -- local ratio73 = 0
+        -- local ratio74 = 0
 
-        -- if level63 > 0 then
-        --     ratio63 = level63 / count
+        -- if level73 > 0 then
+        --     ratio73 = level73 / count
         -- end
         
-        -- if level64 >0 then
-        --     ratio64 = level64 / count
+        -- if level74 >0 then
+        --     ratio74 = level74 / count
         -- end
 
         -- 团队里有一定人数目标为xx，才切换
 
-        if level63 > AQSV.raidTargetThreshold and level63 > level64 then
-                SELFAQ.needSuit = 63
+        if level73 > AQSV.raidTargetThreshold and level73 > level74 then
+                SELFAQ.needSuit = 73
         end
 
-        if level64 > AQSV.raidTargetThreshold and level64 > level63 then
-                SELFAQ.needSuit = 64
+        if level74 > AQSV.raidTargetThreshold and level74 > level73 then
+                SELFAQ.needSuit = 74
         end
 
 
@@ -119,18 +119,18 @@ function SELFAQ.suitInit()
             return false
         end
 
-        local boss = 60
+        local boss = 70
 
-        if level == 63 then
-        -- if level == 60 or level == 62 or level == 61 then
-            boss = 63
+        if level == 73 then
+        -- if level == 70 or level == 72 or level == 71 then
+            boss = 73
         elseif level == -1 then
-        -- elseif level == 61 then
-            boss = 64
+        -- elseif level == 71 then
+            boss = 74
         end
 
 
-        if boss == 60 and not AQSV.enableTargetSuit60 then
+        if boss == 70 and not AQSV.enableTargetSuit70 then
             return
         end
 
@@ -138,12 +138,12 @@ function SELFAQ.suitInit()
         -- 目标为空或者是玩家的情况下，并且目标不是死亡状态，不做更换
         if level ~= 0 and not UnitIsDead(target) and SELFAQ.playerCanEquip() then
 
-            if boss < 64 and not UnitIsFriend("player", target) then 
+            if boss < 74 and not UnitIsFriend("player", target) then 
                 SELFAQ.needSuit = boss
                 return true
             end
 
-            if boss == 64 and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
+            if boss == 74 and not string.find(AQSV.ignoreBoss, GetUnitName(target)) then
                 SELFAQ.needSuit = boss
                 return true
             end
@@ -185,56 +185,50 @@ function SELFAQ.suitInit()
             wipe(SELFAQ.empty5)
             local waitId = SELFAQ.empty5
 
-            waitId[63] = AQSV.suit[63][v]
-            waitId[64] = AQSV.suit[64][v]
-            local wait60 = AQSV.suit[60][v]
+            waitId[73] = AQSV.suit[73][v]
+            waitId[74] = AQSV.suit[74][v]
+            local wait70 = AQSV.suit[70][v]
             
 
             local slotId = GetSlotID(v)
 
-            -- print(AQSV.suit[63][17])
+            -- print(AQSV.suit[73][17])
             -- 需要换装的栏位
-            if waitId[63] > 0 or waitId[64] > 0 then
+            if waitId[73] > 0 or waitId[74] > 0 then
 
                 -- 需要换上指定装备
-                if boss > 60 and waitId[boss] > 0 then
+                if boss > 70 and waitId[boss] > 0 then
                     -- 跟当前装备的id不同时
                     if slotId ~= waitId[boss] then
 
                         local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
-
-                        if v == 15 and SELFAQ.isNefNest() then
-
-                        else
-                            SELFAQ.equipWait(waitId[boss], v, false)
-                        end
+                        SELFAQ.equipWait(waitId[boss], v, false)
                     end
                 end
 
             end
             
-            if waitId[63] > 0 or waitId[64] > 0 or wait60 > 0 then  
+            if waitId[73] > 0 or waitId[74] > 0 or wait70 > 0 then  
                 -- 需要换回普通装备
-                if wait60 > 0 and boss == 60 and slotId ~= wait60 then
+                if wait70 > 0 and boss == 70 and slotId ~= wait70 then
 
                     -- 如果当前套装是双手武器，则副手不换
                     if v == 17 and GetItemEquipLoc(AQSV.suit[boss][16]) == "INVTYPE_2HWEAPON" then
 
-                    elseif v == 15 and SELFAQ.isNefNest() then
 
                     else
 
                         local order = 0
 
                         if v == 12 or v == 14 or v == 17 then
-                            -- 保存60装备，只能取到item id，因此判断多槽位，如果id一样，则取到第二个
-                            if wait60 == AQSV.suit[60][v-1] then
+                            -- 保存70装备，只能取到item id，因此判断多槽位，如果id一样，则取到第二个
+                            if wait70 == AQSV.suit[70][v-1] then
                                 order = 1000000
                             end
 
                         end
 
-                        SELFAQ.equipByID(wait60 + order, v, false)
+                        SELFAQ.equipByID(wait70 + order, v, false)
 
                     end
                     
@@ -242,11 +236,11 @@ function SELFAQ.suitInit()
 
 
                 -- 解锁受到影响的位置
-                if SELFAQ.slotFrames[v] and boss == 60 then
+                if SELFAQ.slotFrames[v] and boss == 70 then
                     SELFAQ.cancelLocker( v )
                 end
 
-            elseif boss == 60 then
+            elseif boss == 70 then
                  if v == 17 and GetItemEquipLoc(GetSlotID(16)) == "INVTYPE_2HWEAPON" then
                     SELFAQ.equipByID(AQSV.suit[boss][v], v, false)
                 else
@@ -259,9 +253,7 @@ function SELFAQ.suitInit()
         for k,v in pairs(AQSV.suit[boss]) do
             local slotId = GetSlotID(k)
 
-            if k == 15 and SELFAQ.isNefNest() then
-                
-            elseif v > 0 and slotId ~= v then
+            if v > 0 and slotId ~= v then
                 res = false
             end
         end
@@ -323,12 +315,12 @@ function SELFAQ.suitInit()
         
         if AQSV["enableSuit"] then
             f.checkbox["enableMembersTarget"]:Enable()
-            f.checkbox["enableTargetSuit60"]:Enable()
-            f.checkbox["enableAutoSuit60"]:Enable()
+            f.checkbox["enableTargetSuit70"]:Enable()
+            f.checkbox["enableAutoSuit70"]:Enable()
         else
             f.checkbox["enableMembersTarget"]:Disable()
-            f.checkbox["enableTargetSuit60"]:Disable()
-            f.checkbox["enableAutoSuit60"]:Disable()
+            f.checkbox["enableTargetSuit70"]:Disable()
+            f.checkbox["enableAutoSuit70"]:Disable()
         end
 
     end
@@ -340,16 +332,10 @@ function SELFAQ.suitInit()
         t:SetPoint("TOPLEFT", f, 52, -58)
     end
 
-    do
-        local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        t:SetText(L["#Don't change clock when you are in Nefarian's Lair"])
-        t:SetPoint("TOPLEFT", f, 52, -78)
-    end
-
-    buildCheckbox(L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"], "enableSuit", -25)
-    buildCheckbox(L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"], "enableMembersTarget", -100)
-    buildCheckbox(L["Automatic equip Suit "..L[60].." when you leave combat"], "enableAutoSuit60", -125)
-    buildCheckbox(L["Equip Suit "..L[60].." when you target enemy under lv.63"], "enableTargetSuit60", -150)
+    buildCheckbox(L["[Enable] Equip specific suit when |cffffffffYou|r target lv.73 elite or lv.?? boss"], "enableSuit", -25)
+    buildCheckbox(L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.73 elite or boss"], "enableMembersTarget", -100)
+    buildCheckbox(L["Automatic equip Suit "..L[70].." when you leave combat"], "enableAutoSuit70", -125)
+    buildCheckbox(L["Equip Suit "..L[70].." when you target enemy under lv.73"], "enableTargetSuit70", -150)
 
     updateCheckbox()
 
@@ -368,7 +354,7 @@ function SELFAQ.suitInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(350,60)
         s:SetPoint("TOPLEFT", f, 26, -240)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -395,19 +381,19 @@ function SELFAQ.suitInit()
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        l:SetText(L["Suit "..L[60]])
+        l:SetText(L["Suit "..L[70]])
         l:SetPoint("TOPLEFT", f, 25, -330)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        l:SetText(L["Suit "..L[63]])
+        l:SetText(L["Suit "..L[73]])
         l:SetPoint("TOPLEFT", f, 188, -330)
     end
 
     do
         local l = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-        l:SetText(L["Suit "..L[64]])
+        l:SetText(L["Suit "..L[74]])
         l:SetPoint("TOPLEFT", f, 351, -330)
     end
 
@@ -440,9 +426,9 @@ function SELFAQ.suitInit()
         local dropdown = CreateFrame("Frame", nil, f, "UIDropDownMenuTemplate")
         local left = 7
 
-        if boss == 64 then
+        if boss == 74 then
             left = 333
-        elseif boss == 63 then
+        elseif boss == 73 then
             left = 170
         end
 
@@ -475,16 +461,16 @@ function SELFAQ.suitInit()
 
     for k,v in pairs(SELFAQ.items) do
 
-        if AQSV.suit[63][k] == nil then
-            AQSV.suit[63][k] = 0
+        if AQSV.suit[73][k] == nil then
+            AQSV.suit[73][k] = 0
         end
 
-        if AQSV.suit[64][k] == nil then
-            AQSV.suit[64][k] = 0
+        if AQSV.suit[74][k] == nil then
+            AQSV.suit[74][k] = 0
         end
 
-         if AQSV.suit[60][k] == nil then
-            AQSV.suit[60][k] = 0
+         if AQSV.suit[70][k] == nil then
+            AQSV.suit[70][k] = 0
         end
 
         local heightK = k
@@ -497,9 +483,9 @@ function SELFAQ.suitInit()
         l:SetText(SELFAQ.slotToName[k])
         l:SetPoint("TOPLEFT", f, 515, height - heightK*35)
 
-        buildLine(60, v, k, height + 5 - heightK*35)
-        buildLine(63, v, k, height + 5 - heightK*35)
-        buildLine(64, v, k, height + 5 - heightK*35)
+        buildLine(70, v, k, height + 5 - heightK*35)
+        buildLine(73, v, k, height + 5 - heightK*35)
+        buildLine(74, v, k, height + 5 - heightK*35)
 
         -- 保存最后一个下拉框的位置
         lastHeight = height - heightK*35

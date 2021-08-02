@@ -566,7 +566,6 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
 
             if (not SELFAQ.inInstance()) -- 不在副本里
             or AQSV.enableAccInstance -- 副本生效
-            or (AQSV.enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
             then
 
 
@@ -666,7 +665,6 @@ SELFAQ.getTrinketStatusBySlotId = function( slot_id, queue )
 
             if (not SELFAQ.inInstance()) -- 不在副本里
             or AQSV.enableAccInstance -- 副本生效
-            or (AQSV.enableAccTAQ and SELFAQ.inTAQ()) -- TAQ生效功能
             then
 
                 if slot["id"] ~= SELFAQ["swim"..slot_id] and SELFAQ["swim"..slot_id] > 0 then
@@ -1207,54 +1205,6 @@ function SELFAQ.slotsCanEquip()
     return slots
 end
 
-local onyxiaAlert = false
-
-SELFAQ.equipOnyxiaCloak = function()
-
-    if not AQSV.enableOnyxiaCloak then
-        return
-    end
-    
-    if SELFAQ.isNefNest() then
-        
-        if GetInventoryItemID("player", 15) == 15138 then
-            return
-        end
-
-        if GetItemCount(15138) > 0 then
-            AQSV.cloakBackup = GetInventoryItemID("player", 15)
-            SELFAQ.equipWait(15138, 15)
-
-            if not onyxiaAlert then
-
-                onyxiaAlert = true
-
-                chatInfo(L["Equip "]..GetItemLink(15138))
-
-                -- 避免在团队频道重复多次
-                if AQSV.enableOnyxiaCloakAlert  then   
-                    SendChatMessage(L["<AutoEquip> Equiped "]..SELFAQ.GetItemLink(15138), "RAID")
-                end
-
-                C_Timer.After(5.0, function()
-                    onyxiaAlert = false
-                end)
-
-            end
-
-            
-        end
-
-    elseif GetInventoryItemID("player", 15) == 15138 and AQSV.cloakBackup > 0 then
-        AddonEquipItemByName(AQSV.cloakBackup, 15)
-        chatInfo(L["Equip "]..GetItemLink(AQSV.cloakBackup))
-        SELFAQ.cancelLocker( 15 )
-        AQSV.cloakBackup = 0
-    end
-
-end
-
-
 -- 团队目标规则
 
 function SELFAQ.runTargetMemberRules()
@@ -1279,8 +1229,8 @@ function SELFAQ.runTargetMemberRules()
 
         -- wipe(SELFAQ.memberTargets)
 
-        local level63 = 0
-        local level64 = 0
+        local level73 = 0
+        local level74 = 0
         local enemy = 0
         local boss = ""
 
@@ -1300,8 +1250,8 @@ function SELFAQ.runTargetMemberRules()
                 local level = UnitLevel(target)
 
                 -- 如果有成员
-                -- boss和63判断
-                if name and (level == -1 or level == 63) and not UnitIsDead(target)  then
+                -- boss和73判断
+                if name and (level == -1 or level == 73) and not UnitIsDead(target)  then
 
                     -- 目标是boss
                     if level == -1 then
@@ -1315,13 +1265,13 @@ function SELFAQ.runTargetMemberRules()
                         boss = bName
 
                         -- 统计boss目标人数
-                        level64 = level64 + 1
+                        level74 = level74 + 1
                     end
 
                     
-                    -- 目标是63
-                    if level == 63 then
-                        level63 = level63 + 1
+                    -- 目标是73
+                    if level == 73 then
+                        level73 = level73 + 1
                     end
 
                 end
@@ -1341,7 +1291,7 @@ function SELFAQ.runTargetMemberRules()
         if SELFAQ.haveTargetMember and boss ~= "" then
             
             -- 团员目标大于1
-            if level64 > AQSV.raidTargetThreshold then
+            if level74 > AQSV.raidTargetThreshold then
 
                 -- 检查换装规则
                 local pass = false
@@ -1377,14 +1327,14 @@ function SELFAQ.runTargetMemberRules()
 
         -- boss套装检查
         if (AQSV.enableSuit and AQSV.enableMembersTarget) then
-            if level63 > AQSV.raidTargetThreshold and level63 > level64 then
-                SELFAQ.needSuit = 63
+            if level73 > AQSV.raidTargetThreshold and level73 > level74 then
+                SELFAQ.needSuit = 73
             end
 
-            if level64 > AQSV.raidTargetThreshold and level64 > level63 then
+            if level74 > AQSV.raidTargetThreshold and level74 > level73 then
                 -- 不在排除列表里
                 if not string.find(AQSV.ignoreBoss, boss) then
-                    SELFAQ.needSuit = 64
+                    SELFAQ.needSuit = 74
                 end
             end
         end

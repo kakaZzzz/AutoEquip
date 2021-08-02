@@ -28,9 +28,9 @@ function SELFAQ.superInit()
     SELFAQ.superOption = f
     f.checkbox = {}
     f.dropdown = {
-        [63] = {},
-        [64] = {},
-        [60] = {}
+        [73] = {},
+        [74] = {},
+        [70] = {}
     }
 
     p.name = L["Super Equip"]
@@ -178,19 +178,11 @@ function SELFAQ.superInit()
             for k,v in pairs(SELFAQ.items) do
 
                 if SUITAQ[number]["slot"..k] and SUITAQ[number]["slot"..k] > 0 then
-
-                    if k == 15 and SELFAQ.isNefNest() then
-                        -- 奈法房间，披风位置
+                    if SUITAQ[number]["enableLock"] then
+                        SELFAQ.equipWait(SUITAQ[number]["slot"..k], k, false)
                     else
-
-                        if SUITAQ[number]["enableLock"] then
-                            SELFAQ.equipWait(SUITAQ[number]["slot"..k], k, false)
-                        else
-                            SELFAQ.equipByID (SUITAQ[number]["slot"..k], k, false)
-                        end
-
+                        SELFAQ.equipByID (SUITAQ[number]["slot"..k], k, false)
                     end
-
                 end
 
             end
@@ -640,7 +632,7 @@ function SELFAQ.superInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(250,60)
         s:SetPoint("TOPLEFT", f, 26, leftHight-65)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -680,7 +672,7 @@ function SELFAQ.superInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(250,60)
         s:SetPoint("TOPLEFT", f, 26, leftHight-65-35)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});

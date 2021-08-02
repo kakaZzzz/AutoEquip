@@ -209,7 +209,7 @@ function SELFAQ.settingInit()
             return
         end
 
-        local line = CreateFrame("Button", nil, queueFrame)
+        local line = CreateFrame("Button", nil, queueFrame, "BackdropTemplate")
 
         line:SetWidth(570)
         line:SetHeight(1)
@@ -668,7 +668,7 @@ function SELFAQ.settingInit()
     end
 
     function buildLine( y )
-        local line = CreateFrame("Button", nil, f)
+        local line = CreateFrame("Button", nil, f, "BackdropTemplate")
 
         line:SetWidth(10)
         line:SetHeight(1)
@@ -679,12 +679,9 @@ function SELFAQ.settingInit()
     end
 
     buildCheckbox(SELFAQ.color("FF4500", L["Enable AutoEquip function"]), "enable", -60)
-
-    buildLine(-95+3)
-
-    buildCheckbox(SELFAQ.color("FF4500", L["Enable Equipment Bar"]), "enableItemBar", -85-10)
-    buildCheckbox(L["Lock frame"], "locked", -85-10, 190)
-    buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110-10, 190)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Equipment Bar"]), "enableItemBar", -85)
+    buildCheckbox(L["Lock frame"], "locked", -85, 190)
+    buildCheckbox(L["Hide black translucent border"], "hideBackdrop", -110, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
@@ -727,7 +724,7 @@ function SELFAQ.settingInit()
         end)
     end
 
-    local slotCheckbosHeight = -115-25-10
+    local slotCheckbosHeight = -115-25
 
     buildSlotCheckbox(L["MainHand"], 16, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["OffHand"], 17, slotCheckbosHeight, 155)
@@ -735,7 +732,7 @@ function SELFAQ.settingInit()
     buildSlotCheckbox(L["Head"], 1, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Neck"], 2, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -140-25-10
+    slotCheckbosHeight = -140-25
 
     buildSlotCheckbox(L["Shoulder"], 3, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Chest"], 5, slotCheckbosHeight, 155)
@@ -743,7 +740,7 @@ function SELFAQ.settingInit()
     buildSlotCheckbox(L["Legs"], 7, slotCheckbosHeight, 375)
     buildSlotCheckbox(L["Feet"], 8, slotCheckbosHeight, 485)
 
-    slotCheckbosHeight = -165-25-10
+    slotCheckbosHeight = -165-25
 
     buildSlotCheckbox(L["Wrist"], 9, slotCheckbosHeight, 45)
     buildSlotCheckbox(L["Hands"], 10, slotCheckbosHeight, 155)
@@ -754,26 +751,24 @@ function SELFAQ.settingInit()
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#The above selections will take effect after reloading UI"])
-        t:SetPoint("TOPLEFT", f, 53, -200-25-10)
+        t:SetPoint("TOPLEFT", f, 53, -200-25)
     end
 
     local otherHight = -330
 
-    buildLine(otherHight+3)
-
-    buildCheckbox(SELFAQ.color("FF4500", L["Enable Buff Alert"]), "enableBuff", otherHight)
-    buildCheckbox(L["Lock frame"], "buffLocked", otherHight, 190)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Buff Alert"]), "enableBuff", otherHight+15+25)
+    buildCheckbox(L["Lock frame"], "buffLocked", otherHight+15+25, 190)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 320, otherHight-8)
+        t:SetPoint("TOPLEFT", f, 320, otherHight+7+25)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#Effective after ENTER"])
-        t:SetPoint("TOPLEFT", f, 430, otherHight-8)
+        t:SetPoint("TOPLEFT", f, 430, otherHight+7+25)
     end
 
     do
@@ -782,7 +777,7 @@ function SELFAQ.settingInit()
         e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 370,  otherHight+5)
+        e:SetPoint("TOPLEFT", f, 370,  otherHight+20+25)
         e:SetAutoFocus(false)
         e:SetText(AQSV.buffZoom)
         e:SetCursorPosition(0)
@@ -807,21 +802,19 @@ function SELFAQ.settingInit()
 
     otherHight = -265
 
-    buildCheckbox(SELFAQ.color("FF4500", L["Separate Quick Button and move it separately (Need reload UI)"]), "splitQuickButton", otherHight)
-    buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight-25)
-
-    buildLine(-262)
+    buildCheckbox(SELFAQ.color("FF4500", L["Separate Quick Button and move it separately (Need reload UI)"]), "splitQuickButton", otherHight+25)
+    buildCheckbox(L["Lock frame"], "quickButtonLocked", otherHight)
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontNormal")
         t:SetText(L["Zoom"])
-        t:SetPoint("TOPLEFT", f, 320-130, otherHight-25-8)
+        t:SetPoint("TOPLEFT", f, 320-130, otherHight-8)
     end
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["#Effective after ENTER"])
-        t:SetPoint("TOPLEFT", f, 430-130, otherHight-25-8)
+        t:SetPoint("TOPLEFT", f, 430-130, otherHight-8)
     end
 
     do
@@ -830,7 +823,7 @@ function SELFAQ.settingInit()
         e:SetWidth(50)
         e:SetHeight(40)
         e:SetJustifyH("CENTER")
-        e:SetPoint("TOPLEFT", f, 370-130,  otherHight-25+5)
+        e:SetPoint("TOPLEFT", f, 370-130,  otherHight+5)
         e:SetAutoFocus(false)
         e:SetText(AQSV.quickButtonZoom)
         e:SetCursorPosition(0)
@@ -855,35 +848,26 @@ function SELFAQ.settingInit()
         end)
     end
 
-    otherHight = -365
+    otherHight = -335
 
-    buildCheckbox(SELFAQ.color("FF4500", L["Enable Quick Equip on charactor panel (Need reload UI)"]), "enableQuickEquip", otherHight)
-    buildCheckbox(SELFAQ.color("FF4500", L["Enable Minimap Icon (Need reload UI)"]), "enableMinimapIcon", otherHight-25)
-    buildLine(otherHight+3)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Quick Equip on charactor panel (Need reload UI)"]), "enableQuickEquip", otherHight+20)
+    buildCheckbox(SELFAQ.color("FF4500", L["Enable Minimap Icon (Need reload UI)"]), "enableMinimapIcon", otherHight-5)
 
     otherHight = otherHight - 45 - 15 -25
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
         t:SetText(L["AutoEquip Function:"])
-        t:SetPoint("TOPLEFT", f, 25, otherHight)
+        t:SetPoint("TOPLEFT", f, 25, otherHight+30)
     end
 
-    otherHight = otherHight-25
+    otherHight = otherHight+5
 
     buildCheckbox(L["Automatic switch to PVP queue in Battleground"], "enableBattleground", otherHight)
+    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-25)
+    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-50)
 
-    buildLine(otherHight - 32)
-
-    buildCheckbox(L["Disable Slot 2"], "disableSlot14", otherHight-35)
-    buildCheckbox(L["Equip item by priority forcibly even if the item in slot is aviilable"], "forcePriority", otherHight-60)
-
-    buildLine(otherHight - 92)
-
-    buildCheckbox(L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"], "enableOnyxiaCloak", otherHight-95)
-    buildCheckbox(L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"], "enableOnyxiaCloakAlert", otherHight-120)
-
-    otherHight = otherHight-120-45
+    otherHight = otherHight-100
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -909,9 +893,8 @@ function SELFAQ.settingInit()
     buildLine(otherHight-155+3-25)
 
     buildCheckbox(L["In Instance and Battleground, enable Auto Acceleration function"], "enableAccInstance", otherHight-155-25)
-    buildCheckbox(L["In TAQ, enable Auto Acceleration function"], "enableAccTAQ", otherHight-180-25)
 
-    otherHight = otherHight-180-45-25
+    otherHight = otherHight-180-45
 
     do
         local t = f:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -1037,7 +1020,7 @@ function SELFAQ.settingInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(350,80)
         s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 135)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -1081,7 +1064,7 @@ function SELFAQ.settingInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(350,80)
         s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 110)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -1130,7 +1113,7 @@ function SELFAQ.settingInit()
 
     do
 
-        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate") -- or you actual parent instead
+        local s = CreateFrame("ScrollFrame", nil, f, "UIPanelScrollFrameTemplate" and "BackdropTemplate") -- or you actual parent instead
         s:SetSize(350,80)
         s:SetPoint("TOPLEFT", f, 26, SELFAQ.lastHeight - 110)
         s:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2});
@@ -1216,13 +1199,13 @@ function SELFAQ.settingInit()
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText("/ae 60(63/64)")
+        t:SetText("/ae 70(73/74)")
         t:SetPoint("TOPLEFT", helpFrame, 25, SELFAQ.lastHeightHelp - 165)
     end
 
     do
         local t = helpFrame:CreateFontString(nil, "ARTWORK", "GameFontNormal")
-        t:SetText(L["-- Equip Suit "]..L[60].."/"..L[63].."/"..L[64])
+        t:SetText(L["-- Equip Suit "]..L[70].."/"..L[73].."/"..L[74])
         t:SetPoint("TOPLEFT", helpFrame, 170, SELFAQ.lastHeightHelp - 165)
     end
 

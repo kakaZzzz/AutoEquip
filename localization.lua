@@ -22,13 +22,13 @@ SELFAQ.L = L
 local locale = GetLocale()
 
 L["enable_battleground"] = "Enable in Battleground / Equip \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Alliance]\124h\124r \124cff0070dd\124Hitem:18854:0:0:0:0:0:0:0\124h[Insignia of the Horde]\124h\124r."
-L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff1eff00[Mithril Spurs]|r|cffffffff[Riding Skill]|r when riding (Not in Instance). "
+L["enable_carrot"] = "Equip |cff1eff00[Carrot on a Stick]|r|cff0070dd[Riding Crop]|r|cff0070dd[Skybreaker Whip]|r when riding (Not in Instance). "
 L["enable_swim"] = "Equip |cff0070dd[Hydrocane]|r|cff1eff00[Azure Silk Belt]|r|cff1eff00[Deepdive Helmet]|r when swiming (Not in Instance)."
 L["Disable Slot 2"] = "Disable Trinket Slot 2 (Make the ultimate trinket permanent, such as \124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[Neltharion's Tear]\124h\124r)"
 
-L[60] = color("00FF00", "General")
-L[64] = color("FF0000", "Lv.?? Boss")
-L[63] = color("FF4500", "Lv.63 Elite")
+L[70] = color("00FF00", "General")
+L[74] = color("FF0000", "Lv.?? Boss")
+L[73] = color("FF4500", "Lv.73 Elite")
 
 L["prefix"] = "|cFFBF6B31<|r|cFFFFFF00AE|r|cFFBF6B31>|r"
 
@@ -38,18 +38,14 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["Enable"] = "启用"
 	L["Enable AutoEquip function"] = "启用自动换装功能"
 	L["Automatic switch to PVP queue in Battleground"] = "战场中自动切换到PVP队列"
-	L["enable_carrot"] = "骑乘时装备|cff1eff00[棍子上的胡萝卜]|r|cff1eff00[秘银马刺]|r|cffffffff[附魔手套-骑乘]|r（战场/副本中不生效）"
+	L["enable_carrot"] = "骑乘时装备|cff0070dd[马鞭]|r或|cff0070dd[碎天者之鞭]|r或|cff1eff00[棍子上的胡萝卜]|r（战场/副本中不生效）"
 	L["enable_swim"] = "游泳时装备|cff0070dd[水藤]|r|cff1eff00[碧蓝丝质腰带]|r|cff1eff00[潜水头盔]|r（战场/副本中不生效）"
-	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[奈萨里奥之泪]\124h\124r)"
+	L["Disable Slot 2"] = "禁用饰品栏2 (让极品饰品常驻, 比如\124cffa335ee\124Hitem:19379:0:0:0:0:0:0:0\124h[灰暗的纳鲁薄片]\124h\124r)"
 	L["Equip item by priority forcibly even if the item in slot is aviilable"] = "强制按优先级装备物品，即使已装备的物品当前可用"
 	L["Item queue is displayed above the Equipment Bar"] = "物品队列在装备栏上方显示"
 	L["In combat |cFF00FF00shift + left-click|r equipment button to display the item list"] = "战斗中|cFF00FF00按住Shift左键单击|r装备栏按钮显示物品列表"
 	L["Hide item level on the item list (Need reload UI)"] = "隐藏装备列表上的物品等级（需要重载UI）"
 	L["Show simple tooltip (only item name)"] = "显示精简提示（只有物品名）"
-	L["Equip |cff0070dd[Onyxia Scale Cloak]|r when entering |cffffffffNefarian's Lair|r"] = "进入|cffffffff奈法利安的巢穴|r装备|cff0070dd[奥妮克希亚鳞片披风]|r"
-	L["Remind on Raid channel when auto-equiped |cff0070dd[Onyxia Scale Cloak]|r"] = "自动装备|cff0070dd[奥妮克希亚鳞片披风]|r后在团队频道发出提醒"
-
-	L["#Don't change clock when you are in Nefarian's Lair"] = "#进入 奈法利安的巢穴 后不会更换披风"
 
 	L["Expand Settings"] = "展开设置列表"
 
@@ -142,21 +138,21 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["OffHand"] = "副手"
 	L["Ranged"] = "远程"
 
-	L[60] = color("00FF00", "常规")
-	L[63] = color("FF4500", "Lv.63 精英")
+	L[70] = color("00FF00", "常规")
+	L[73] = color("FF4500", "Lv.73 精英")
 
 	L["General"] = "常规设置"
-	L["Suit for 63+"] = "63+套装"
+	L["Suit for 73+"] = "73+套装"
 	L["Usable Queue"] = "主动队列"
 
-	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"] = "[启用]当|cffffffff自己|r目标是63级精英或??级Boss时，装备对应套装"
-	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"] = "当|cffffffff团队成员|r超过1人目标是63级精英或者Boss时，装备对应套装"
-	L["Automatic equip Suit "..L[60].." when you leave combat"] = "离开战斗时自动切换回"..L[60].."套装"
+	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.73 elite or lv.?? boss"] = "[启用]当|cffffffff自己|r目标是73级精英或??级Boss时，装备对应套装"
+	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.73 elite or boss"] = "当|cffffffff团队成员|r超过1人目标是73级精英或者Boss时，装备对应套装"
+	L["Automatic equip Suit "..L[70].." when you leave combat"] = "离开战斗时自动切换回"..L[70].."套装"
 	L["#The following options only take effect in instance"] = "#以下选项只在副本中生效"
-	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "当目标为63级以下的敌方单位，装备"..L[60].."套装"
-	L["Suit "..L[64]] = L[64].."套装"
-	L["Suit "..L[63]] = L[63].."套装"
-	L["Suit "..L[60]] = L[60].."套装"
+	L["Equip Suit "..L[70].." when you target enemy under lv.73"] = "当目标为73级以下的敌方单位，装备"..L[70].."套装"
+	L["Suit "..L[74]] = L[74].."套装"
+	L["Suit "..L[73]] = L[73].."套装"
+	L["Suit "..L[70]] = L[70].."套装"
 
 	L["-- Equip Suit "] = "-- 装备套装"
 	L["-- Set 5 items per column in dropdown list (default 4)"] = "-- 设置物品下拉框每列显示5件物品（默认4）"
@@ -248,7 +244,6 @@ if locale == 'zhCN' or locale == 'zhTW' then
 	L["When |cffffffffRaid members|r target |cFFFF0000enemies|r, takeoff acceleration items"] = "当|cffffffff团队成员|r选中|cFFFF0000敌对|r目标时脱下加速装备"
 	L["When equipment bar is locked, Auto Acceleration function also takes effect"] = "当装备栏锁定时，自动加速功能也生效"
 	L["In Instance and Battleground, enable Auto Acceleration function"] = "在所有副本/战场中，启用自动加速功能"
-	L["In TAQ, enable Auto Acceleration function"] = "在TAQ副本，启用自动加速功能"
 
 	L["Separate Quick Button and move it separately (Need reload UI)"] = "分离快捷按钮，可以单独移动位置（需要重载UI）"
 	L["Lock frame in Settings"] = "设置里锁定框架"
@@ -267,11 +262,11 @@ if locale == 'zhCN' or locale == 'zhTW' then
 
 	L["Enable Minimap Icon (Need reload UI)"] = "启用小地图图标（需要重载UI）"
 
-	L["Enable in Naxxramas / Scholomance / Stratholme"] = "在 NAXX / STSM / TL 中启用"
-	L["(Disable automatically when the target is not undead is NAXX)"] = "(NAXX中目标不是亡灵时自动停用)"
-	L["Enable when the target is undead out of instance"] = "副本外目标是亡灵时启用"
+	L["Enable in Naxxramas / Scholomance / Stratholme"] = "在 KLZ / NAXX / STSM / TL 中启用"
+	L["(Disable automatically when the target is not undead is NAXX)"] = "(KLZ / NAXX中目标不是亡灵/恶魔时自动停用)"
+	L["Enable when the target is undead out of instance"] = "副本外目标是亡灵/恶魔时启用"
 	L["Select the position to insert "] = "选择位置插入"
-	L["NAXX / Argent Dawn Trinket:"] = "NAXX/银色黎明饰品:"
+	L["NAXX / Argent Dawn Trinket:"] = "KLZ / NAXX/ 银色黎明饰品:"
 end
 
 if locale == 'koKR' then
@@ -384,21 +379,21 @@ if locale == 'koKR' then
 	L["OffHand"] = "보조장비"
 	L["Ranged"] = "원거리"
 
-	L[60] = color("00FF00", "일반")
-	L[63] = color("FF4500", "Lv.63 정예")
+	L[70] = color("00FF00", "일반")
+	L[73] = color("FF4500", "Lv.73 정예")
 
 	L["General"] = "일반설정"
-	L["Suit for 63+"] = "63+세트"
+	L["Suit for 73+"] = "73+세트"
 	L["Usable Queue"] = "능동 대열"
 
-	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.63 elite or lv.?? boss"] = "[사용]|cffffffff당신이|rlv.63 엘리트 또는 lv.??Boss를 목표로 할 때, 대응장비세트"
-	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.63 elite or boss"] = "1인 이상의|cffffffff구성원이|r lv.63 엘리트 또는 Boss 를 타겟으로 할 때, 대응장비세트"
-	L["Automatic equip Suit "..L[60].." when you leave combat"] = "전장으로 떠날때 "..L[60].."장비 세트 장착"
+	L["[Enable] Equip specific suit when |cffffffffYou|r target lv.73 elite or lv.?? boss"] = "[사용]|cffffffff당신이|rlv.73 엘리트 또는 lv.??Boss를 목표로 할 때, 대응장비세트"
+	L["Equip specific suit when more than 1 |cffffffffRaid members|r target lv.73 elite or boss"] = "1인 이상의|cffffffff구성원이|r lv.73 엘리트 또는 Boss 를 타겟으로 할 때, 대응장비세트"
+	L["Automatic equip Suit "..L[70].." when you leave combat"] = "전장으로 떠날때 "..L[70].."장비 세트 장착"
 	L["#The following options only take effect in instance"] = "#다음 옵션은 인던에서만 적용됩니다."
-	L["Equip Suit "..L[60].." when you target enemy under lv.63"] = "Lv.63 이하 적을 목표로 할 때"..L[60].."착용 세트"
-	L["Suit "..L[64]] = L[64].."세트"
-	L["Suit "..L[63]] = L[63].."세트"
-	L["Suit "..L[60]] = L[60].."세트"
+	L["Equip Suit "..L[70].." when you target enemy under lv.73"] = "Lv.73 이하 적을 목표로 할 때"..L[70].."착용 세트"
+	L["Suit "..L[74]] = L[74].."세트"
+	L["Suit "..L[73]] = L[73].."세트"
+	L["Suit "..L[70]] = L[70].."세트"
 
 	L["-- Equip Suit "] = "-- 장비 세트"
 	L["-- Set 5 items per column in dropdown list (default 4)"] = "-- 드롭 다운 목록에서 열당 5 개 항목 설정 (기본값 4)"

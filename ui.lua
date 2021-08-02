@@ -267,6 +267,7 @@ function SELFAQ.createItemButton( slot_id, position )
 
 	-- 左键触发物品
 	button:SetAttribute("type1", "item")
+
 	-- 饰品切换后自动匹配点击功能
     button:SetAttribute("slot", slot_id)
 
@@ -293,7 +294,8 @@ function SELFAQ.createItemButton( slot_id, position )
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
   	-- button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2})
-  	button:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+  	fixSetBackdrop(button, {edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+  	--button:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
 
 	button:SetBackdropBorderColor(0,0,0,1);
 	-- button:SetTexCoord(0.07, 0.93, 0.07, 0.93)
@@ -348,7 +350,7 @@ function SELFAQ.createItemButton( slot_id, position )
 	button.cooldown = cooldown
 
 	-- 饰品队列层
-    local wait = CreateFrame("Frame", nil, button)
+    local wait = CreateFrame("Frame", nil, button, "BackdropTemplate")
     -- 设0不成功
     wait:SetSize(20, 20)
     wait:SetPoint("BOTTOMRIGHT", button, 0, 0)
@@ -579,7 +581,7 @@ function SELFAQ.createItemDropdown(item_id, x, position, slot_id)
    	if SELFAQ.itemButtons[item_id] then
    		button = SELFAQ.itemButtons[item_id]
    	else
-   		button = CreateFrame("Button", nil, UIParent)
+   		button = CreateFrame("Button", nil, UIParent, "BackdropTemplate")
    	end
 
    	button.pass_id = pass_id
@@ -790,7 +792,7 @@ end
 
 -- 绘制下方的饰品队列
 function SELFAQ.createCooldownUnit( item_id, position )
-	local f = CreateFrame("Frame", nil, SELFAQ.bar)
+	local f = CreateFrame("Frame", nil, SELFAQ.bar, "BackdropTemplate")
 	-- f:SetPoint("TOPLEFT", SELFAQ.bar, 0 , - (40 + AQSV.buttonSpacingNew) - (position - 1) * 23)
 	f:SetSize(20, 20)
 
@@ -1133,39 +1135,39 @@ SELFAQ.renderQuickButton = function()
 
 	if AQSV.enableSuit then
 
-		SELFAQ.createQBOne(60, step, AQSV.enableSuit, function()
-			SlashCmdList.AQCMD("60")
+		SELFAQ.createQBOne(70, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("70")
 		end)
 		step = step + 1
 
-		SELFAQ.createQBOne(63, step, AQSV.enableSuit, function()
-			SlashCmdList.AQCMD("63")
+		SELFAQ.createQBOne(73, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("73")
 		end)
 		step = step + 1
 
-		SELFAQ.createQBOne(64, step, AQSV.enableSuit, function()
-			SlashCmdList.AQCMD("64")
+		SELFAQ.createQBOne(74, step, AQSV.enableSuit, function()
+			SlashCmdList.AQCMD("74")
 		end)
 		step = step + 1
 
 	else
 
-		SELFAQ.createQBOne(60, step, AQSV.enableSuit, function()
+		SELFAQ.createQBOne(70, step, AQSV.enableSuit, function()
 		end)
 
-		SELFAQ.createQBOne(63, step, AQSV.enableSuit, function()
+		SELFAQ.createQBOne(73, step, AQSV.enableSuit, function()
 		end)
 
-		SELFAQ.createQBOne(64, step, AQSV.enableSuit, function()
+		SELFAQ.createQBOne(74, step, AQSV.enableSuit, function()
 		end)
 	end
 
-	SELFAQ.createQBOne(70, step, true, function()
+	SELFAQ.createQBOne(80, step, true, function()
 		SlashCmdList.AQCMD("unlock")
 	end)
 	step = step + 1
 
-	SELFAQ.createQBOne(71, step, true, function()
+	SELFAQ.createQBOne(81, step, true, function()
 		SlashCmdList.AQCMD("")
 	end)
 	step = step + 1
@@ -1219,11 +1221,11 @@ SELFAQ.createQBOne = function(word, order, show, func)
 	-- button:SetBackdropBorderColor(0,0,0,0.9)
 	-- button:SetBackdropColor(0,0,0,1)
 
-	if word ~= 64 and word ~= 11 and word ~= 70 and word ~= 71 then
+	if word ~= 74 and word ~= 11 and word ~= 80 and word ~= 81 then
 
 		local text
 
-		if word < 60 then
+		if word < 70 then
 			text = button:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
 		else
 			text = button:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
@@ -1237,13 +1239,13 @@ SELFAQ.createQBOne = function(word, order, show, func)
     local t = button:CreateTexture(nil, "BACKGROUND")
 	t:SetTexture("Interface\\AddOns\\AutoEquip\\Textures\\B.blp")
 
-	if word == 64 then
+	if word == 74 then
 		t:SetTexCoord(0, 0.125, 0, 0.5)
 	elseif word == 11 then
 		t:SetTexCoord(0, 0.125, 0.5, 1)
-	elseif word == 70 then
+	elseif word == 80 then
 		t:SetTexCoord(0.375, 0.5, 0, 0.5)
-	elseif word == 71 then
+	elseif word == 81 then
 		t:SetTexCoord(0.125, 0.25, 0, 0.5)
 	else
 		t:SetTexCoord(0.5, 0.625, 0, 0.5)
@@ -1305,15 +1307,15 @@ function SELFAQ.showQBTooltip( button, word )
 
 			tooltip:AddLine(SELFAQ.color("FF0000", L["Takeoff"]))
 
-		elseif word == 70 then
+		elseif word == 80 then
 
 			tooltip:AddLine(L["|cFF00FF00Unlocked|r all equipment buttons"])
 
-		elseif word == 71 then
+		elseif word == 81 then
 
 			tooltip:AddLine(L["AutoEquip |cFF00FF00ON|r/|cFFFF0000OFF|r"])
 
-		elseif word >= 60 then
+		elseif word >= 70 then
 
 			tooltip:AddLine(L["Suit "..L[word]])
 

@@ -2,6 +2,14 @@ local _, SELFAQ = ...
 
 local L = SELFAQ.L
 
+function fixSetBackdrop(frame,backdrop)
+    if frame.SetBackdrop then return frame:SetBackdrop(backdrop) end
+    Mixin(frame,BackdropTemplateMixin)
+    frame:SetScript("OnSizeChanged",frame.OnBackdropSizeChanged,0)
+    frame:SetBackdrop(backdrop)
+    frame:OnBackdropLoaded()
+end
+
 -- 复制table的数据，而不是引用
 SELFAQ.clone =  function(org)
     local function copy(org, res)
@@ -351,7 +359,15 @@ SELFAQ.findCarrot = function( id, slot_id, link )
 
     if slot_id == 13 then
 
-        if id == 11122 then
+        -- 优先装备碎天者之鞭
+        if id == 32863 and UnitLevel("player") >= 70 then
+            SELFAQ.carrot = id
+        -- 其次是马鞭
+        -- 如果已经有碎天者之鞭，则不更换
+        elseif id == 25653 and UnitLevel("player") >= 69 and SELFAQ.carrot < 25653 then
+            SELFAQ.carrot = id
+        -- 最后是萝卜
+        elseif id == 11122 and SELFAQ.carrot == 0 then
             SELFAQ.carrot = id
         end
 
@@ -451,7 +467,7 @@ SELFAQ.popupInfo = function(text)
     SELFAQ.infoFrameIndex = SELFAQ.infoFrameIndex + 1
 
     if _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex] == nil then
-        CreateFrame( "GameTooltip", "AutoEquip_Popup"..SELFAQ.infoFrameIndex, UIParent, "GameTooltipTemplate" )
+        CreateFrame( "GameTooltip", "AutoEquip_Popup"..SELFAQ.infoFrameIndex, UIParent, "GameTooltipTemplate")
     end
 
     local f = _G["AutoEquip_Popup"..SELFAQ.infoFrameIndex]
@@ -472,7 +488,8 @@ SELFAQ.popupInfo = function(text)
     f:SetOwner(UIParent, "ANCHOR_NONE")
     f:SetPoint("CENTER", UIParent,  AQSV.popupX, -40*(SELFAQ.infoFrameIndex - 1) + AQSV.popupY )
 
-    f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+    fixSetBackdrop(f, {bgFile = "Interface/Tooltips/UI-Tooltip-Background"})
+    --f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
     f:SetBackdropColor(0,0,0,0.8);
 
     if SELFAQ.infoFrameIndex == 5 then
@@ -521,17 +538,6 @@ SELFAQ.popupInfo = function(text)
 
 end
 
-SELFAQ.isNefNest = function()
-    local zonetext = GetSubZoneText() == "" and GetZoneText() or GetSubZoneText()
-
-    if zonetext == "奈法利安的巢穴" or zonetext ==  "Nefarian's Lair" then
-    -- if zonetext == "艾尔文森林" then
-        return true
-    else
-        return false
-    end
-end
-
 SELFAQ.comma2Table = function(text)
     -- 兼容全角逗号
     local s = string.gsub(text,"，", ",")
@@ -544,17 +550,6 @@ SELFAQ.comma2Table = function(text)
     end
 
     return t
-end
-
-SELFAQ.inTAQ = function()
-    local name, type, difficultyIndex, difficultyName, maxPlayers,
-    dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
-
-    if instanceMapId == 531 then
-        return true
-    else
-        return false
-    end
 end
 
 SELFAQ.getItemLevel = function(item_id)
@@ -579,7 +574,7 @@ SELFAQ.inNaxx = function()
     dynamicDifficulty, isDynamic, instanceMapId, lfgID = GetInstanceInfo()
 
     -- naxx应该是533，待验证
-    if instanceMapId == 533 then
+    if instanceMapId == 533 or instanceMapId == 532 then
         return true
     else
         return false

@@ -1,13 +1,24 @@
 Todo:
-人物界面直接换装
 区分不同附魔的同名装备
 支持默认的冷却动画
 物品列表显示银行装备
 换装支持银行装备
 分离萝卜功能
-快捷按钮单独移动位置
-沙虫buff显示bug
-根据怪物类型换饰品（naxx	）
+
+---
+
+v6.0
+感谢nga大佬们wjsghr1、七箫的高品质代码！！
+
+1. 自动更换马鞭、碎天者之鞭
+2. 更新TBC的主动饰品数据
+3. 解决图标显示异常问题
+4. 更新73+套装功能
+
+1. Automatic equip Skybreaker Whip and Riding Crop
+2. Update TBC's usable trinkets data
+3. Fix the bug that the icon is displayed abnormally
+4. Update Suite for 73+ feature
 
 ---
 

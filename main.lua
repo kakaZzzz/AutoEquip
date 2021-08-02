@@ -160,13 +160,13 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.hideBackdrop = initSV(AQSV.hideBackdrop, false)
 
             AQSV.suit = initSV(AQSV.suit, {})
-            AQSV.suit[63] = initSV(AQSV.suit[63], {})
-            AQSV.suit[64] = initSV(AQSV.suit[64], {})
-            AQSV.suit[60] = initSV(AQSV.suit[60], {})
+            AQSV.suit[73] = initSV(AQSV.suit[73], {})
+            AQSV.suit[74] = initSV(AQSV.suit[74], {})
+            AQSV.suit[70] = initSV(AQSV.suit[70], {})
             AQSV.currentSuit = initSV(AQSV.currentSuit, 0)
             AQSV.enableSuit = initSV(AQSV.enableSuit, false)
-            AQSV.enableAutoSuit60 = initSV(AQSV.enableAutoSuit60, false)
-            AQSV.enableTargetSuit60 = initSV(AQSV.enableTargetSuit60, false)
+            AQSV.enableAutoSuit70 = initSV(AQSV.enableAutoSuit70, false)
+            AQSV.enableTargetSuit70 = initSV(AQSV.enableTargetSuit70, false)
 
             AQSV.itemsPerColumn = initSV(AQSV.itemsPerColumn, 4)
             AQSV.customSlots = initSV(AQSV.customSlots, {})
@@ -178,8 +178,6 @@ SELFAQ.onMainUpdate = function(self, elapsed)
 
 
             AQSV.cloakBackup = initSV(AQSV.cloakBackup, 0)
-            AQSV.enableOnyxiaCloak = initSV(AQSV.enableOnyxiaCloak, true)
-            AQSV.enableOnyxiaCloakAlert = initSV(AQSV.enableOnyxiaCloakAlert, true)
 
             AQSV.simpleTooltip = initSV(AQSV.simpleTooltip, false)
 
@@ -199,7 +197,6 @@ SELFAQ.onMainUpdate = function(self, elapsed)
             AQSV.enableFixedPosition = initSV(AQSV.enableFixedPosition, false)
 
             AQSV.enableAccInstance = initSV(AQSV.enableAccInstance, false)
-            AQSV.enableAccTAQ = initSV(AQSV.enableAccTAQ, true)
             AQSV.forceAcc = initSV(AQSV.forceAcc, true)
             AQSV.pauseAccWhenTarget = initSV(AQSV.pauseAccWhenTarget, true)
             AQSV.pauseAccWhenTargetFriend = initSV(AQSV.pauseAccWhenTargetFriend, true)
@@ -300,11 +297,6 @@ SELFAQ.onMainUpdate = function(self, elapsed)
         if UnitInBattleground("player") and not AQSV.enableBattleground then
             return
         end
-        
-        -- 自动换奥妮克希亚披风
-        SELFAQ.equipOnyxiaCloak()
-
-        -- SELFAQ.updateMembersTarget()
 
         SELFAQ.changeSuit()
 
@@ -371,7 +363,7 @@ function SELFAQ.mainInit()
              chatInfo(L["|cFF00FF00Locked|r all equipment buttons"])
              popupInfo(L["|cFF00FF00Locked|r all equipment buttons"])
 
-        elseif msg == "60" or msg == "63" or msg == "64"   then
+        elseif msg == "70" or msg == "73" or msg == "74"   then
             -- EquipItemByName(19891, 17)
             if SELFAQ.playerCanEquip()  then
                 SELFAQ.needSuit = tonumber(msg)
@@ -557,8 +549,8 @@ function SELFAQ.mainInit()
             SELFAQ.runLeaveCombatRules()
             
             -- 避免每次脱离战斗都触发
-            if AQSV.enableSuit and AQSV.enableAutoSuit60 and AQSV.currentSuit > 60 and SELFAQ.inInstance() then
-                SELFAQ.needSuit = 60
+            if AQSV.enableSuit and AQSV.enableAutoSuit70 and AQSV.currentSuit > 70 and SELFAQ.inInstance() then
+                SELFAQ.needSuit = 70
             end
 
             -- 执行一系列更换逻辑
@@ -653,7 +645,7 @@ SELFAQ.checkSelfTarget = function()
 
     -- 目标是亡灵
     if true then
-        if not UnitIsDead("target") and UnitCreatureType("target") == "亡灵" then
+        if not UnitIsDead("target") and (UnitCreatureType("target") == "亡灵" or UnitCreatureType("target") == "恶魔") then
             SELFAQ.targetUndead = true
         else
             SELFAQ.targetUndead = false
@@ -667,7 +659,7 @@ SELFAQ.checkSelfTarget = function()
     -- 目标不是亡灵
     if true then
         -- 目标活着，并且不是友善的，不是亡灵
-        if not UnitIsDead("target") and not UnitIsFriend("player", "target") and not (UnitCreatureType("target") == "亡灵") then
+        if not UnitIsDead("target") and not UnitIsFriend("player", "target") and not (UnitCreatureType("target") == "亡灵" or UnitCreatureType("target") == "恶魔") then
             SELFAQ.targetNotUndead = true
         else
             SELFAQ.targetNotUndead = false
@@ -686,7 +678,7 @@ SELFAQ.checkSelfTarget = function()
         SELFAQ.superEquipSuit(number)
     end
 
-    -- 63+套装
+    -- 73+套装
     if not AQSV.enable then
         return
     end

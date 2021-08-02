@@ -22,7 +22,7 @@ function SELFAQ.createBuffIcon()
 	timerf:SetScript("OnUpdate", SELFAQ.onBuffChanged)
 	
 	-- 选择BUTTON类似，才能触发鼠标事件
-	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent)
+	local f = CreateFrame("Button", "AutoEquip_Buff", UIParent, "BackdropTemplate")
 	SELFAQ.buff = f
 
 	f:SetFrameStrata("HIGH")
