@@ -2,7 +2,7 @@ local _, SELFAQ = ...
 
 local L = SELFAQ.L
 
-function fixSetBackdrop(frame,backdrop)
+SELFAQ.fixSetBackdrop = function(frame,backdrop)
     if frame.SetBackdrop then return frame:SetBackdrop(backdrop) end
     Mixin(frame,BackdropTemplateMixin)
     frame:SetScript("OnSizeChanged",frame.OnBackdropSizeChanged,0)
@@ -488,8 +488,7 @@ SELFAQ.popupInfo = function(text)
     f:SetOwner(UIParent, "ANCHOR_NONE")
     f:SetPoint("CENTER", UIParent,  AQSV.popupX, -40*(SELFAQ.infoFrameIndex - 1) + AQSV.popupY )
 
-    fixSetBackdrop(f, {bgFile = "Interface/Tooltips/UI-Tooltip-Background"})
-    --f:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background"});
+    SELFAQ.fixSetBackdrop(f, nil)
     f:SetBackdropColor(0,0,0,0.8);
 
     if SELFAQ.infoFrameIndex == 5 then

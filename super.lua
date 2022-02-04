@@ -228,8 +228,8 @@ function SELFAQ.superInit()
                         SELFAQ.qbs[i]['hl'] = true
 
                         if SUITAQ[i]["note"] ~= "" and SUITAQ[i]["note"] ~= nil then
-                            chatInfo(color("00FF00", SUITAQ[i]["note"]))
-                            popupInfo(color("00FF00", SUITAQ[i]["note"]))
+                            chatInfo(L["Suit "]..color("00FF00", SUITAQ[i]["note"]))
+                            popupInfo(L["Suit "]..color("00FF00", SUITAQ[i]["note"]))
                         else
                             chatInfo(color("00FF00", L["Suit "]..i))
                             popupInfo(color("00FF00", L["Suit "]..i))

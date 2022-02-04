@@ -7,6 +7,16 @@ Todo:
 
 ---
 
+v6.2
+
+1. 支持2.5.3
+2. 修复一些小Bug
+
+1. Support v2.5.3
+2. Fix some minor bugs
+
+---
+
 v6.0
 感谢nga大佬们wjsghr1、七箫的高品质代码！！
 

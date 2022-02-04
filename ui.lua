@@ -294,7 +294,7 @@ function SELFAQ.createItemButton( slot_id, position )
   	button:SetHighlightTexture("Interface/Buttons/ButtonHilight-Square", "ADD")
 
   	-- button:SetBackdrop({edgeFile = "Interface/Tooltips/UI-Tooltip-Background", edgeSize = 2})
-  	fixSetBackdrop(button, {edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
+  	SELFAQ.fixSetBackdrop(button, {edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
   	--button:SetBackdrop({edgeFile = "Interface\\AddOns\\AutoEquip\\Textures\\S.blp", edgeSize = 2})
 
 	button:SetBackdropBorderColor(0,0,0,1);

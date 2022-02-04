@@ -1,7 +1,7 @@
-## Interface: 20501
+## Interface: 20503
 ## Title: AutoEquip
 ## Author: kaka
-## Version: 6.0
+## Version: 6.2
 ## Notes: Swap item by the customized priority automatically.
 ## Notes-zhCN: 按照自定义的优先级自动更换装备。
 ## SavedVariablesPerCharacter: AQSV,SUITAQ
